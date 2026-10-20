@@ -24,10 +24,32 @@
     video { 
       width: 100%; 
       max-width: 320px; 
-      height: 240px; 
+      height: 220px; 
       border-radius: 12px; 
       background: #000; 
       object-fit: cover; 
+    }
+    .form-group {
+      margin-top: 14px;
+      text-align: right;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      color: #444;
+      margin-bottom: 6px;
+    }
+    select {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      background: #fafafa;
+      box-sizing: border-box;
+      outline: none;
+      color: #333;
     }
     button { 
       width: 100%; 
@@ -60,6 +82,20 @@
     <video id="webcam" autoplay playsinline muted></video>
     <canvas id="canvas" style="display:none;"></canvas>
     
+    <!-- قائمة اختيار الفروع الـ 6 -->
+    <div class="form-group">
+      <label for="branchSelect">📍 اختر الفرع الحالي:</label>
+      <select id="branchSelect">
+        <option value="">-- الفرع الرئيسي (التلقائي) --</option>
+        <option value="El Thawra">El Thawra</option>
+        <option value="Sheraton">Sheraton</option>
+        <option value="Nasr City">Nasr City</option>
+        <option value="Mall El Arab">Mall El Arab</option>
+        <option value="Maxim Mall">Maxim Mall</option>
+        <option value="Alex">Alex</option>
+      </select>
+    </div>
+
     <button class="btn-checkin" onclick="processAttendance('Check-In')">🟢 تسجيل حضور</button>
     <button class="btn-checkout" onclick="processAttendance('Check-Out')">🔴 تسجيل انصراف</button>
     
@@ -98,7 +134,6 @@
     initCamera();
 
     function processAttendance(actionType) {
-      // فحص التأكد من صحة الرابط
       if (!MAKE_WEBHOOK_URL.startsWith("http")) {
         statusText.style.color = "#c62828";
         statusText.innerText = "خطأ: رابط الـ Webhook غير صحيح!";
@@ -122,6 +157,9 @@
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageData = canvas.toDataURL('image/jpeg', 0.4);
 
+        // قراءة الفرع المختار من القائمة المنسدلة
+        const selectedBranch = document.getElementById('branchSelect').value;
+
         // تجهيز البيانات
         const payload = {
           telegram_id: tg.initDataUnsafe?.user?.id || "TEST_USER",
@@ -129,6 +167,7 @@
           action: actionType,
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
+          branch_id: selectedBranch, // إرسال كود/اسم الفرع إلى Make.com
           photo: imageData
         };
 
