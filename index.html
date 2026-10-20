@@ -57,13 +57,13 @@
 <body>
   <div class="card">
     <h3>تسجيل الحضور والانصراف</h3>
-    <video id="webcam" autoplay playsinline></video>
+    <video id="webcam" autoplay playsinline muted></video>
     <canvas id="canvas" style="display:none;"></canvas>
     
     <button class="btn-checkin" onclick="processAttendance('Check-In')">🟢 تسجيل حضور</button>
     <button class="btn-checkout" onclick="processAttendance('Check-Out')">🔴 تسجيل انصراف</button>
     
-    <p id="status"></p>
+    <p id="status">جاري إعداد الكاميرا...</p>
   </div>
 
   <script>
@@ -74,15 +74,37 @@
     const canvas = document.getElementById('canvas');
     const statusText = document.getElementById('status');
 
-    // ضع رابط الـ Webhook الخاص بك من Make.com بين التنصيص أسفله
-    const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
+    // ⚠️ استبدل الرابط أدناه بالسطر 58 برابط الـ Webhook الخاص بك من Make.com
+    const MAKE_WEBHOOK_URL = "YOUR_MAKE_WEBHOOK_URL_HERE";
 
-    // تشغيل الكاميرا الأمامية
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-      .then(stream => { video.srcObject = stream; })
-      .catch(err => { statusText.innerText = "تعذر الوصول للكاميرا: يرجى إعطاء صلاحية الكاميرا للمتصفح."; });
+    // تشغيل الكاميرا بطريقة مرنة تضمن العمل على كافة الهواتف
+    async function initCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+        video.srcObject = stream;
+        statusText.innerText = "الكاميرا جاهزة للالتقاط";
+      } catch (err) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = stream;
+          statusText.innerText = "الكاميرا جاهزة للالتقاط";
+        } catch (err2) {
+          statusText.style.color = "#c62828";
+          statusText.innerText = "يرجى منح صلاحية الكاميرا لتطبيق تليجرام في إعدادات الموبايل.";
+        }
+      }
+    }
+
+    initCamera();
 
     function processAttendance(actionType) {
+      // فحص التأكد من وضع رابط Webhook صحيح
+      if (MAKE_WEBHOOK_URL.includes("YOUR_MAKE_WEBHOOK_URL_HERE") || !MAKE_WEBHOOK_URL.startsWith("http")) {
+        statusText.style.color = "#c62828";
+        statusText.innerText = "خطأ: لم يتم وضع رابط الـ Webhook الخاص بك من Make.com داخل الكود!";
+        return;
+      }
+
       statusText.style.color = "#333";
       statusText.innerText = "جاري تحديد الموقع والتقاط الصورة...";
 
@@ -93,12 +115,12 @@
       }
 
       navigator.geolocation.getCurrentPosition((pos) => {
-        // التقاط صورة حية من الكاميرا
+        // التقاط صورة من الكاميرا
         const context = canvas.getContext('2d');
         canvas.width = video.videoWidth || 320;
         canvas.height = video.videoHeight || 240;
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL('image/jpeg', 0.5);
+        const imageData = canvas.toDataURL('image/jpeg', 0.4);
 
         // تجهيز البيانات
         const payload = {
@@ -123,12 +145,12 @@
             setTimeout(() => tg.close(), 1500);
           } else {
             statusText.style.color = "#c62828";
-            statusText.innerText = "حدث خطأ في الاستجابة من السيرفر.";
+            statusText.innerText = "حدث خطأ في استجابة السيرفر (" + res.status + ")";
           }
         })
         .catch(err => {
           statusText.style.color = "#c62828";
-          statusText.innerText = "حدث خطأ أثناء الاتصال بالسيرفر.";
+          statusText.innerText = "حدث خطأ في الاتصال بالسيرفر أو الـ Webhook.";
         });
       }, (err) => {
         statusText.style.color = "#c62828";
