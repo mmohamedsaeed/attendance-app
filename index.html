@@ -75,7 +75,7 @@
     const statusText = document.getElementById('status');
 
     // ⚠️ استبدل الرابط أدناه بالسطر 58 برابط الـ Webhook الخاص بك من Make.com
-    const MAKE_WEBHOOK_URL = "YOUR_MAKE_WEBHOOK_URL_HERE";
+    const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
 
     // تشغيل الكاميرا بطريقة مرنة تضمن العمل على كافة الهواتف
     async function initCamera() {
@@ -99,7 +99,7 @@
 
     function processAttendance(actionType) {
       // فحص التأكد من وضع رابط Webhook صحيح
-      if (MAKE_WEBHOOK_URL.includes("YOUR_MAKE_WEBHOOK_URL_HERE") || !MAKE_WEBHOOK_URL.startsWith("http")) {
+      if (MAKE_WEBHOOK_URL.includes("https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a") || !MAKE_WEBHOOK_URL.startsWith("http")) {
         statusText.style.color = "#c62828";
         statusText.innerText = "خطأ: لم يتم وضع رابط الـ Webhook الخاص بك من Make.com داخل الكود!";
         return;
