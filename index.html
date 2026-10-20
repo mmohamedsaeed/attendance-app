@@ -74,7 +74,7 @@
     const canvas = document.getElementById('canvas');
     const statusText = document.getElementById('status');
 
-    // ⚠️ استبدل الرابط أدناه بالسطر 58 برابط الـ Webhook الخاص بك من Make.com
+    // رابط الـ Webhook الخاص بك من Make.com
     const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
 
     // تشغيل الكاميرا بطريقة مرنة تضمن العمل على كافة الهواتف
@@ -98,10 +98,10 @@
     initCamera();
 
     function processAttendance(actionType) {
-      // فحص التأكد من وضع رابط Webhook صحيح
-      if (MAKE_WEBHOOK_URL.includes("https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a") || !MAKE_WEBHOOK_URL.startsWith("http")) {
+      // فحص التأكد من صحة الرابط
+      if (!MAKE_WEBHOOK_URL.startsWith("http")) {
         statusText.style.color = "#c62828";
-        statusText.innerText = "خطأ: لم يتم وضع رابط الـ Webhook الخاص بك من Make.com داخل الكود!";
+        statusText.innerText = "خطأ: رابط الـ Webhook غير صحيح!";
         return;
       }
 
