@@ -82,7 +82,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 <script>
 // ===== الإعدادات الأساسية وروابط Webhook =====
 const SB_URL = "https://lmjnyzkmkvknvgfvrxmb.supabase.co";
-const SB_KEY = "sb_publishable_qTWkfRTdkrG9wGbqDhgT0w_EjbkQrlS";
+const SB_KEY = "sb_publishable_qTwkfRTdkrG9wGbqDhgT0w_EjbkQrlS";
 const MODELS = "https://mmohamedsaeed.github.io/attendance-app";
 
 // روابط الـ Webhooks لتحديث Google Sheets وإرسال التنبيه الأمني للمدير
@@ -98,8 +98,8 @@ const ERR = {
   FACE_MISMATCH: "الوجه غير مطابق لبيانات الموظف ❌",
   NO_FACE: "لم يتم تسجيل بصمة الوجه بعد",
   DUP: "تم تسجيل نفس الحركة منذ لحظات",
-  NETWORK: "تعذر الاتصال بالخادم، أعد المحاولة",
-  GPS: "تعذر تحديد موقعك، فعّل الـ GPS وأعد المحاولة"
+  NETWORK: "تعذر الاتصال بالخادم، تأكد من الاتصال بالشبكة",
+  GPS: "تعذر تحديد موقعك، يرجى تفعيل الـ GPS والتأكد من الصلاحيات"
 };
 
 const deviceId = localStorage.getItem("dev") || (() => { const v = crypto.randomUUID(); localStorage.setItem("dev", v); return v; })();
@@ -107,6 +107,7 @@ $("displayUUID").textContent = deviceId.slice(0, 8) + "...";
 
 let session = JSON.parse(localStorage.getItem("sess") || "null");
 let stream = null, timer = null, busy = false, lastDescriptor = null;
+
 const modelsReady = Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri(MODELS),
   faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),
@@ -117,19 +118,23 @@ async function rpc(fn, args) {
   try {
     const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
       method: "POST",
-      headers: { apikey: SB_KEY, "Content-Type": "application/json" },
+      headers: { 
+        "apikey": SB_KEY, 
+        "Authorization": `Bearer ${SB_KEY}`,
+        "Content-Type": "application/json" 
+      },
       body: JSON.stringify(args)
     });
-    
+
+    const res = await r.json();
     if (!r.ok) {
-      const errorText = await r.text();
-      console.error(`Supabase RPC Error (${fn}):`, errorText);
-      throw new Error("NETWORK");
+      console.error(`Supabase RPC Error (${fn}):`, res);
+      throw new Error(res.message || res.error || "NETWORK");
     }
-    return await r.json();
+    return res;
   } catch (err) {
     console.error("Network Fetch Failure:", err);
-    throw new Error("NETWORK");
+    throw new Error(err.message || "NETWORK");
   }
 }
 
@@ -146,9 +151,14 @@ function setStatus(cls, icon, msg) {
 }
 
 function getPos() {
-  return new Promise((res, rej) => navigator.geolocation
-    ? navigator.geolocation.getCurrentPosition(p => res(p.coords), () => rej(new Error("GPS")), { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 })
-    : rej(new Error("GPS")));
+  return new Promise((res, rej) => {
+    if (!navigator.geolocation) return rej(new Error("GPS"));
+    navigator.geolocation.getCurrentPosition(
+      p => res(p.coords), 
+      err => rej(err), 
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  });
 }
 
 // ===== تسجيل الدخول =====
@@ -167,7 +177,8 @@ $("loginForm").addEventListener("submit", async e => {
     $("loginPassword").value = "";
     enter();
   } catch (err) {
-    msg.textContent = ERR[err.message] || ERR.NETWORK; msg.style.display = "flex";
+    msg.textContent = ERR[err.message] || err.message || ERR.NETWORK; 
+    msg.style.display = "flex";
   } finally { btn.disabled = false; }
 });
 
@@ -182,7 +193,7 @@ async function enter() {
   $("activeEmpName").textContent = session.name;
   showView("viewAttendance");
   refreshButton();
-  
+
   // 1. تشغيل الكاميرا أولاً
   try {
     stream = await navigator.mediaDevices.getUserMedia({ 
@@ -194,7 +205,7 @@ async function enter() {
     });
     $("webcam").srcObject = stream;
   } catch (err) {
-    return setStatus("status-danger", "fa-triangle-exclamation", "تعذر فتح الكاميرا، تأكد من الصلاحيات.");
+    return setStatus("status-danger", "fa-triangle-exclamation", "تعذر فتح الكاميرا، تأكد من إعطاء الصلاحيات.");
   }
 
   // 2. تحميل نماذج الوجه مع إظهار تنبيه عند التعثر
@@ -203,7 +214,7 @@ async function enter() {
     await modelsReady;
   } catch (err) {
     console.error("Model Load Error:", err);
-    return setStatus("status-danger", "fa-wifi", "تعذر تحميل ملفات بصمة الوجه، تأكد من جودة اتصال باقة الموبايل.");
+    return setStatus("status-danger", "fa-wifi", "تعذر تحميل ملفات بصمة الوجه، تأكد من جودة اتصال الشبكة.");
   }
 
   // 3. بدء حلقة الفحص
@@ -225,11 +236,15 @@ function refreshButton() {
 
 async function detect() {
   if (busy || !session) return;
-  const d = await faceapi.detectSingleFace($("webcam"), new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
-  lastDescriptor = d ? d.descriptor : null;
-  $("actionBtn").disabled = !d;
-  if (d) setStatus("status-success", "fa-user-check", session.has_face ? "تم اكتشاف الوجه ✅" : "الوجه واضح، اضغط لتسجيل بصمتك ✅");
-  else setStatus("status-warning", "fa-user-slash", "يرجى التواجد بوضوح أمام الكاميرا");
+  try {
+    const d = await faceapi.detectSingleFace($("webcam"), new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+    lastDescriptor = d ? d.descriptor : null;
+    $("actionBtn").disabled = !d;
+    if (d) setStatus("status-success", "fa-user-check", session.has_face ? "تم اكتشاف الوجه ✅" : "الوجه واضح، اضغط لتسجيل بصمتك ✅");
+    else setStatus("status-warning", "fa-user-slash", "يرجى التواجد بوضوح أمام الكاميرا");
+  } catch (e) {
+    console.error("Detect Loop Error", e);
+  }
 }
 
 // ===== تسجيل الحركة والتزامن مع Google Sheets وتنبيه المدير =====
@@ -246,8 +261,14 @@ $("actionBtn").addEventListener("click", async () => {
       setStatus("status-success", "fa-circle-check", "تم تسجيل بصمة الوجه، يمكنك الآن تسجيل الحضور");
     } else {
       setStatus("status-info", "fa-spinner fa-spin", "جاري تحديد الموقع وإرسال البيانات...");
-      const pos = await getPos();
       
+      let pos;
+      try {
+        pos = await getPos();
+      } catch (gpsErr) {
+        throw new Error("GPS");
+      }
+
       r = await rpc("app_punch", {
         p_token: session.token, 
         p_device: deviceId,
@@ -302,7 +323,7 @@ $("actionBtn").addEventListener("click", async () => {
     }
   } catch (err) {
     if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
-    setStatus("status-danger", "fa-circle-xmark", ERR[err.message] || "حدث خطأ، حاول مرة أخرى");
+    setStatus("status-danger", "fa-circle-xmark", ERR[err.message] || err.message || "حدث خطأ، حاول مرة أخرى");
   } finally {
     setTimeout(() => { busy = false; }, 3000);
   }
