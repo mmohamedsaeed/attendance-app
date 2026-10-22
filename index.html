@@ -7,338 +7,220 @@
 <meta name="theme-color" content="#4f46e5">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:#f1f5f9;color:#1e293b;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:12px}
-.app-card{background:#fff;width:100%;max-width:440px;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:hidden}
+.card{background:#fff;width:100%;max-width:440px;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:hidden}
 .header{background:linear-gradient(135deg,#4f46e5,#3b82f6);color:#fff;padding:24px 20px;text-align:center}
 .header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px}.header p{font-size:.85rem;opacity:.9}
 .content{padding:20px}
-.view-section{display:none}.view-section.active{display:block}
-.form-group{margin-bottom:16px}
-.form-group label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;color:#475569}
-.input-wrapper{position:relative}
-.input-wrapper i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#94a3b8}
-.form-control{width:100%;padding:12px 42px 12px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;outline:none}
-.form-control:focus{border-color:#4f46e5;box-shadow:0 0 0 3px rgba(79,70,229,.15)}
-select.form-control{-webkit-appearance:none;appearance:none;background:#fff url('data:image/svg+xml;utf8,<svg fill="%23475569" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat left 12px center/18px}
-.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px}
-.btn-primary{background:#4f46e5;color:#fff}.btn-primary:disabled{background:#cbd5e1;cursor:not-allowed}
-.webcam-box{position:relative;width:100%;height:260px;border-radius:16px;overflow:hidden;background:#000;margin-bottom:16px;border:2px solid #e2e8f0}
+.view{display:none}.view.active{display:block}
+.hero{text-align:center;padding:10px 0 6px}
+.hero .ico{width:84px;height:84px;margin:0 auto 14px;border-radius:50%;background:#eef2ff;color:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:2.2rem}
+.hero h2{font-size:1.2rem;margin-bottom:6px}.hero p{font-size:.88rem;color:#64748b;margin-bottom:18px}
+.steps{list-style:none;margin:0 0 20px;text-align:right}
+.steps li{display:flex;gap:10px;align-items:center;padding:9px 0;font-size:.88rem;color:#475569;border-bottom:1px solid #f1f5f9}
+.steps i{color:#4f46e5;width:20px;text-align:center}
+.fg{margin-bottom:16px}.fg label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;color:#475569}
+.iw{position:relative}.iw i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#94a3b8}
+.fc{width:100%;padding:12px 42px 12px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;outline:none;background:#fff}
+.fc:focus{border-color:#4f46e5;box-shadow:0 0 0 3px rgba(79,70,229,.15)}
+select.fc{-webkit-appearance:none;appearance:none;background:#fff url('data:image/svg+xml;utf8,<svg fill="%23475569" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat left 12px center/18px}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;color:#fff}
+.b-pri{background:#4f46e5}.b-in{background:#16a34a}.b-out{background:#dc2626}
+.btn:disabled{background:#cbd5e1;cursor:not-allowed}
+.link{display:block;text-align:center;margin-top:14px;font-size:.85rem;color:#64748b;text-decoration:none}
+.cam{position:relative;width:100%;height:240px;border-radius:16px;overflow:hidden;background:#000;margin-bottom:14px;border:2px solid #e2e8f0}
 video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-.status-badge{padding:10px 14px;border-radius:10px;font-size:.85rem;font-weight:600;text-align:center;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px}
-.status-info{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
-.status-success{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
-.status-danger{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
-.status-warning{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
-.device-tag{font-size:.72rem;color:#94a3b8;text-align:center;margin-top:12px}
+.badge{padding:10px 14px;border-radius:10px;font-size:.85rem;font-weight:600;text-align:center;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px}
+.info{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}.ok{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.bad{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.warn{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tag{font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px}
 </style>
 </head>
 <body>
-<div class="app-card">
-  <div class="header"><h1><i class="fa-solid fa-user-check"></i> Attendance System</h1><p>سجل دخولك لبدء تسجيل الحضور</p></div>
+<div class="card">
+  <div class="header"><h1><i class="fa-solid fa-user-check"></i> Attendance System</h1><p>نظام الحضور والانصراف</p></div>
   <div class="content">
 
-    <div id="viewLogin" class="view-section active">
-      <div id="loginMsg" class="status-badge status-danger" style="display:none"></div>
-      <form id="loginForm">
-        <div class="form-group"><label>رقم الموبايل</label><div class="input-wrapper"><i class="fa-solid fa-phone"></i>
-          <input type="tel" id="loginPhone" class="form-control" placeholder="01XXXXXXXXX" required></div></div>
-        <div class="form-group"><label>كلمة السر</label><div class="input-wrapper"><i class="fa-solid fa-lock"></i>
-          <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required></div></div>
-        <button type="submit" id="loginBtn" class="btn btn-primary"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</button>
-      </form>
+    <!-- Landing -->
+    <div id="vLanding" class="view active">
+      <div class="hero">
+        <div class="ico"><i class="fa-solid fa-fingerprint"></i></div>
+        <h2>أهلاً بك 👋</h2>
+        <p>سجّل حضورك وانصرافك من أي فرع في خطوات بسيطة</p>
+      </div>
+      <ul class="steps">
+        <li><i class="fa-solid fa-right-to-bracket"></i> سجّل الدخول برقم الموبايل وكلمة السر</li>
+        <li><i class="fa-solid fa-location-dot"></i> اختر فرعك وتأكد إنك داخل النطاق</li>
+        <li><i class="fa-solid fa-camera"></i> هتتصور تلقائياً لحظة التسجيل</li>
+      </ul>
+      <button class="btn b-pri" id="startBtn"><i class="fa-solid fa-arrow-left"></i> ابدأ الآن</button>
     </div>
 
-    <div id="viewAttendance" class="view-section">
+    <!-- Login -->
+    <div id="vLogin" class="view">
+      <div id="loginMsg" class="badge bad" style="display:none"></div>
+      <form id="loginForm">
+        <div class="fg"><label>رقم الموبايل</label><div class="iw"><i class="fa-solid fa-phone"></i>
+          <input type="tel" id="phone" class="fc" placeholder="01XXXXXXXXX" required autocomplete="username"></div></div>
+        <div class="fg"><label>كلمة السر</label><div class="iw"><i class="fa-solid fa-lock"></i>
+          <input type="password" id="pass" class="fc" placeholder="••••••••" required autocomplete="current-password"></div></div>
+        <button type="submit" id="loginBtn" class="btn b-pri"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</button>
+      </form>
+      <a href="#" class="link" id="backLink">رجوع</a>
+    </div>
+
+    <!-- App -->
+    <div id="vApp" class="view">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:.85rem">
-        <span>👤 الموظف: <b id="activeEmpName">-</b></span>
+        <span>👤 <b id="empName">-</b></span>
         <a href="#" id="logoutLink" style="color:#ef4444;text-decoration:none;font-weight:600"><i class="fa-solid fa-power-off"></i> خروج</a>
       </div>
-      <div class="form-group"><div class="input-wrapper"><i class="fa-solid fa-location-dot"></i>
-        <select id="branchSelect" class="form-control">
-          <option value="El Thawra">فرع الثورة (El Thawra)</option>
-          <option value="Sheraton">فرع شيراتون (Sheraton)</option>
-          <option value="Nasr City">فرع مدينة نصر (Nasr City)</option>
-          <option value="Mall El Arab">فرع مول العرب (Mall El Arab)</option>
-          <option value="Maxim Mall">فرع مكسيم مول (Maxim Mall)</option>
-          <option value="Alex">فرع الإسكندرية (Alex)</option>
-        </select></div></div>
-      <div class="form-group"><div class="input-wrapper"><i class="fa-solid fa-arrow-right-to-city"></i>
-        <select id="actionType" class="form-control">
-          <option value="Check-In">🟢 تسجيل حضور (Check-In)</option>
-          <option value="Check-Out">🔴 تسجيل انصراف (Check-Out)</option>
-        </select></div></div>
-      <div class="webcam-box"><video id="webcam" autoplay playsinline muted></video></div>
-      <div id="faceStatus" class="status-badge status-warning"><i class="fa-solid fa-spinner fa-spin"></i><span>جاري التحميل...</span></div>
-      <button id="actionBtn" class="btn btn-primary" disabled></button>
+      <div class="fg"><div class="iw"><i class="fa-solid fa-location-dot"></i>
+        <select id="branch" class="fc"><option value="">جاري تحميل الفروع...</option></select></div></div>
+      <div class="cam"><video id="cam" autoplay playsinline muted></video></div>
+      <div id="geo" class="badge warn"><i class="fa-solid fa-spinner fa-spin"></i><span>جاري تحديد موقعك...</span></div>
+      <div class="row">
+        <button class="btn b-in" id="inBtn" disabled><i class="fa-solid fa-right-to-bracket"></i> حضور</button>
+        <button class="btn b-out" id="outBtn" disabled><i class="fa-solid fa-right-from-bracket"></i> انصراف</button>
+      </div>
+      <div id="result" class="badge" style="display:none;margin:14px 0 0"></div>
     </div>
 
-    <div class="device-tag">Device ID: <span id="displayUUID"></span></div>
+    <div class="tag">Device: <span id="devTag"></span></div>
   </div>
 </div>
 
 <script>
-// ===== الإعدادات الأساسية =====
-const SB_URL = "https://lmjnyzkmkvknvgfvrxmb.supabase.co";
-const SB_KEY = "sb_publishable_qTwkfRTdkrG9wGbqDhgT0w_EjbkQrlS";
-const MODELS = "https://mmohamedsaeed.github.io/attendance-app";
-
-// روابط Webhook للربط مع Make.com وتليجرام
-const MAKE_ATTENDANCE_WEBHOOK = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
-const MAKE_SECURITY_WEBHOOK   = "https://hook.us2.make.com/ejz1nugtaq8llq2nfi572vrl59omto8j";
+// ===== الإعداد: رابط الـ Web App من Apps Script (Deploy > Web app) =====
+const API = "https://script.google.com/macros/s/AKfycbzyNYVuwW-f8Kej7TiPmqkAMpBtrz3XMh8hgvBuDnhqQI_RA4d9za-sm-89ur7on90/exec";
 
 const $ = id => document.getElementById(id);
 const ERR = {
   BAD_LOGIN: "رقم الموبايل أو كلمة السر غير صحيحة",
   LOCKED: "تم إيقاف المحاولات مؤقتاً، حاول بعد 15 دقيقة",
-  DEVICE: "🛑 هذا الحساب مرتبط بجهاز آخر. تم تسجيل المحاولة وإبلاغ الإدارة.",
-  SESSION: "انتهت الجلسة، سجل دخولك مرة أخرى",
-  FACE_MISMATCH: "الوجه غير مطابق لبيانات الموظف ❌",
-  NO_FACE: "لم يتم تسجيل بصمة الوجه بعد",
+  DEVICE: "🛑 هذا الحساب مرتبط بجهاز آخر. تم إبلاغ الإدارة.",
+  SESSION: "انتهت الجلسة، سجّل دخولك مرة أخرى",
+  FAR: "أنت خارج نطاق الفرع المختار",
+  GPS: "تعذر تحديد موقعك، فعّل الـ GPS وأعد المحاولة",
+  GPS_WEAK: "إشارة الـ GPS ضعيفة، اخرج لمكان مفتوح وحاول تاني",
+  NO_PHOTO: "تعذر التقاط الصورة، حاول مرة أخرى",
   DUP: "تم تسجيل نفس الحركة منذ لحظات",
-  FAR: "⚠️ أنت بعيد عن موقع الفرع المختار",
-  NETWORK: "تعذر الاتصال بالخادم، أعد المحاولة",
-  GPS: "تعذر تحديد موقعك، فعّل الـ GPS وأعد المحاولة"
+  BRANCH: "الفرع غير معروف",
+  MAKE: "تعذر إرسال البيانات للنظام، حاول مرة أخرى",
+  NETWORK: "تعذر الاتصال بالخادم، تأكد من الإنترنت وأعد المحاولة"
 };
 
-const deviceId = localStorage.getItem("dev") || (() => { const v = crypto.randomUUID(); localStorage.setItem("dev", v); return v; })();
-$("displayUUID").textContent = deviceId.slice(0, 8) + "...";
+const dev = localStorage.getItem("dev") || (() => { const v = crypto.randomUUID(); localStorage.setItem("dev", v); return v; })();
+$("devTag").textContent = dev.slice(0, 8) + "...";
+let S = JSON.parse(localStorage.getItem("sess") || "null"); // {token,name}
+let stream = null, watchId = null, pos = null, branches = [], busy = false;
 
-let session = JSON.parse(localStorage.getItem("sess") || "null");
-let stream = null, timer = null, busy = false, lastDescriptor = null;
-
-const modelsReady = Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri(MODELS),
-  faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),
-  faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)
-]);
-
-async function rpc(fn, args) {
-  try {
-    const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
-      method: "POST",
-      headers: { 
-        "apikey": SB_KEY, 
-        "Authorization": `Bearer ${SB_KEY}`,
-        "Content-Type": "application/json" 
-      },
-      body: JSON.stringify(args)
-    });
-
-    const res = await r.json();
-    if (!r.ok) {
-      console.error(`Supabase RPC Error (${fn}):`, res);
-      return res; // إرجاع أخطاء السيرفر لمعالجتها في التطبيق
-    }
-    return res;
-  } catch (err) {
-    console.error("Network Fetch Failure:", err);
-    return { error: "NETWORK" };
-  }
+// بنبعت بدون Content-Type عشان نتفادى مشاكل CORS مع Apps Script
+async function api(fn, data) {
+  const r = await fetch(API, { method: "POST", body: JSON.stringify({ fn, device: dev, token: S && S.token, ...data }) });
+  if (!r.ok) throw new Error("NETWORK");
+  const j = await r.json();
+  if (j.error) { const e = new Error(j.error); e.data = j; throw e; }
+  return j;
+}
+function show(id) { document.querySelectorAll(".view").forEach(v => v.classList.remove("active")); $(id).classList.add("active"); }
+function badge(el, cls, icon, msg) {
+  el.className = "badge " + cls; el.style.display = "flex";
+  el.innerHTML = `<i class="fa-solid ${icon}"></i><span></span>`; el.lastChild.textContent = msg;
+}
+function hav(a, b, c, d) {
+  const R = 6371000, r = x => x * Math.PI / 180;
+  const h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
 }
 
-function showView(id) {
-  document.querySelectorAll(".view-section").forEach(e => e.classList.remove("active"));
-  $(id).classList.add("active");
-}
-
-function setStatus(cls, icon, msg) {
-  const b = $("faceStatus");
-  b.className = "status-badge " + cls;
-  b.innerHTML = `<i class="fa-solid ${icon}"></i><span></span>`;
-  b.lastChild.textContent = msg;
-}
-
-function getPos() {
-  return new Promise((res, rej) => {
-    if (!navigator.geolocation) return rej(new Error("GPS"));
-    navigator.geolocation.getCurrentPosition(
-      p => res(p.coords), 
-      err => rej(err), 
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-  });
-}
-
-// ===== تسجيل الدخول =====
+// ===== Landing / Login =====
+$("startBtn").onclick = () => show("vLogin");
+$("backLink").onclick = e => { e.preventDefault(); show("vLanding"); };
 $("loginForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const btn = $("loginBtn"), msg = $("loginMsg");
-  btn.disabled = true; msg.style.display = "none";
+  const btn = $("loginBtn"); btn.disabled = true; $("loginMsg").style.display = "none";
   try {
-    const r = await rpc("app_login", {
-      p_phone: $("loginPhone").value.trim(), 
-      p_pass: $("loginPassword").value,
-      p_device: deviceId, 
-      p_ua: navigator.userAgent
-    });
-
-    if (r.error) {
-      // إرسال تنبيه أمني لتليجرام في حالة محاولة الدخول من جهاز آخر
-      if (r.error === "DEVICE") {
-        fetch(MAKE_SECURITY_WEBHOOK, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            event: "UNAUTHORIZED_DEVICE_ATTEMPT",
-            phone: $("loginPhone").value.trim(),
-            device_uuid: deviceId,
-            user_agent: navigator.userAgent,
-            timestamp: new Date().toLocaleString('ar-EG')
-          })
-        }).catch(e => console.error("Telegram Alert Error", e));
-      }
-      throw new Error(r.error);
-    }
-
-    session = { token: r.token, name: r.name, has_face: r.has_face };
-    localStorage.setItem("sess", JSON.stringify(session));
-    $("loginPassword").value = "";
-    enter();
-  } catch (err) {
-    msg.textContent = ERR[err.message] || ERR.NETWORK; 
-    msg.style.display = "flex";
-  } finally { btn.disabled = false; }
+    const r = await api("login", { phone: $("phone").value.trim(), password: $("pass").value, ua: navigator.userAgent });
+    S = { token: r.token, name: r.name }; localStorage.setItem("sess", JSON.stringify(S));
+    $("pass").value = ""; enterApp();
+  } catch (err) { badge($("loginMsg"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK); }
+  finally { btn.disabled = false; }
 });
+$("logoutLink").onclick = e => { e.preventDefault(); logout(); };
+function logout() { localStorage.removeItem("sess"); S = null; stopAll(); show("vLanding"); }
 
-$("logoutLink").addEventListener("click", e => { e.preventDefault(); logout(); });
-function logout() {
-  localStorage.removeItem("sess"); session = null;
-  stopCamera(); showView("viewLogin");
-}
-
-// ===== الكاميرا وكشف الوجه =====
-async function enter() {
-  $("activeEmpName").textContent = session.name;
-  showView("viewAttendance");
-  refreshButton();
-
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({ 
-      video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } } 
-    });
-    $("webcam").srcObject = stream;
-  } catch (err) {
-    return setStatus("status-danger", "fa-triangle-exclamation", "تعذر فتح الكاميرا، تأكد من إعطاء الصلاحيات.");
+// ===== شاشة التسجيل =====
+async function enterApp() {
+  $("empName").textContent = S.name; show("vApp"); $("result").style.display = "none";
+  try { branches = (await api("branches")).branches; }
+  catch (err) {
+    if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
+    return badge($("geo"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK);
   }
-
+  const sel = $("branch"); sel.innerHTML = "";
+  sel.add(new Option("اختر الفرع", ""));
+  branches.forEach(b => sel.add(new Option(b.name, b.name)));
   try {
-    setStatus("status-info", "fa-spinner fa-spin", "جاري تحميل نماذج بصمة الوجه...");
-    await modelsReady;
-  } catch (err) {
-    console.error("Model Load Error:", err);
-    return setStatus("status-danger", "fa-wifi", "تعذر تحميل ملفات بصمة الوجه، تأكد من جودة اتصال الشبكة.");
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+    $("cam").srcObject = stream;
+  } catch (err) { return badge($("geo"), "bad", "fa-video-slash", "الكاميرا مطلوبة للتسجيل، فعّل الصلاحية وأعد تحميل الصفحة"); }
+  if (!navigator.geolocation) return badge($("geo"), "bad", "fa-location-crosshairs", ERR.GPS);
+  watchId = navigator.geolocation.watchPosition(
+    p => { pos = p.coords; refresh(); },
+    () => { pos = null; badge($("geo"), "bad", "fa-location-crosshairs", "فعّل الـ GPS وصلاحية الموقع"); },
+    { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
+  );
+}
+function stopAll() {
+  if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
+  if (watchId !== null) navigator.geolocation.clearWatch(watchId); watchId = null; pos = null;
+}
+$("branch").onchange = refresh;
+function refresh() {
+  const b = branches.find(x => x.name === $("branch").value);
+  let can = false;
+  if (!pos) badge($("geo"), "warn", "fa-spinner fa-spin", "جاري تحديد موقعك...");
+  else if (!b) badge($("geo"), "info", "fa-location-dot", "اختر الفرع لحساب المسافة");
+  else {
+    const m = Math.round(hav(pos.latitude, pos.longitude, b.lat, b.lng));
+    if (m <= b.radius) { can = true; badge($("geo"), "ok", "fa-circle-check", `داخل نطاق الفرع (${m} متر) ✅`); }
+    else badge($("geo"), "bad", "fa-circle-xmark", `خارج نطاق الفرع، تبعد ${m} متر (المسموح ${b.radius}) ❌`);
   }
-
-  clearInterval(timer);
-  timer = setInterval(detect, 1200);
+  $("inBtn").disabled = $("outBtn").disabled = !(can && stream && !busy);
 }
 
-function stopCamera() {
-  clearInterval(timer); timer = null; lastDescriptor = null;
-  if (stream) stream.getTracks().forEach(t => t.stop());
-  stream = null;
+// ===== التصوير + الإرسال =====
+function snap() {
+  const v = $("cam"), c = document.createElement("canvas");
+  if (!v.videoWidth) return null;
+  c.width = 480; c.height = Math.round(480 * v.videoHeight / v.videoWidth);
+  c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", 0.6);
 }
-
-function refreshButton() {
-  $("actionBtn").innerHTML = session.has_face
-    ? '<i class="fa-solid fa-camera"></i> تأكيد التسجيل'
-    : '<i class="fa-solid fa-face-smile"></i> تسجيل بصمة الوجه (مرة واحدة)';
-}
-
-async function detect() {
-  if (busy || !session) return;
+async function punch(action) {
+  if (busy) return;
+  busy = true; refresh();
+  const photo = snap();
+  if (!photo) { busy = false; refresh(); return badge($("result"), "bad", "fa-circle-xmark", ERR.NO_PHOTO); }
+  badge($("result"), "info", "fa-spinner fa-spin", "جاري إرسال البيانات...");
   try {
-    const d = await faceapi.detectSingleFace($("webcam"), new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
-    lastDescriptor = d ? d.descriptor : null;
-    $("actionBtn").disabled = !d;
-    if (d) setStatus("status-success", "fa-user-check", session.has_face ? "تم اكتشاف الوجه ✅" : "الوجه واضح، اضغط لتسجيل بصمتك ✅");
-    else setStatus("status-warning", "fa-user-slash", "يرجى التواجد بوضوح أمام الكاميرا");
-  } catch (e) {
-    console.error("Detect Loop Error", e);
-  }
-}
-
-// ===== تسجيل الحركة وإرسال إشعارات تليجرام =====
-$("actionBtn").addEventListener("click", async () => {
-  if (busy || !lastDescriptor) return;
-  busy = true; $("actionBtn").disabled = true;
-  const face = Array.from(lastDescriptor);
-  try {
-    let r;
-    if (!session.has_face) {
-      r = await rpc("app_enroll", { p_token: session.token, p_device: deviceId, p_face: face });
-      if (r.error) throw new Error(r.error);
-      session.has_face = true; localStorage.setItem("sess", JSON.stringify(session)); refreshButton();
-      setStatus("status-success", "fa-circle-check", "تم تسجيل بصمة الوجه، يمكنك الآن تسجيل الحضور");
-    } else {
-      setStatus("status-info", "fa-spinner fa-spin", "جاري تحديد الموقع وإرسال البيانات...");
-      
-      let pos;
-      try {
-        pos = await getPos();
-      } catch (gpsErr) {
-        throw new Error("GPS");
-      }
-
-      r = await rpc("app_punch", {
-        p_token: session.token, 
-        p_device: deviceId,
-        p_branch: $("branchSelect").value, 
-        p_action: $("actionType").value,
-        p_lat: pos.latitude, 
-        p_lng: pos.longitude, 
-        p_face: face
-      });
-
-      // 1. معالجة رفض النطاق الجغرافي (إرسال تنبيه للمدير على تليجرام)
-      if (r.error === "FAR") {
-        fetch(MAKE_SECURITY_WEBHOOK, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            event: "OUT_OF_RANGE_ATTEMPT",
-            employee_name: session.name,
-            branch_name: $("branchSelect").value,
-            action: $("actionType").value,
-            distance_m: r.dist,
-            attempt_time: new Date().toLocaleString('ar-EG')
-          })
-        }).catch(e => console.error("Security Alert Error", e));
-
-        setStatus("status-danger", "fa-triangle-exclamation", `⚠️ تحذير: أنت بعيد عن الفرع بـ (${r.dist} متر). تم إرسال تنبيه للإدارة على تليجرام.`);
-        return;
-      }
-
-      if (r.error) throw new Error(r.error);
-
-      // 2. إرسال الحركة الناجحة إلى Google Sheets وتليجرام
-      fetch(MAKE_ATTENDANCE_WEBHOOK, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          employee_name: session.name,
-          action: $("actionType").value,
-          branch_name: $("branchSelect").value,
-          status: "Approved",
-          timestamp: new Date().toLocaleString('sv-SE')
-        })
-      }).catch(e => console.error("Sheet Sync Error", e));
-
-      setStatus("status-success", "fa-circle-check", `✅ تم تسجيل ${$("actionType").value} بنجاح`);
-    }
+    const p = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }));
+    const r = await api("punch", { branch: $("branch").value, action, lat: p.latitude, lng: p.longitude, acc: p.accuracy, photo });
+    badge($("result"), "ok", "fa-circle-check", `✅ تم تسجيل ${action === "Check-In" ? "الحضور" : "الانصراف"} (${r.time})`);
   } catch (err) {
     if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
-    setStatus("status-danger", "fa-circle-xmark", ERR[err.message] || "حدث خطأ، حاول مرة أخرى");
-  } finally {
-    setTimeout(() => { busy = false; }, 3000);
-  }
-});
+    const m = err.data && err.data.dist ? `${ERR.FAR} (${err.data.dist} متر)` : (ERR[err.message] || (err.code ? ERR.GPS : ERR.NETWORK));
+    badge($("result"), "bad", "fa-circle-xmark", m);
+  } finally { setTimeout(() => { busy = false; refresh(); }, 2500); }
+}
+$("inBtn").onclick = () => punch("Check-In");
+$("outBtn").onclick = () => punch("Check-Out");
 
-// ===== البداية =====
-if (session) enter(); else showView("viewLogin");
+if (S) enterApp(); // جلسة محفوظة
 </script>
 </body>
 </html>
