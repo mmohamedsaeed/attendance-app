@@ -85,7 +85,7 @@
           <label>رقم الموبايل</label>
           <div class="input-wrapper">
             <i class="fa-solid fa-phone"></i>
-            <input type="tel" id="loginPhone" class="form-control" placeholder="010XXXXXXXX" required>
+            <input type="tel" id="loginPhone" class="form-control" placeholder="01XXXXXXXXX" required>
           </div>
         </div>
 
@@ -111,13 +111,13 @@
       </div>
 
       <p style="font-size: 0.85rem; color: #64748b; text-align: center; margin-bottom: 20px;">
-        يرجى إدخال رمز PIN السريع أو التوثيق البيومتري للدخول
+        يرجى إدخال كلمة السر الفتح السريع
       </p>
 
       <div class="form-group">
         <div class="input-wrapper">
           <i class="fa-solid fa-key"></i>
-          <input type="password" id="quickPinInput" class="form-control" placeholder="رمز PIN الخاص بك" maxlength="6">
+          <input type="password" id="quickPinInput" class="form-control" placeholder="كلمة السر الخاصة بك">
         </div>
       </div>
 
@@ -197,22 +197,34 @@
   const MAKE_ATTENDANCE_WEBHOOK = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
   const MAKE_SECURITY_WEBHOOK   = "https://hook.us2.make.com/ejz1nugtaq8llq2nfi572vrl59omto8j";
   
-  // Simulated Local Database
+  // Dynamic Phone Normalizer (Extracts last 10 digits to match any input format)
+  function normalizePhone(phone) {
+    if (!phone) return "";
+    let cleaned = phone.toString().replace(/\D/g, "");
+    return cleaned.length >= 10 ? cleaned.slice(-10) : cleaned;
+  }
+
+  // Employee Database Integrated
   const EMPLOYEES_DB = [
-    {
-      id: "101",
-      name: "محمد سعيد ابراهيم",
-      phone: "01012345678",
-      password: "123",
-      device_uuid: "dev_3584da_MOHAMED",
-      face_descriptor: null
-    }
+    { id: "101", name: "mohamed saeed", phone: "201110124468", password: "123", device_uuid: null, face_descriptor: null },
+    { id: "102", name: "Maiven Magdy Wahib", phone: "201203412533", password: "MW3842", device_uuid: null, face_descriptor: null },
+    { id: "103", name: "Nada Farag El Sayed", phone: "201206659040", password: "NS9154", device_uuid: null, face_descriptor: null },
+    { id: "104", name: "Habiba Khaled", phone: "201212184765", password: "HK2709", device_uuid: null, face_descriptor: null },
+    { id: "105", name: "Walid Medhat Fathy", phone: "201127724690", password: "WF6183", device_uuid: null, face_descriptor: null },
+    { id: "106", name: "Mariam Atef Yousef", phone: "201203802285", password: "MY4521", device_uuid: null, face_descriptor: null },
+    { id: "107", name: "Mohamed Mohamady Attia", phone: "201012164930", password: "MA8316", device_uuid: null, face_descriptor: null },
+    { id: "108", name: "Yara Sayed Abd ElMonsif", phone: "20122116733", password: "YA5947", device_uuid: null, face_descriptor: null },
+    { id: "109", name: "Ezz ElDin Ahmed Hatem", phone: "201022260035", password: "EH7230", device_uuid: null, face_descriptor: null },
+    { id: "110", name: "Ahmed Rady", phone: "201001363307", password: "AR1498", device_uuid: null, face_descriptor: null },
+    { id: "111", name: "Sandy Mohamed Fahmy", phone: "201050156300", password: "SF8602", device_uuid: null, face_descriptor: null },
+    { id: "112", name: "Mai Abd El Rahman", phone: "201069222468", password: "MR3075", device_uuid: null, face_descriptor: null },
+    { id: "113", name: "Mariam Karim Hares", phone: "201227802831", password: "MH6419", device_uuid: null, face_descriptor: null },
+    { id: "114", name: "Mohamed Talaat", phone: "201156003604", password: "MT5284", device_uuid: null, face_descriptor: null }
   ];
 
   let currentLocalUUID = "";
   let loggedUser = null;
   let userCoords = { lat: null, lng: null };
-  let isFaceVerified = false;
 
   // ==========================================
   // INITIALIZATION
@@ -221,10 +233,8 @@
     currentLocalUUID = getOrCreateDeviceUUID();
     document.getElementById('displayUUID').innerText = currentLocalUUID.substring(0, 16) + "...";
 
-    // Request Location
     initGeolocation();
 
-    // Check Session
     const savedSession = localStorage.getItem('app_user_session');
     if (savedSession) {
       loggedUser = JSON.parse(savedSession);
@@ -234,7 +244,6 @@
       showView('viewLogin');
     }
 
-    // Preload Face Models
     loadFaceApiModels();
   });
 
@@ -283,15 +292,18 @@
   // ==========================================
   async function handleLogin(e) {
     e.preventDefault();
-    const phone = document.getElementById('loginPhone').value.trim();
-    const password = document.getElementById('loginPassword').value.trim();
+    const inputPhone = document.getElementById('loginPhone').value.trim();
+    const inputPassword = document.getElementById('loginPassword').value.trim();
     const loginBtn = document.getElementById('loginBtn');
 
     loginBtn.disabled = true;
     loginBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
 
-    // Find Employee
-    const emp = EMPLOYEES_DB.find(x => x.phone === phone && x.password === password);
+    // Normalize phone input
+    const normalizedInput = normalizePhone(inputPhone);
+
+    // Find Employee using Normalized Phone Match
+    const emp = EMPLOYEES_DB.find(x => normalizePhone(x.phone) === normalizedInput && x.password === inputPassword);
 
     if (!emp) {
       alert("❌ رقم الموبايل أو كلمة السر غير صحيحة");
@@ -302,7 +314,6 @@
 
     // Security Check: Device Binding Match
     if (emp.device_uuid && emp.device_uuid !== currentLocalUUID) {
-      // Send Security Alert to Make.com
       await triggerSecurityAlert(emp);
 
       alert(`🛑 محاولة محظورة!\nهذا الحساب مرتبط بجهاز آخر.\nتم إرسال إشعار أمني للمدير ببيانات جهازك.`);
@@ -356,11 +367,11 @@
   // ==========================================
   function handleQuickUnlock() {
     const pin = document.getElementById('quickPinInput').value.trim();
-    if (pin === loggedUser.password || pin === "1234") {
+    if (pin === loggedUser.password) {
       document.getElementById('activeEmpName').innerText = loggedUser.name;
       showView('viewAttendance');
     } else {
-      alert("❌ رمز PIN غير صحيح");
+      alert("❌ كلمة السر غير صحيحة");
     }
   }
 
