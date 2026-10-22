@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Attendance_System</title>
+  <title>Attendance System</title>
   
   <!-- PWA Settings -->
   <meta name="theme-color" content="#4f46e5">
@@ -23,7 +23,7 @@
     
     .app-card { background: #ffffff; width: 100%; max-width: 440px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden; position: relative; }
     .header { background: linear-gradient(135deg, #4f46e5, #3b82f6); color: white; padding: 24px 20px; text-align: center; }
-    .header h1 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+    .header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; font-family: 'Cairo', sans-serif; }
     .header p { font-size: 0.85rem; opacity: 0.9; }
 
     .content { padding: 20px; }
@@ -72,7 +72,7 @@
 <div class="app-card">
   <!-- Header -->
   <div class="header">
-    <h1><i class="fa-solid fa-user-check"></i> Attendance_System</h1>
+    <h1><i class="fa-solid fa-user-check"></i> Attendance System</h1>
     <p id="subHeaderTitle">سجل دخولك لبدء تسجيل الحضور</p>
   </div>
 
@@ -192,20 +192,20 @@
 
 <script>
   // ==========================================
-  // CONFIGURATION & WEBHOOK URLS
+  // CONFIGURATION & INTEGRATED WEBHOOK URLS
   // ==========================================
-  const MAKE_ATTENDANCE_WEBHOOK = "https://hook.us2.make.com/YOUR_ATTENDANCE_WEBHOOK_URL";
-  const MAKE_SECURITY_WEBHOOK   = "https://hook.us2.make.com/YOUR_SECURITY_WEBHOOK_URL";
+  const MAKE_ATTENDANCE_WEBHOOK = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
+  const MAKE_SECURITY_WEBHOOK   = "https://hook.us2.make.com/ejz1nugtaq8llq2nfi572vrl59omto8j";
   
-  // Simulated Local Database (In Real App, Fetch from Google Sheets API)
+  // Simulated Local Database
   const EMPLOYEES_DB = [
     {
       id: "101",
       name: "محمد سعيد ابراهيم",
       phone: "01012345678",
       password: "123",
-      device_uuid: "dev_3584da_MOHAMED", // Stored Device UUID
-      face_descriptor: null // Array of 128 numbers
+      device_uuid: "dev_3584da_MOHAMED",
+      face_descriptor: null
     }
   ];
 
@@ -334,8 +334,8 @@
       phone: emp.phone,
       attempt_time: new Date().toLocaleString('sv-SE'),
       attempt_device: navigator.userAgent,
-      attempt_device_uuid: currentLocalUUID,      // UUID المحاول
-      registered_device_uuid: emp.device_uuid,   // UUID المسجل في Google Sheets
+      attempt_device_uuid: currentLocalUUID,
+      registered_device_uuid: emp.device_uuid,
       location_lat: userCoords.lat,
       location_lng: userCoords.lng
     };
@@ -414,10 +414,9 @@
         .withFaceDescriptor();
 
       if (detection) {
-        // If employee has registered face descriptor, compare Euclidean Distance
         if (loggedUser.face_descriptor) {
           const distance = faceapi.euclideanDistance(detection.descriptor, loggedUser.face_descriptor);
-          if (distance < 0.5) { // Match > 85%
+          if (distance < 0.5) {
             updateFaceStatus("status-success", "fa-circle-check", "تم التوثيق: هوية الموظف مطابقة ✅");
             submitBtn.disabled = false;
           } else {
@@ -425,7 +424,6 @@
             submitBtn.disabled = true;
           }
         } else {
-          // If 1st time without registered descriptor, allow face presence detection
           updateFaceStatus("status-success", "fa-user-check", "تم اكتشاف الوجه بوضوح ✅");
           submitBtn.disabled = false;
         }
@@ -469,7 +467,7 @@
         body: JSON.stringify(payload)
       });
 
-      alert(`✅ تم تسحيل الحركة بنجاح!\nالفرع: ${payload.branch_id}\nالحركة: ${payload.action}`);
+      alert(`✅ تم تسجيل الحركة بنجاح!\nالفرع: ${payload.branch_id}\nالحركة: ${payload.action}`);
     } catch (err) {
       alert("❌ حدث خطأ في الاتصال بالخادم، يرجى إعادة المحاولة.");
     } finally {
