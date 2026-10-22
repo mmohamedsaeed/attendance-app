@@ -72,12 +72,22 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
       <a href="#" class="link" id="backLink">رجوع</a>
     </div>
 
+    <!-- Unlock بالبصمة -->
+    <div id="vUnlock" class="view">
+      <div class="hero"><div class="ico"><i class="fa-solid fa-fingerprint"></i></div>
+        <h2>أهلاً <span id="unlockName"></span></h2><p>افتح التطبيق بالبصمة</p></div>
+      <div id="unlockMsg" class="badge bad" style="display:none"></div>
+      <button class="btn b-pri" id="unlockBtn"><i class="fa-solid fa-fingerprint"></i> فتح بالبصمة</button>
+      <a href="#" class="link" id="unlockPass">تسجيل الدخول بكلمة السر</a>
+    </div>
+
     <!-- App -->
     <div id="vApp" class="view">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:.85rem">
         <span>👤 <b id="empName">-</b></span>
         <a href="#" id="logoutLink" style="color:#ef4444;text-decoration:none;font-weight:600"><i class="fa-solid fa-power-off"></i> خروج</a>
       </div>
+      <button class="btn b-pri" id="bioBtn" style="display:none;margin-bottom:12px;background:#0ea5e9"><i class="fa-solid fa-fingerprint"></i> تفعيل الدخول بالبصمة</button>
       <div class="fg"><div class="iw"><i class="fa-solid fa-location-dot"></i>
         <select id="branch" class="fc"><option value="">جاري تحميل الفروع...</option></select></div></div>
       <div class="cam"><video id="cam" autoplay playsinline muted></video></div>
@@ -97,7 +107,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 
 <script>
 // ===== الإعداد: رابط الـ Web App من Apps Script (Deploy > Web app) =====
-const API = "https://script.google.com/macros/s/AKfycbwporh8hxRZRcpWLTE351xT6N9WkqPt5Ci6rK3lwSJ7EMo4qeKxU9SsKTHBn_KU3qQ/exec";
+const API = "https://script.google.com/macros/s/AKfycbygALx555mX8lurImxCD0D1UgpOBxuWnfrUUI_EW5txHT4wU3gpQ-QkyXjLSqGyeA/exec";
 
 const $ = id => document.getElementById(id);
 const ERR = {
@@ -143,6 +153,41 @@ function hav(a, b, c, d) {
 // المسافة: أكتر من 999 متر تتعرض بالكيلو متر
 const fmt = m => m > 999 ? +(m / 1000).toFixed(2) + " كم" : m + " متر";
 
+// ===== الدخول بالبصمة (WebAuthn): بعد أول تسجيل دخول، البصمة بتفتح الجلسة المحفوظة على نفس الجهاز =====
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const empId = () => S.token.split(".")[0];
+const bioSupported = () => !!(window.PublicKeyCredential && navigator.credentials && window.isSecureContext);
+const bioOn = () => { try { const b = JSON.parse(localStorage.getItem("bio") || "null"); return !!(b && S && b.emp === empId()); } catch (e) { return false; } };
+$("bioBtn").onclick = async () => {
+  try {
+    const cred = await navigator.credentials.create({ publicKey: {
+      challenge: crypto.getRandomValues(new Uint8Array(32)),
+      rp: { name: "Attendance" },
+      user: { id: new TextEncoder().encode(empId()), name: S.name, displayName: S.name },
+      pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
+      authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "discouraged" },
+      timeout: 60000
+    } });
+    localStorage.setItem("bio", JSON.stringify({ id: b64(cred.rawId), emp: empId() }));
+    $("bioBtn").style.display = "none";
+    badge($("result"), "ok", "fa-fingerprint", "تم تفعيل الدخول بالبصمة ✅");
+  } catch (e) { badge($("result"), "bad", "fa-circle-xmark", "تعذر تفعيل البصمة، تأكد إن بصمة الموبايل أو قفل الشاشة مفعّل"); }
+};
+$("unlockBtn").onclick = async () => {
+  $("unlockMsg").style.display = "none";
+  try {
+    const B = JSON.parse(localStorage.getItem("bio"));
+    await navigator.credentials.get({ publicKey: {
+      challenge: crypto.getRandomValues(new Uint8Array(32)),
+      allowCredentials: [{ type: "public-key", id: unb64(B.id), transports: ["internal"] }],
+      userVerification: "required", timeout: 60000
+    } });
+    enterApp();
+  } catch (e) { badge($("unlockMsg"), "bad", "fa-circle-xmark", "تعذر التحقق بالبصمة، حاول مرة أخرى"); }
+};
+$("unlockPass").onclick = e => { e.preventDefault(); logout(); show("vLogin"); };
+
 // ===== Landing / Login =====
 $("startBtn").onclick = () => show("vLogin");
 $("backLink").onclick = e => { e.preventDefault(); show("vLanding"); };
@@ -162,6 +207,7 @@ function logout() { localStorage.removeItem("sess"); S = null; stopAll(); show("
 // ===== شاشة التسجيل =====
 async function enterApp() {
   $("empName").textContent = S.name; show("vApp"); $("result").style.display = "none";
+  $("bioBtn").style.display = (bioSupported() && !bioOn()) ? "flex" : "none";
   try { const r0 = await api("branches"); branches = r0.branches; if (r0.wait > 0) startCooldown(r0.wait); setAllowed(r0.allowed); }
   catch (err) {
     if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
@@ -269,7 +315,10 @@ async function punch(action) {
 $("inBtn").onclick = () => punch("Check-In");
 $("outBtn").onclick = () => punch("Check-Out");
 
-if (S) enterApp(); // جلسة محفوظة
+if (S) { // جلسة محفوظة: لو البصمة مفعّلة نطلبها الأول
+  if (bioSupported() && bioOn()) { $("unlockName").textContent = S.name; show("vUnlock"); }
+  else enterApp();
+}
 </script>
 </body>
 </html>
