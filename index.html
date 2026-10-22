@@ -95,7 +95,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 
 <script>
 // ===== الإعداد: رابط الـ Web App من Apps Script (Deploy > Web app) =====
-const API = "https://script.google.com/macros/s/AKfycbzyNYVuwW-f8Kej7TiPmqkAMpBtrz3XMh8hgvBuDnhqQI_RA4d9za-sm-89ur7on90/exec";
+const API = "https://script.google.com/macros/s/AKfycbwdC574RoXPMi6iv2Koya4W56q347V44Ral54EGClMs7I_Eo1XYTjCAQBozetxz6WY/exec";
 
 const $ = id => document.getElementById(id);
 const ERR = {
@@ -136,6 +136,9 @@ function hav(a, b, c, d) {
   const h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
 }
+
+// المسافة: أكتر من 999 متر تتعرض بالكيلو متر
+const fmt = m => m > 999 ? +(m / 1000).toFixed(2) + " كم" : m + " متر";
 
 // ===== Landing / Login =====
 $("startBtn").onclick = () => show("vLogin");
@@ -187,8 +190,9 @@ function refresh() {
   else if (!b) badge($("geo"), "info", "fa-location-dot", "اختر الفرع لحساب المسافة");
   else {
     const m = Math.round(hav(pos.latitude, pos.longitude, b.lat, b.lng));
-    if (m <= b.radius) { can = true; badge($("geo"), "ok", "fa-circle-check", `داخل نطاق الفرع (${m} متر) ✅`); }
-    else badge($("geo"), "bad", "fa-circle-xmark", `خارج نطاق الفرع، تبعد ${m} متر (المسموح ${b.radius}) ❌`);
+    can = true; // التسجيل مسموح حتى خارج النطاق، لكن بيظهر تحذير بعد الإرسال
+    if (m <= b.radius) badge($("geo"), "ok", "fa-circle-check", `داخل نطاق الفرع (${fmt(m)}) ✅`);
+    else badge($("geo"), "warn", "fa-triangle-exclamation", `خارج نطاق الفرع، تبعد ${fmt(m)} — يمكنك التسجيل وسيظهر تحذير ⚠️`);
   }
   $("inBtn").disabled = $("outBtn").disabled = !(can && stream && !busy);
 }
@@ -210,10 +214,12 @@ async function punch(action) {
   try {
     const p = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }));
     const r = await api("punch", { branch: $("branch").value, action, lat: p.latitude, lng: p.longitude, acc: p.accuracy, photo });
-    badge($("result"), "ok", "fa-circle-check", `✅ تم تسجيل ${action === "Check-In" ? "الحضور" : "الانصراف"} (${r.time})`);
+    const what = action === "Check-In" ? "الحضور" : "الانصراف";
+    if (r.far) badge($("result"), "warn", "fa-triangle-exclamation", `⚠️ تحذير: تم تسجيل ${what} خارج نطاق الفرع (تبعد ${fmt(r.dist)}) — ${r.time}`);
+    else badge($("result"), "ok", "fa-circle-check", `✅ تم تسجيل ${what} (${r.time})`);
   } catch (err) {
     if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
-    const m = err.data && err.data.dist ? `${ERR.FAR} (${err.data.dist} متر)` : (ERR[err.message] || (err.code ? ERR.GPS : ERR.NETWORK));
+    const m = ERR[err.message] || (err.code ? ERR.GPS : ERR.NETWORK);
     badge($("result"), "bad", "fa-circle-xmark", m);
   } finally { setTimeout(() => { busy = false; refresh(); }, 2500); }
 }
