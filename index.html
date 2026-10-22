@@ -83,7 +83,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 // ===== الإعدادات الأساسية وروابط Webhook =====
 const SB_URL = "https://lmjnyzkmkvknvgfvrxmb.supabase.co";
 const SB_KEY = "sb_publishable_qTWkfRTdkrG9wGbqDhgT0w_EjbkQrlS";
-const MODELS = "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights";
+const MODELS = "https://cdn.jsdelivr.net/gh/cbrandolino/face-api.js@master/weights";
 
 // روابط الـ Webhooks لتحديث Google Sheets وإرسال التنبيه الأمني للمدير
 const MAKE_ATTENDANCE_WEBHOOK = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
@@ -182,6 +182,8 @@ async function enter() {
   $("activeEmpName").textContent = session.name;
   showView("viewAttendance");
   refreshButton();
+  
+  // 1. تشغيل الكاميرا أولاً
   try {
     stream = await navigator.mediaDevices.getUserMedia({ 
       video: { 
@@ -191,13 +193,22 @@ async function enter() {
       } 
     });
     $("webcam").srcObject = stream;
-    await modelsReady;
   } catch (err) {
     return setStatus("status-danger", "fa-triangle-exclamation", "تعذر فتح الكاميرا، تأكد من الصلاحيات.");
   }
+
+  // 2. تحميل نماذج الوجه مع إظهار تنبيه عند التعثر
+  try {
+    setStatus("status-info", "fa-spinner fa-spin", "جاري تحميل نماذج بصمة الوجه...");
+    await modelsReady;
+  } catch (err) {
+    console.error("Model Load Error:", err);
+    return setStatus("status-danger", "fa-wifi", "تعذر تحميل ملفات بصمة الوجه، تأكد من جودة اتصال باقة الموبايل.");
+  }
+
+  // 3. بدء حلقة الفحص
   clearInterval(timer);
-  // تغيير زمن الفحص إلى 1.5 ثانية بدلاً من 0.9 ثانية لتقليل ضغط المعالج
-  timer = setInterval(detect, 1500);
+  timer = setInterval(detect, 1200);
 }
 
 function stopCamera() {
