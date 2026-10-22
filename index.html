@@ -80,10 +80,14 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 </div>
 
 <script>
-// ===== الإعدادات: من Supabase > Project Settings > API =====
+// ===== الإعدادات الأساسية وروابط Webhook =====
 const SB_URL = "https://lmjnyzkmkvknvgfvrxmb.supabase.co";
 const SB_KEY = "sb_publishable_qTWkfRTdkrG9wGbqDhgT0w_EjbkQrlS";
 const MODELS = "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights";
+
+// روابط الـ Webhooks لتحديث Google Sheets وإرسال التنبيه الأمني للمدير
+const MAKE_ATTENDANCE_WEBHOOK = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
+const MAKE_SECURITY_WEBHOOK   = "https://hook.us2.make.com/ejz1nugtaq8llq2nfi572vrl59omto8j";
 
 const $ = id => document.getElementById(id);
 const ERR = {
@@ -91,7 +95,6 @@ const ERR = {
   LOCKED: "تم إيقاف المحاولات مؤقتاً، حاول بعد 15 دقيقة",
   DEVICE: "🛑 هذا الحساب مرتبط بجهاز آخر. تم تسجيل المحاولة وإبلاغ الإدارة.",
   SESSION: "انتهت الجلسة، سجل دخولك مرة أخرى",
-  FAR: "أنت خارج نطاق الفرع المختار",
   FACE_MISMATCH: "الوجه غير مطابق لبيانات الموظف ❌",
   NO_FACE: "لم يتم تسجيل بصمة الوجه بعد",
   DUP: "تم تسجيل نفس الحركة منذ لحظات",
@@ -99,11 +102,10 @@ const ERR = {
   GPS: "تعذر تحديد موقعك، فعّل الـ GPS وأعد المحاولة"
 };
 
-// معرّف الجهاز (الربط الفعلي بيتم على السيرفر)
 const deviceId = localStorage.getItem("dev") || (() => { const v = crypto.randomUUID(); localStorage.setItem("dev", v); return v; })();
 $("displayUUID").textContent = deviceId.slice(0, 8) + "...";
 
-let session = JSON.parse(localStorage.getItem("sess") || "null"); // {token,name,has_face} — بدون كلمة سر
+let session = JSON.parse(localStorage.getItem("sess") || "null");
 let stream = null, timer = null, busy = false, lastDescriptor = null;
 const modelsReady = Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri(MODELS),
@@ -117,10 +119,7 @@ async function rpc(fn, args) {
     headers: { apikey: SB_KEY, "Content-Type": "application/json" },
     body: JSON.stringify(args)
   });
-  if (!r.ok) {
-    console.error("Supabase error", r.status, await r.text());
-    throw new Error("NETWORK");
-  }
+  if (!r.ok) throw new Error("NETWORK");
   return r.json();
 }
 
@@ -128,12 +127,14 @@ function showView(id) {
   document.querySelectorAll(".view-section").forEach(e => e.classList.remove("active"));
   $(id).classList.add("active");
 }
+
 function setStatus(cls, icon, msg) {
   const b = $("faceStatus");
   b.className = "status-badge " + cls;
   b.innerHTML = `<i class="fa-solid ${icon}"></i><span></span>`;
   b.lastChild.textContent = msg;
 }
+
 function getPos() {
   return new Promise((res, rej) => navigator.geolocation
     ? navigator.geolocation.getCurrentPosition(p => res(p.coords), () => rej(new Error("GPS")), { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 })
@@ -166,7 +167,7 @@ function logout() {
   stopCamera(); showView("viewLogin");
 }
 
-// ===== الكاميرا + كشف الوجه (Loop واحد فقط) =====
+// ===== الكاميرا وكشف الوجه =====
 async function enter() {
   $("activeEmpName").textContent = session.name;
   showView("viewAttendance");
@@ -181,16 +182,19 @@ async function enter() {
   clearInterval(timer);
   timer = setInterval(detect, 900);
 }
+
 function stopCamera() {
   clearInterval(timer); timer = null; lastDescriptor = null;
   if (stream) stream.getTracks().forEach(t => t.stop());
   stream = null;
 }
+
 function refreshButton() {
   $("actionBtn").innerHTML = session.has_face
     ? '<i class="fa-solid fa-camera"></i> تأكيد'
     : '<i class="fa-solid fa-face-smile"></i> تسجيل بصمة الوجه (مرة واحدة)';
 }
+
 async function detect() {
   if (busy || !session) return;
   const d = await faceapi.detectSingleFace($("webcam"), new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
@@ -200,7 +204,7 @@ async function detect() {
   else setStatus("status-warning", "fa-user-slash", "يرجى التواجد بوضوح أمام الكاميرا");
 }
 
-// ===== تسجيل الوجه / الحضور (التحقق كله على السيرفر) =====
+// ===== تسجيل الحركة والتزامن مع Google Sheets وتنبيه المدير =====
 $("actionBtn").addEventListener("click", async () => {
   if (busy || !lastDescriptor) return;
   busy = true; $("actionBtn").disabled = true;
@@ -215,19 +219,64 @@ $("actionBtn").addEventListener("click", async () => {
     } else {
       setStatus("status-info", "fa-spinner fa-spin", "جاري تحديد الموقع وإرسال البيانات...");
       const pos = await getPos();
+      
       r = await rpc("app_punch", {
-        p_token: session.token, p_device: deviceId,
-        p_branch: $("branchSelect").value, p_action: $("actionType").value,
-        p_lat: pos.latitude, p_lng: pos.longitude, p_face: face
+        p_token: session.token, 
+        p_device: deviceId,
+        p_branch: $("branchSelect").value, 
+        p_action: $("actionType").value,
+        p_lat: pos.latitude, 
+        p_lng: pos.longitude, 
+        p_face: face
       });
       if (r.error) throw new Error(r.error);
-      setStatus("status-success", "fa-circle-check", `✅ تم تسجيل ${$("actionType").value} بنجاح`);
+
+      // 1. إرسال الصف إلى Google Sheets عبر Make.com
+      const sheetPayload = {
+        employee_name: session.name,
+        action: $("actionType").value,
+        branch_name: $("branchSelect").value,
+        distance_m: r.dist_m,
+        status: r.status,
+        timestamp: new Date().toLocaleString('sv-SE')
+      };
+
+      fetch(MAKE_ATTENDANCE_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sheetPayload)
+      }).catch(e => console.error("Sheet Sync Error", e));
+
+      // 2. معالجة حالة المسافة (> 100 متر)
+      if (r.is_far) {
+        // إرسال إشعار تحذيري فوري للمدير
+        const alertPayload = {
+          event: "OUT_OF_RANGE_ATTEMPT",
+          employee_name: session.name,
+          branch_name: $("branchSelect").value,
+          action: $("actionType").value,
+          distance_m: r.dist_m,
+          attempt_time: new Date().toLocaleString('ar-EG')
+        };
+
+        fetch(MAKE_SECURITY_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(alertPayload)
+        }).catch(e => console.error("Security Alert Error", e));
+
+        // تحذير الموظف على الشاشة
+        setStatus("status-danger", "fa-triangle-exclamation", `⚠️ تحذير: أنت بعيد عن الفرع بـ (${r.dist_m} متر). تم تسجيل الحركة كـ (مرفوض - خارج النطاق) وإرسال تنبيه للإدارة.`);
+      } else {
+        // إشعار نجاح الحضور للموظف
+        setStatus("status-success", "fa-circle-check", `✅ تم تسجيل ${$("actionType").value} بنجاح (المسافة: ${r.dist_m} متر)`);
+      }
     }
   } catch (err) {
     if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
     setStatus("status-danger", "fa-circle-xmark", ERR[err.message] || "حدث خطأ، حاول مرة أخرى");
   } finally {
-    setTimeout(() => { busy = false; }, 3000); // يمنع الضغط المتكرر
+    setTimeout(() => { busy = false; }, 3000);
   }
 });
 
