@@ -173,14 +173,21 @@ async function enter() {
   showView("viewAttendance");
   refreshButton();
   try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+    stream = await navigator.mediaDevices.getUserMedia({ 
+      video: { 
+        facingMode: "user",
+        width: { ideal: 640 },
+        height: { ideal: 480 }
+      } 
+    });
     $("webcam").srcObject = stream;
     await modelsReady;
   } catch (err) {
-    return setStatus("status-danger", "fa-triangle-exclamation", "تعذر فتح الكاميرا أو تحميل النماذج، تأكد من الصلاحيات والاتصال.");
+    return setStatus("status-danger", "fa-triangle-exclamation", "تعذر فتح الكاميرا، تأكد من الصلاحيات.");
   }
   clearInterval(timer);
-  timer = setInterval(detect, 900);
+  // تغيير زمن الفحص إلى 1.5 ثانية بدلاً من 0.9 ثانية لتقليل ضغط المعالج
+  timer = setInterval(detect, 1500);
 }
 
 function stopCamera() {
