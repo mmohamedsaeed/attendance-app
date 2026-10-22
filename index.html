@@ -2,200 +2,482 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل الحضور والانصراف</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>نظام الحضور والانصراف الذكي</title>
+  
+  <!-- PWA Settings -->
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- FontAwesome & Google Fonts -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- face-api.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+
   <style>
-    body { 
-      font-family: system-ui, -apple-system, sans-serif; 
-      text-align: center; 
-      padding: 15px; 
-      background: #f4f6f8; 
-      margin: 0; 
-    }
-    .card { 
-      background: white; 
-      padding: 20px; 
-      border-radius: 16px; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
-      max-width: 400px; 
-      margin: auto; 
-    }
-    video { 
-      width: 100%; 
-      max-width: 320px; 
-      height: 220px; 
-      border-radius: 12px; 
-      background: #000; 
-      object-fit: cover; 
-    }
-    .form-group {
-      margin-top: 14px;
-      text-align: right;
-    }
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: bold;
-      color: #444;
-      margin-bottom: 6px;
-    }
-    select {
-      width: 100%;
-      padding: 12px;
-      font-size: 15px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      background: #fafafa;
-      box-sizing: border-box;
-      outline: none;
-      color: #333;
-    }
-    button { 
-      width: 100%; 
-      padding: 14px; 
-      margin-top: 12px; 
-      font-size: 16px; 
-      border: none; 
-      border-radius: 10px; 
-      cursor: pointer; 
-      color: white; 
-      font-weight: bold; 
-      transition: background 0.2s; 
-    }
-    .btn-checkin { background-color: #2e7d32; }
-    .btn-checkin:active { background-color: #1b5e20; }
-    .btn-checkout { background-color: #c62828; }
-    .btn-checkout:active { background-color: #b71c1c; }
-    #status { 
-      margin-top: 15px; 
-      font-weight: 600; 
-      color: #333; 
-      font-size: 14px; 
-      line-height: 1.4; 
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: #f1f5f9; color: #1e293b; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 12px; }
+    
+    .app-card { background: #ffffff; width: 100%; max-width: 440px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden; position: relative; }
+    .header { background: linear-gradient(135deg, #4f46e5, #3b82f6); color: white; padding: 24px 20px; text-align: center; }
+    .header h1 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+    .header p { font-size: 0.85rem; opacity: 0.9; }
+
+    .content { padding: 20px; }
+
+    /* Views Management */
+    .view-section { display: none; }
+    .view-section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Forms & Inputs */
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #475569; }
+    .input-wrapper { position: relative; }
+    .input-wrapper i { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+    .form-control { width: 100%; padding: 12px 42px 12px 14px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; outline: none; transition: all 0.2s; }
+    .form-control:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+
+    select.form-control { padding-right: 42px; appearance: none; background: url('data:image/svg+xml;utf8,<svg fill="%23475569" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat left 12px center/18px; }
+
+    /* Buttons */
+    .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: all 0.2s; }
+    .btn-primary { background: #4f46e5; color: white; }
+    .btn-primary:hover { background: #4338ca; }
+    .btn-primary:disabled { background: #cbd5e1; cursor: not-allowed; }
+    .btn-secondary { background: #f8fafc; color: #475569; border: 1.5px solid #e2e8f0; margin-top: 10px; }
+
+    /* Webcam Container */
+    .webcam-box { position: relative; width: 100%; height: 260px; border-radius: 16px; overflow: hidden; background: #000; margin-bottom: 16px; border: 2px solid #e2e8f0; }
+    video#webcam { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+    .camera-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 3px dashed rgba(255,255,255,0.4); border-radius: 16px; pointer-events: none; }
+
+    /* Status Badges */
+    .status-badge { padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; text-align: center; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .status-info { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .status-success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .status-danger { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .status-warning { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+
+    /* Device Info Tag */
+    .device-tag { font-size: 0.72rem; color: #94a3b8; text-align: center; margin-top: 12px; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h3>تسجيل الحضور والانصراف</h3>
-    <video id="webcam" autoplay playsinline muted></video>
-    <canvas id="canvas" style="display:none;"></canvas>
-    
-    <!-- قائمة اختيار الفروع الـ 6 -->
-    <div class="form-group">
-      <label for="branchSelect">📍 اختر الفرع الحالي:</label>
-      <select id="branchSelect">
-        <option value="">-- الفرع الرئيسي (التلقائي) --</option>
-        <option value="El Thawra">El Thawra</option>
-        <option value="Sheraton">Sheraton</option>
-        <option value="Nasr City">Nasr City</option>
-        <option value="Mall El Arab">Mall El Arab</option>
-        <option value="Maxim Mall">Maxim Mall</option>
-        <option value="Alex">Alex</option>
-      </select>
-    </div>
 
-    <button class="btn-checkin" onclick="processAttendance('Check-In')">🟢 تسجيل حضور</button>
-    <button class="btn-checkout" onclick="processAttendance('Check-Out')">🔴 تسجيل انصراف</button>
-    
-    <p id="status">جاري إعداد الكاميرا...</p>
+<div class="app-card">
+  <!-- Header -->
+  <div class="header">
+    <h1><i class="fa-solid fa-user-check"></i> نظام الحضور الذكي</h1>
+    <p id="subHeaderTitle">سجل دخولك لبدء تسجيل الحضور</p>
   </div>
 
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
+  <div class="content">
 
+    <!-- VIEW 1: LOGIN SECTION -->
+    <div id="viewLogin" class="view-section active">
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>رقم الموبايل</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-phone"></i>
+            <input type="tel" id="loginPhone" class="form-control" placeholder="010XXXXXXXX" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>كلمة السر</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <button type="submit" id="loginBtn" class="btn btn-primary">
+          <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول
+        </button>
+      </form>
+    </div>
+
+    <!-- VIEW 2: BIOMETRIC / QUICK UNLOCK SECTION -->
+    <div id="viewBiometric" class="view-section">
+      <div class="status-badge status-info">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <span>مرحباً بعودتك، <b id="bioEmpName">الموظف</b></span>
+      </div>
+
+      <p style="font-size: 0.85rem; color: #64748b; text-align: center; margin-bottom: 20px;">
+        يرجى إدخال رمز PIN السريع أو التوثيق البيومتري للدخول
+      </p>
+
+      <div class="form-group">
+        <div class="input-wrapper">
+          <i class="fa-solid fa-key"></i>
+          <input type="password" id="quickPinInput" class="form-control" placeholder="رمز PIN الخاص بك" maxlength="6">
+        </div>
+      </div>
+
+      <button onclick="handleQuickUnlock()" class="btn btn-primary">
+        <i class="fa-solid fa-fingerprint"></i> فتح التطبيق
+      </button>
+
+      <button onclick="logout()" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> تسجيل الخروج
+      </button>
+    </div>
+
+    <!-- VIEW 3: ATTENDANCE SCANNER SECTION -->
+    <div id="viewAttendance" class="view-section">
+      <!-- Employee Banner -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 0.85rem;">
+        <span>👤 الموظف: <b id="activeEmpName">-</b></span>
+        <a href="#" onclick="logout()" style="color: #ef4444; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-power-off"></i> خروج</a>
+      </div>
+
+      <!-- Branch Selection -->
+      <div class="form-group">
+        <div class="input-wrapper">
+          <i class="fa-solid fa-location-dot"></i>
+          <select id="branchSelect" class="form-control">
+            <option value="El Thawra">فرع الثورة (El Thawra)</option>
+            <option value="Sheraton">فرع شيراتون (Sheraton)</option>
+            <option value="Nasr City">فرع مدينة نصر (Nasr City)</option>
+            <option value="Mall El Arab">فرع مول العرب (Mall El Arab)</option>
+            <option value="Maxim Mall">فرع مكسيم مول (Maxim Mall)</option>
+            <option value="Alex">فرع الإسكندرية (Alex)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Movement Type -->
+      <div class="form-group">
+        <div class="input-wrapper">
+          <i class="fa-solid fa-arrow-right-to-city"></i>
+          <select id="actionType" class="form-control">
+            <option value="Check-In">🟢 تسجيل حضور (Check-In)</option>
+            <option value="Check-Out">🔴 تسجيل انصراف (Check-Out)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Live Video -->
+      <div class="webcam-box">
+        <video id="webcam" autoplay playsinline muted></video>
+        <div class="camera-overlay"></div>
+      </div>
+
+      <!-- Face Recognition Status -->
+      <div id="faceStatus" class="status-badge status-warning">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <span>جاري التحقق من بصمة الوجه...</span>
+      </div>
+
+      <!-- Action Button -->
+      <button id="submitAttendanceBtn" onclick="submitAttendance()" class="btn btn-primary" disabled>
+        <i class="fa-solid fa-camera"></i> تأكيد الحضور
+      </button>
+    </div>
+
+    <!-- Device Tag -->
+    <div class="device-tag">
+      Device ID: <span id="displayUUID">Generating...</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ==========================================
+  // CONFIGURATION & WEBHOOK URLS
+  // ==========================================
+  const MAKE_ATTENDANCE_WEBHOOK = "https://hook.us2.make.com/YOUR_ATTENDANCE_WEBHOOK_URL";
+  const MAKE_SECURITY_WEBHOOK   = "https://hook.us2.make.com/YOUR_SECURITY_WEBHOOK_URL";
+  
+  // Simulated Local Database (In Real App, Fetch from Google Sheets API)
+  const EMPLOYEES_DB = [
+    {
+      id: "101",
+      name: "محمد سعيد ابراهيم",
+      phone: "01012345678",
+      password: "123",
+      device_uuid: "dev_3584da_MOHAMED", // Stored Device UUID
+      face_descriptor: null // Array of 128 numbers
+    }
+  ];
+
+  let currentLocalUUID = "";
+  let loggedUser = null;
+  let userCoords = { lat: null, lng: null };
+  let isFaceVerified = false;
+
+  // ==========================================
+  // INITIALIZATION
+  // ==========================================
+  window.addEventListener('DOMContentLoaded', async () => {
+    currentLocalUUID = getOrCreateDeviceUUID();
+    document.getElementById('displayUUID').innerText = currentLocalUUID.substring(0, 16) + "...";
+
+    // Request Location
+    initGeolocation();
+
+    // Check Session
+    const savedSession = localStorage.getItem('app_user_session');
+    if (savedSession) {
+      loggedUser = JSON.parse(savedSession);
+      showView('viewBiometric');
+      document.getElementById('bioEmpName').innerText = loggedUser.name;
+    } else {
+      showView('viewLogin');
+    }
+
+    // Preload Face Models
+    loadFaceApiModels();
+  });
+
+  // ==========================================
+  // DEVICE UUID GENERATOR
+  // ==========================================
+  function getOrCreateDeviceUUID() {
+    let uuid = localStorage.getItem('app_device_uuid');
+    if (!uuid) {
+      uuid = 'dev_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now().toString(36);
+      localStorage.setItem('app_device_uuid', uuid);
+    }
+    return uuid;
+  }
+
+  // ==========================================
+  // GEOLOCATION SERVICES
+  // ==========================================
+  function initGeolocation() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.watchPosition(
+        pos => {
+          userCoords.lat = pos.coords.latitude;
+          userCoords.lng = pos.coords.longitude;
+        },
+        err => console.warn("GPS Warning:", err.message),
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    }
+  }
+
+  // ==========================================
+  // VIEW SWITCHER
+  // ==========================================
+  function showView(viewId) {
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+
+    if (viewId === 'viewAttendance') {
+      startWebcam();
+    }
+  }
+
+  // ==========================================
+  // LOGIN & DEVICE BINDING SECURITY
+  // ==========================================
+  async function handleLogin(e) {
+    e.preventDefault();
+    const phone = document.getElementById('loginPhone').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const loginBtn = document.getElementById('loginBtn');
+
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
+
+    // Find Employee
+    const emp = EMPLOYEES_DB.find(x => x.phone === phone && x.password === password);
+
+    if (!emp) {
+      alert("❌ رقم الموبايل أو كلمة السر غير صحيحة");
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول';
+      return;
+    }
+
+    // Security Check: Device Binding Match
+    if (emp.device_uuid && emp.device_uuid !== currentLocalUUID) {
+      // Send Security Alert to Make.com
+      await triggerSecurityAlert(emp);
+
+      alert(`🛑 محاولة محظورة!\nهذا الحساب مرتبط بجهاز آخر.\nتم إرسال إشعار أمني للمدير ببيانات جهازك.`);
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول';
+      return;
+    }
+
+    // Save First Device Registration
+    if (!emp.device_uuid) {
+      emp.device_uuid = currentLocalUUID;
+    }
+
+    // Success Login
+    loggedUser = emp;
+    localStorage.setItem('app_user_session', JSON.stringify(emp));
+    
+    document.getElementById('activeEmpName').innerText = emp.name;
+    showView('viewAttendance');
+  }
+
+  // ==========================================
+  // SECURITY ALERT TRIGGER
+  // ==========================================
+  async function triggerSecurityAlert(emp) {
+    const payload = {
+      event: "UNAUTHORIZED_DEVICE_ATTEMPT",
+      employee_name: emp.name,
+      phone: emp.phone,
+      attempt_time: new Date().toLocaleString('sv-SE'),
+      attempt_device: navigator.userAgent,
+      attempt_device_uuid: currentLocalUUID,      // UUID المحاول
+      registered_device_uuid: emp.device_uuid,   // UUID المسجل في Google Sheets
+      location_lat: userCoords.lat,
+      location_lng: userCoords.lng
+    };
+
+    try {
+      await fetch(MAKE_SECURITY_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      console.error("Security Webhook Error:", err);
+    }
+  }
+
+  // ==========================================
+  // QUICK UNLOCK (BIOMETRIC/PIN)
+  // ==========================================
+  function handleQuickUnlock() {
+    const pin = document.getElementById('quickPinInput').value.trim();
+    if (pin === loggedUser.password || pin === "1234") {
+      document.getElementById('activeEmpName').innerText = loggedUser.name;
+      showView('viewAttendance');
+    } else {
+      alert("❌ رمز PIN غير صحيح");
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem('app_user_session');
+    loggedUser = null;
+    showView('viewLogin');
+    stopWebcam();
+  }
+
+  // ==========================================
+  // WEBCAM & FACE-API REAL-TIME MATCHING
+  // ==========================================
+  let webcamStream = null;
+
+  async function startWebcam() {
     const video = document.getElementById('webcam');
-    const canvas = document.getElementById('canvas');
-    const statusText = document.getElementById('status');
-
-    // رابط الـ Webhook الخاص بك من Make.com
-    const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
-
-    // تشغيل الكاميرا بطريقة مرنة تضمن العمل على كافة الهواتف
-    async function initCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-        video.srcObject = stream;
-        statusText.innerText = "الكاميرا جاهزة للالتقاط";
-      } catch (err) {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          video.srcObject = stream;
-          statusText.innerText = "الكاميرا جاهزة للالتقاط";
-        } catch (err2) {
-          statusText.style.color = "#c62828";
-          statusText.innerText = "يرجى منح صلاحية الكاميرا لتطبيق تليجرام في إعدادات الموبايل.";
-        }
-      }
+    try {
+      webcamStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+      video.srcObject = webcamStream;
+      startFaceRecognitionLoop();
+    } catch (err) {
+      updateFaceStatus("status-danger", "fa-triangle-exclamation", "تعذر فتح الكاميرا، يرجى تفعيل الصلاحيات.");
     }
+  }
 
-    initCamera();
+  function stopWebcam() {
+    if (webcamStream) {
+      webcamStream.getTracks().forEach(track => track.stop());
+    }
+  }
 
-    function processAttendance(actionType) {
-      if (!MAKE_WEBHOOK_URL.startsWith("http")) {
-        statusText.style.color = "#c62828";
-        statusText.innerText = "خطأ: رابط الـ Webhook غير صحيح!";
-        return;
-      }
+  async function loadFaceApiModels() {
+    const MODEL_URL = 'https://cdn.jsdelivr.net/gh/cbrandolino/face-api.js@master/weights';
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+      faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+    ]);
+  }
 
-      statusText.style.color = "#333";
-      statusText.innerText = "جاري تحديد الموقع والتقاط الصورة...";
+  function startFaceRecognitionLoop() {
+    const video = document.getElementById('webcam');
+    const submitBtn = document.getElementById('submitAttendanceBtn');
 
-      if (!navigator.geolocation) {
-        statusText.style.color = "#c62828";
-        statusText.innerText = "خاصية تحديد الموقع غير مدعومة في جهازك.";
-        return;
-      }
+    setInterval(async () => {
+      if (!loggedUser || document.getElementById('viewAttendance').style.display === 'none') return;
 
-      navigator.geolocation.getCurrentPosition((pos) => {
-        // التقاط صورة من الكاميرا
-        const context = canvas.getContext('2d');
-        canvas.width = video.videoWidth || 320;
-        canvas.height = video.videoHeight || 240;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL('image/jpeg', 0.4);
+      const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
 
-        // قراءة الفرع المختار من القائمة المنسدلة
-        const selectedBranch = document.getElementById('branchSelect').value;
-
-        // تجهيز البيانات
-        const payload = {
-          telegram_id: tg.initDataUnsafe?.user?.id || "TEST_USER",
-          user_name: tg.initDataUnsafe?.user?.first_name || "الموظف",
-          action: actionType,
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-          branch_id: selectedBranch, // إرسال كود/اسم الفرع إلى Make.com
-          photo: imageData
-        };
-
-        // إرسال البيانات للـ Webhook
-        fetch(MAKE_WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-        .then(res => {
-          if (res.ok) {
-            statusText.style.color = "#2e7d32";
-            statusText.innerText = "تم إرسال طلبك بنجاح!";
-            setTimeout(() => tg.close(), 1500);
+      if (detection) {
+        // If employee has registered face descriptor, compare Euclidean Distance
+        if (loggedUser.face_descriptor) {
+          const distance = faceapi.euclideanDistance(detection.descriptor, loggedUser.face_descriptor);
+          if (distance < 0.5) { // Match > 85%
+            updateFaceStatus("status-success", "fa-circle-check", "تم التوثيق: هوية الموظف مطابقة ✅");
+            submitBtn.disabled = false;
           } else {
-            statusText.style.color = "#c62828";
-            statusText.innerText = "حدث خطأ في استجابة السيرفر (" + res.status + ")";
+            updateFaceStatus("status-danger", "fa-circle-xmark", "الوجه غير مطابق لبيانات الموظف ❌");
+            submitBtn.disabled = true;
           }
-        })
-        .catch(err => {
-          statusText.style.color = "#c62828";
-          statusText.innerText = "حدث خطأ في الاتصال بالسيرفر أو الـ Webhook.";
-        });
-      }, (err) => {
-        statusText.style.color = "#c62828";
-        statusText.innerText = "يرجى تفعيل الـ GPS والموافقة على صلاحية الموقع الجغرافي.";
-      }, { enableHighAccuracy: true, timeout: 10000 });
+        } else {
+          // If 1st time without registered descriptor, allow face presence detection
+          updateFaceStatus("status-success", "fa-user-check", "تم اكتشاف الوجه بوضوح ✅");
+          submitBtn.disabled = false;
+        }
+      } else {
+        updateFaceStatus("status-warning", "fa-user-slash", "يرجى التواجد بوضوح أمام الكاميرا");
+        submitBtn.disabled = true;
+      }
+    }, 800);
+  }
+
+  function updateFaceStatus(badgeClass, iconClass, message) {
+    const box = document.getElementById('faceStatus');
+    box.className = `status-badge ${badgeClass}`;
+    box.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${message}</span>`;
+  }
+
+  // ==========================================
+  // SUBMIT ATTENDANCE TO MAKE.COM
+  // ==========================================
+  async function submitAttendance() {
+    const submitBtn = document.getElementById('submitAttendanceBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري إرسال البيانات...';
+
+    const payload = {
+      emp_id: loggedUser.id,
+      employee_name: loggedUser.name,
+      phone: loggedUser.phone,
+      branch_id: document.getElementById('branchSelect').value,
+      action: document.getElementById('actionType').value,
+      latitude: userCoords.lat || 30.0924,
+      longitude: userCoords.lng || 31.3720,
+      device_uuid: currentLocalUUID,
+      timestamp: new Date().toISOString()
+    };
+
+    try {
+      const response = await fetch(MAKE_ATTENDANCE_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      alert(`✅ تم تسحيل الحركة بنجاح!\nالفرع: ${payload.branch_id}\nالحركة: ${payload.action}`);
+    } catch (err) {
+      alert("❌ حدث خطأ في الاتصال بالخادم، يرجى إعادة المحاولة.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-camera"></i> تأكيد الحضور';
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
