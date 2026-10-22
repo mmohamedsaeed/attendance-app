@@ -82,10 +82,12 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
         <select id="branch" class="fc"><option value="">جاري تحميل الفروع...</option></select></div></div>
       <div class="cam"><video id="cam" autoplay playsinline muted></video></div>
       <div id="geo" class="badge warn"><i class="fa-solid fa-spinner fa-spin"></i><span>جاري تحديد موقعك...</span></div>
+      <div id="state" class="badge info" style="display:none"></div>
       <div class="row">
         <button class="btn b-in" id="inBtn" disabled><i class="fa-solid fa-right-to-bracket"></i> حضور</button>
         <button class="btn b-out" id="outBtn" disabled><i class="fa-solid fa-right-from-bracket"></i> انصراف</button>
       </div>
+      <div id="cd" class="badge info" style="display:none;margin:14px 0 0"></div>
       <div id="result" class="badge" style="display:none;margin:14px 0 0"></div>
     </div>
 
@@ -95,7 +97,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 
 <script>
 // ===== الإعداد: رابط الـ Web App من Apps Script (Deploy > Web app) =====
-const API = "https://script.google.com/macros/s/AKfycbwdC574RoXPMi6iv2Koya4W56q347V44Ral54EGClMs7I_Eo1XYTjCAQBozetxz6WY/exec";
+const API = "https://script.google.com/macros/s/AKfycbwporh8hxRZRcpWLTE351xT6N9WkqPt5Ci6rK3lwSJ7EMo4qeKxU9SsKTHBn_KU3qQ/exec";
 
 const $ = id => document.getElementById(id);
 const ERR = {
@@ -107,7 +109,8 @@ const ERR = {
   GPS: "تعذر تحديد موقعك، فعّل الـ GPS وأعد المحاولة",
   GPS_WEAK: "إشارة الـ GPS ضعيفة، اخرج لمكان مفتوح وحاول تاني",
   NO_PHOTO: "تعذر التقاط الصورة، حاول مرة أخرى",
-  DUP: "تم تسجيل نفس الحركة منذ لحظات",
+  COOLDOWN: "تم تسجيل حركة منذ قليل، انتظر انتهاء العد التنازلي",
+  WRONG_ACTION: "هذه الحركة غير متاحة حالياً",
   BRANCH: "الفرع غير معروف",
   MAKE: "تعذر إرسال البيانات للنظام، حاول مرة أخرى",
   NETWORK: "تعذر الاتصال بالخادم، تأكد من الإنترنت وأعد المحاولة"
@@ -116,7 +119,7 @@ const ERR = {
 const dev = localStorage.getItem("dev") || (() => { const v = crypto.randomUUID(); localStorage.setItem("dev", v); return v; })();
 $("devTag").textContent = dev.slice(0, 8) + "...";
 let S = JSON.parse(localStorage.getItem("sess") || "null"); // {token,name}
-let stream = null, watchId = null, pos = null, branches = [], busy = false;
+let stream = null, watchId = null, pos = null, branches = [], busy = false, cdEnd = 0, cdTimer = null, allowed = "both";
 
 // بنبعت بدون Content-Type عشان نتفادى مشاكل CORS مع Apps Script
 async function api(fn, data) {
@@ -159,7 +162,7 @@ function logout() { localStorage.removeItem("sess"); S = null; stopAll(); show("
 // ===== شاشة التسجيل =====
 async function enterApp() {
   $("empName").textContent = S.name; show("vApp"); $("result").style.display = "none";
-  try { branches = (await api("branches")).branches; }
+  try { const r0 = await api("branches"); branches = r0.branches; if (r0.wait > 0) startCooldown(r0.wait); setAllowed(r0.allowed); }
   catch (err) {
     if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
     return badge($("geo"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK);
@@ -181,6 +184,7 @@ async function enterApp() {
 function stopAll() {
   if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
   if (watchId !== null) navigator.geolocation.clearWatch(watchId); watchId = null; pos = null;
+  cdEnd = 0; clearInterval(cdTimer); $("cd").style.display = "none"; allowed = "both"; $("state").style.display = "none";
 }
 $("branch").onchange = refresh;
 function refresh() {
@@ -194,16 +198,51 @@ function refresh() {
     if (m <= b.radius) badge($("geo"), "ok", "fa-circle-check", `داخل نطاق الفرع (${fmt(m)}) ✅`);
     else badge($("geo"), "warn", "fa-triangle-exclamation", `خارج نطاق الفرع، تبعد ${fmt(m)} — يمكنك التسجيل وسيظهر تحذير ⚠️`);
   }
-  $("inBtn").disabled = $("outBtn").disabled = !(can && stream && !busy);
+  const base = can && stream && !busy && !cdActive();
+  $("inBtn").disabled = !(base && allowed !== "Check-Out");
+  $("outBtn").disabled = !(base && allowed !== "Check-In");
+}
+
+// ===== العد التنازلي بين عمليات التسجيل (5 دقائق، والسيرفر بيفرضه كمان) =====
+const cdActive = () => Date.now() < cdEnd;
+function startCooldown(sec) {
+  cdEnd = Date.now() + sec * 1000;
+  clearInterval(cdTimer);
+  const tick = () => {
+    const left = Math.ceil((cdEnd - Date.now()) / 1000);
+    if (left <= 0) { clearInterval(cdTimer); $("cd").style.display = "none"; refresh(); return; }
+    const t = String(Math.floor(left / 60)).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0");
+    badge($("cd"), "info", "fa-hourglass-half", `يمكنك التسجيل مرة أخرى بعد ${t}`);
+    $("inBtn").disabled = $("outBtn").disabled = true;
+  };
+  tick(); cdTimer = setInterval(tick, 1000);
+}
+
+// ===== الحالة: بعد الحضور الانصراف بس (8 ساعات) والعكس =====
+function setAllowed(a) {
+  allowed = a || "both";
+  const el = $("state");
+  if (allowed === "Check-Out") badge(el, "ok", "fa-briefcase", "أنت مسجّل حضور ✅ — المتاح الآن: تسجيل الانصراف فقط");
+  else if (allowed === "Check-In") badge(el, "info", "fa-flag-checkered", "تم تسجيل انصرافك — المتاح الآن: تسجيل الحضور فقط");
+  else el.style.display = "none";
+  refresh();
 }
 
 // ===== التصوير + الإرسال =====
+// الصورة بتتخزن في خلية شيت (حد الخلية 50,000 حرف) فبنصغّرها لحد ما تبقى أقل من 45,000
 function snap() {
-  const v = $("cam"), c = document.createElement("canvas");
+  const v = $("cam");
   if (!v.videoWidth) return null;
-  c.width = 480; c.height = Math.round(480 * v.videoHeight / v.videoWidth);
-  c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
-  return c.toDataURL("image/jpeg", 0.6);
+  for (const w of [360, 280, 220]) {
+    const c = document.createElement("canvas");
+    c.width = w; c.height = Math.round(w * v.videoHeight / v.videoWidth);
+    c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+    for (const q of [0.6, 0.45, 0.3]) {
+      const s = c.toDataURL("image/jpeg", q);
+      if (s.length <= 45000) return s;
+    }
+  }
+  return null;
 }
 async function punch(action) {
   if (busy) return;
@@ -217,8 +256,12 @@ async function punch(action) {
     const what = action === "Check-In" ? "الحضور" : "الانصراف";
     if (r.far) badge($("result"), "warn", "fa-triangle-exclamation", `⚠️ تحذير: تم تسجيل ${what} خارج نطاق الفرع (تبعد ${fmt(r.dist)}) — ${r.time}`);
     else badge($("result"), "ok", "fa-circle-check", `✅ تم تسجيل ${what} (${r.time})`);
+    setAllowed(r.allowed);
+    startCooldown(r.wait || 300);
   } catch (err) {
     if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
+    if (err.message === "WRONG_ACTION") setAllowed(err.data.allowed);
+    if (err.message === "COOLDOWN") startCooldown(err.data.wait);
     const m = ERR[err.message] || (err.code ? ERR.GPS : ERR.NETWORK);
     badge($("result"), "bad", "fa-circle-xmark", m);
   } finally { setTimeout(() => { busy = false; refresh(); }, 2500); }
