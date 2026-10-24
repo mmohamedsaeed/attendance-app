@@ -9,34 +9,74 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:#f1f5f9;color:#1e293b;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:12px}
-.card{background:#fff;width:100%;max-width:440px;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:hidden}
-.header{background:linear-gradient(135deg,#4f46e5,#3b82f6);color:#fff;padding:24px 20px;text-align:center}
-.header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px}.header p{font-size:.85rem;opacity:.9}
+body{background:radial-gradient(1200px 500px at 50% -10%,#e0e7ff 0,#f1f5f9 60%);color:#1e293b;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:12px}
+.card{background:#fff;width:100%;max-width:440px;border-radius:28px;box-shadow:0 30px 60px -20px rgba(49,46,129,.28),0 2px 6px rgba(15,23,42,.05);overflow:hidden;animation:cardIn .7s cubic-bezier(.2,.8,.2,1)}
+.header{background:linear-gradient(135deg,#4338ca,#3b82f6);color:#fff;padding:26px 20px;text-align:center}
+.header h1{font-size:1.4rem;font-weight:800;margin-bottom:4px}.header p{font-size:.85rem;opacity:.9}
 .content{padding:20px}
-.view{display:none}.view.active{display:block}
+.view{display:none}.view.active{display:block;animation:viewIn .4s cubic-bezier(.2,.8,.2,1)}
 .hero{text-align:center;padding:10px 0 6px}
-.hero .ico{width:84px;height:84px;margin:0 auto 14px;border-radius:50%;background:#eef2ff;color:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:2.2rem}
+.ico{position:relative;width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:#eef2ff;color:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:2.2rem}
+.ico::before,.ico::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #6366f1;opacity:0;animation:ring 2.8s ease-out infinite}
+.ico::after{animation-delay:1.4s}
 .hero h2{font-size:1.2rem;margin-bottom:6px}.hero p{font-size:.88rem;color:#64748b;margin-bottom:18px}
-.steps{list-style:none;margin:0 0 20px;text-align:right}
-.steps li{display:flex;gap:10px;align-items:center;padding:9px 0;font-size:.88rem;color:#475569;border-bottom:1px solid #f1f5f9}
-.steps i{color:#4f46e5;width:20px;text-align:center}
+.steps{list-style:none;margin:0 0 22px;text-align:right}
+.steps li{display:flex;gap:12px;align-items:center;padding:10px 0;font-size:.88rem;color:#475569;border-bottom:1px solid #f1f5f9}
+.steps li:last-child{border-bottom:0}
+.steps i{color:#4f46e5;width:34px;height:34px;border-radius:50%;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex:none}
 .fg{margin-bottom:16px}.fg label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;color:#475569}
-.iw{position:relative}.iw i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#94a3b8}
-.fc{width:100%;padding:12px 42px 12px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;outline:none;background:#fff}
-.fc:focus{border-color:#4f46e5;box-shadow:0 0 0 3px rgba(79,70,229,.15)}
+.iw{position:relative}.iw i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#94a3b8;transition:color .2s}
+.iw:focus-within i{color:#4f46e5}
+.fc{width:100%;padding:13px 42px 13px 14px;border:1.5px solid #e2e8f0;border-radius:14px;font-size:.95rem;outline:none;background:#fff;transition:border-color .2s,box-shadow .2s}
+.fc:focus{border-color:#4f46e5;box-shadow:0 0 0 4px rgba(79,70,229,.14)}
 select.fc{-webkit-appearance:none;appearance:none;background:#fff url('data:image/svg+xml;utf8,<svg fill="%23475569" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat left 12px center/18px}
-.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;color:#fff}
-.b-pri{background:#4f46e5}.b-in{background:#16a34a}.b-out{background:#dc2626}
-.btn:disabled{background:#cbd5e1;cursor:not-allowed}
-.link{display:block;text-align:center;margin-top:14px;font-size:.85rem;color:#64748b;text-decoration:none}
-.cam{position:relative;width:100%;height:240px;border-radius:16px;overflow:hidden;background:#000;margin-bottom:14px;border:2px solid #e2e8f0}
+
+/* ===== الأزرار ===== */
+.btn{position:relative;overflow:hidden;isolation:isolate;width:100%;padding:15px;border:0;border-radius:16px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:10px;color:#fff;letter-spacing:.2px;transition:transform .15s,box-shadow .2s,filter .2s}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 55%)}
+.btn::after{content:"";position:absolute;top:0;bottom:0;left:-70%;width:45%;z-index:-1;background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg)}
+.btn:not(:disabled):hover{transform:translateY(-2px);filter:saturate(1.08)}
+.btn:not(:disabled):hover::after{animation:shine .9s}
+.btn:not(:disabled):active{transform:translateY(1px) scale(.985);transition-duration:.05s}
+.btn:focus-visible{outline:3px solid rgba(79,70,229,.45);outline-offset:3px}
+.b-pri{background:linear-gradient(135deg,#4f46e5,#3b82f6);box-shadow:0 12px 22px -10px rgba(79,70,229,.8),inset 0 -3px 0 rgba(0,0,0,.14)}
+.b-bio{background:linear-gradient(135deg,#0ea5e9,#6366f1);box-shadow:0 12px 22px -10px rgba(14,165,233,.8),inset 0 -3px 0 rgba(0,0,0,.14)}
+.b-in{background:linear-gradient(160deg,#22c55e,#15803d);box-shadow:0 14px 24px -10px rgba(22,163,74,.85),inset 0 -4px 0 rgba(0,0,0,.16)}
+.b-out{background:linear-gradient(160deg,#fb7185,#be123c);box-shadow:0 14px 24px -10px rgba(225,29,72,.8),inset 0 -4px 0 rgba(0,0,0,.16)}
+.btn:not(:disabled):active.b-pri,.btn:not(:disabled):active.b-bio,.btn:not(:disabled):active.b-in,.btn:not(:disabled):active.b-out{box-shadow:0 4px 10px -6px rgba(0,0,0,.4),inset 0 -1px 0 rgba(0,0,0,.14)}
+.btn:disabled{background:#e8ecf3;color:#a3aec0;box-shadow:inset 0 0 0 1.5px #dde3ee;cursor:not-allowed}
+.btn:disabled::before,.btn:disabled::after{display:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row .btn{flex-direction:column;gap:8px;padding:16px 8px 14px;font-size:1.05rem}
+.chip{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:1.05rem;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35);transition:transform .25s}
+.btn:not(:disabled):hover .chip{transform:scale(1.1) rotate(-6deg)}
+.btn:disabled .chip{background:rgba(148,163,184,.18);box-shadow:none}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rip .65s ease-out;pointer-events:none;z-index:-1}
+.link{display:block;text-align:center;margin-top:14px;font-size:.85rem;color:#64748b;text-decoration:none;transition:color .2s}.link:hover{color:#4f46e5}
+
+/* ===== الكاميرا ===== */
+.cam{position:relative;width:100%;height:240px;border-radius:20px;overflow:hidden;background:#0b1020;margin-bottom:14px;box-shadow:0 0 0 2px #e2e8f0}
 video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-.badge{padding:10px 14px;border-radius:10px;font-size:.85rem;font-weight:600;text-align:center;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px}
+.cam::after{content:"";position:absolute;inset:12px;pointer-events:none;z-index:2;opacity:.9;background-repeat:no-repeat;background-image:linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff);background-size:24px 3px,3px 24px,24px 3px,3px 24px,24px 3px,3px 24px,24px 3px,3px 24px;background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%}
+.cam.live::before{content:"";position:absolute;left:0;right:0;top:8%;height:2px;z-index:2;background:linear-gradient(90deg,transparent,#60a5fa,transparent);box-shadow:0 0 14px #60a5fa;animation:scan 3s ease-in-out infinite}
+.cam.flash video{animation:vflash .4s ease-out}
+
+.badge{position:relative;overflow:hidden;padding:11px 14px;border-radius:14px;font-size:.85rem;font-weight:600;text-align:center;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px}
+.badge.pop{animation:pop .4s cubic-bezier(.2,.9,.3,1.3)}
 .info{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}.ok{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
 .bad{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.warn{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#cd::after{content:"";position:absolute;bottom:0;right:0;height:3px;width:calc(var(--p,1) * 100%);background:#3b82f6;transition:width 1s linear}
 .tag{font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px}
+
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.8);opacity:0}}
+@keyframes shine{to{left:130%}}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+@keyframes scan{0%,100%{top:8%}50%{top:90%}}
+@keyframes vflash{0%{filter:brightness(3.2)}100%{filter:brightness(1)}}
+@keyframes pop{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -87,15 +127,15 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
         <span>👤 <b id="empName">-</b></span>
         <a href="#" id="logoutLink" style="color:#ef4444;text-decoration:none;font-weight:600"><i class="fa-solid fa-power-off"></i> خروج</a>
       </div>
-      <button class="btn b-pri" id="bioBtn" style="display:none;margin-bottom:12px;background:#0ea5e9"><i class="fa-solid fa-fingerprint"></i> تفعيل الدخول بالبصمة</button>
+      <button class="btn b-bio" id="bioBtn" style="display:none;margin-bottom:12px"><i class="fa-solid fa-fingerprint"></i> تفعيل الدخول بالبصمة</button>
       <div class="fg"><div class="iw"><i class="fa-solid fa-location-dot"></i>
         <select id="branch" class="fc"><option value="">جاري تحميل الفروع...</option></select></div></div>
       <div class="cam"><video id="cam" autoplay playsinline muted></video></div>
       <div id="geo" class="badge warn"><i class="fa-solid fa-spinner fa-spin"></i><span>جاري تحديد موقعك...</span></div>
       <div id="state" class="badge info" style="display:none"></div>
       <div class="row">
-        <button class="btn b-in" id="inBtn" disabled><i class="fa-solid fa-right-to-bracket"></i> حضور</button>
-        <button class="btn b-out" id="outBtn" disabled><i class="fa-solid fa-right-from-bracket"></i> انصراف</button>
+        <button class="btn b-in" id="inBtn" disabled><span class="chip"><i class="fa-solid fa-right-to-bracket"></i></span>حضور</button>
+        <button class="btn b-out" id="outBtn" disabled><span class="chip"><i class="fa-solid fa-right-from-bracket"></i></span>انصراف</button>
       </div>
       <div id="cd" class="badge info" style="display:none;margin:14px 0 0"></div>
       <div id="result" class="badge" style="display:none;margin:14px 0 0"></div>
@@ -142,6 +182,7 @@ async function api(fn, data) {
 function show(id) { document.querySelectorAll(".view").forEach(v => v.classList.remove("active")); $(id).classList.add("active"); }
 function badge(el, cls, icon, msg) {
   el.className = "badge " + cls; el.style.display = "flex";
+  if (["result", "loginMsg", "unlockMsg", "state"].includes(el.id)) { void el.offsetWidth; el.classList.add("pop"); }
   el.innerHTML = `<i class="fa-solid ${icon}"></i><span></span>`; el.lastChild.textContent = msg;
 }
 function hav(a, b, c, d) {
@@ -193,13 +234,14 @@ $("startBtn").onclick = () => show("vLogin");
 $("backLink").onclick = e => { e.preventDefault(); show("vLanding"); };
 $("loginForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const btn = $("loginBtn"); btn.disabled = true; $("loginMsg").style.display = "none";
+  const btn = $("loginBtn"), h = btn.innerHTML; btn.disabled = true; $("loginMsg").style.display = "none";
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
   try {
     const r = await api("login", { phone: $("phone").value.trim(), password: $("pass").value, ua: navigator.userAgent });
     S = { token: r.token, name: r.name }; localStorage.setItem("sess", JSON.stringify(S));
     $("pass").value = ""; enterApp();
   } catch (err) { badge($("loginMsg"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK); }
-  finally { btn.disabled = false; }
+  finally { btn.disabled = false; btn.innerHTML = h; }
 });
 $("logoutLink").onclick = e => { e.preventDefault(); logout(); };
 function logout() { localStorage.removeItem("sess"); S = null; stopAll(); show("vLanding"); }
@@ -218,7 +260,7 @@ async function enterApp() {
   branches.forEach(b => sel.add(new Option(b.name, b.name)));
   try {
     stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
-    $("cam").srcObject = stream;
+    $("cam").srcObject = stream; $("cam").parentElement.classList.add("live");
   } catch (err) { return badge($("geo"), "bad", "fa-video-slash", "الكاميرا مطلوبة للتسجيل، فعّل الصلاحية وأعد تحميل الصفحة"); }
   if (!navigator.geolocation) return badge($("geo"), "bad", "fa-location-crosshairs", ERR.GPS);
   watchId = navigator.geolocation.watchPosition(
@@ -228,6 +270,7 @@ async function enterApp() {
   );
 }
 function stopAll() {
+  $("cam").parentElement.classList.remove("live");
   if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
   if (watchId !== null) navigator.geolocation.clearWatch(watchId); watchId = null; pos = null;
   cdEnd = 0; clearInterval(cdTimer); $("cd").style.display = "none"; allowed = "both"; $("state").style.display = "none";
@@ -252,13 +295,14 @@ function refresh() {
 // ===== العد التنازلي بين عمليات التسجيل (5 دقائق، والسيرفر بيفرضه كمان) =====
 const cdActive = () => Date.now() < cdEnd;
 function startCooldown(sec) {
-  cdEnd = Date.now() + sec * 1000;
+  cdEnd = Date.now() + sec * 1000; const total = sec;
   clearInterval(cdTimer);
   const tick = () => {
     const left = Math.ceil((cdEnd - Date.now()) / 1000);
     if (left <= 0) { clearInterval(cdTimer); $("cd").style.display = "none"; refresh(); return; }
     const t = String(Math.floor(left / 60)).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0");
     badge($("cd"), "info", "fa-hourglass-half", `يمكنك التسجيل مرة أخرى بعد ${t}`);
+    $("cd").style.setProperty("--p", Math.max(0, left / total));
     $("inBtn").disabled = $("outBtn").disabled = true;
   };
   tick(); cdTimer = setInterval(tick, 1000);
@@ -295,6 +339,7 @@ async function punch(action) {
   busy = true; refresh();
   const photo = snap();
   if (!photo) { busy = false; refresh(); return badge($("result"), "bad", "fa-circle-xmark", ERR.NO_PHOTO); }
+  const cam = $("cam").parentElement; cam.classList.remove("flash"); void cam.offsetWidth; cam.classList.add("flash");
   badge($("result"), "info", "fa-spinner fa-spin", "جاري إرسال البيانات...");
   try {
     const p = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }));
@@ -314,6 +359,14 @@ async function punch(action) {
 }
 $("inBtn").onclick = () => punch("Check-In");
 $("outBtn").onclick = () => punch("Check-Out");
+
+// تأثير موجة عند الضغط على أي زرار
+document.addEventListener("click", e => {
+  const b = e.target.closest(".btn"); if (!b || b.disabled) return;
+  const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height), x = document.createElement("span");
+  x.className = "ripple"; x.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`;
+  b.appendChild(x); setTimeout(() => x.remove(), 700);
+});
 
 if (S) { // جلسة محفوظة: لو البصمة مفعّلة نطلبها الأول
   if (bioSupported() && bioOn()) { $("unlockName").textContent = S.name; show("vUnlock"); }
