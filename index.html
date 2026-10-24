@@ -107,6 +107,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
           <input type="tel" id="phone" class="fc" placeholder="01XXXXXXXXX" required autocomplete="username"></div></div>
         <div class="fg"><label>كلمة السر</label><div class="iw"><i class="fa-solid fa-lock"></i>
           <input type="password" id="pass" class="fc" placeholder="••••••••" required autocomplete="current-password"></div></div>
+        <p class="tag" style="margin:0 0 12px">📷 بنفتح الكاميرا لحظياً أثناء الدخول لأسباب أمنية</p>
         <button type="submit" id="loginBtn" class="btn b-pri"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</button>
       </form>
       <a href="#" class="link" id="backLink">رجوع</a>
@@ -153,7 +154,8 @@ const $ = id => document.getElementById(id);
 const ERR = {
   BAD_LOGIN: "رقم الموبايل أو كلمة السر غير صحيحة",
   LOCKED: "تم إيقاف المحاولات مؤقتاً، حاول بعد 15 دقيقة",
-  DEVICE: "🛑 هذا الحساب مرتبط بجهاز آخر. تم إبلاغ الإدارة.",
+  DEVICE: "🛑 هذا الحساب مرتبط بجهاز آخر. تم تصويرك وإبلاغ الإدارة بالمحاولة.",
+  CAM: "الكاميرا مطلوبة لتسجيل الدخول، فعّل صلاحية الكاميرا وحاول مرة أخرى",
   SESSION: "انتهت الجلسة، سجّل دخولك مرة أخرى",
   FAR: "أنت خارج نطاق الفرع المختار",
   GPS: "تعذر تحديد موقعك، فعّل الـ GPS وأعد المحاولة",
@@ -229,6 +231,22 @@ $("unlockBtn").onclick = async () => {
 };
 $("unlockPass").onclick = e => { e.preventDefault(); logout(); show("vLogin"); };
 
+// لقطة سريعة من الكاميرا الأمامية وقت الدخول (الكاميرا بتتقفل فوراً بعدها)
+async function loginSnap() {
+  let st;
+  try { st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false }); }
+  catch (e) { throw new Error("CAM"); }
+  try {
+    const v = document.createElement("video"); v.muted = true; v.playsInline = true; v.srcObject = st;
+    await v.play();
+    if (!v.videoWidth) await new Promise(r => v.addEventListener("loadeddata", r, { once: true }));
+    await new Promise(r => setTimeout(r, 500)); // وقت قصير عشان الكاميرا تظبط الإضاءة
+    const p = snap(v);
+    if (!p) throw new Error("CAM");
+    return p;
+  } finally { st.getTracks().forEach(t => t.stop()); }
+}
+
 // ===== Landing / Login =====
 $("startBtn").onclick = () => show("vLogin");
 $("backLink").onclick = e => { e.preventDefault(); show("vLanding"); };
@@ -237,7 +255,8 @@ $("loginForm").addEventListener("submit", async e => {
   const btn = $("loginBtn"), h = btn.innerHTML; btn.disabled = true; $("loginMsg").style.display = "none";
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
   try {
-    const r = await api("login", { phone: $("phone").value.trim(), password: $("pass").value, ua: navigator.userAgent });
+    const photo = await loginSnap(); // صورة لحظية، بتتبعت للإدارة بس لو الدخول من جهاز غير الأساسي
+    const r = await api("login", { phone: $("phone").value.trim(), password: $("pass").value, ua: navigator.userAgent, photo });
     S = { token: r.token, name: r.name }; localStorage.setItem("sess", JSON.stringify(S));
     $("pass").value = ""; enterApp();
   } catch (err) { badge($("loginMsg"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK); }
@@ -320,8 +339,7 @@ function setAllowed(a) {
 
 // ===== التصوير + الإرسال =====
 // الصورة بتتخزن في خلية شيت (حد الخلية 50,000 حرف) فبنصغّرها لحد ما تبقى أقل من 45,000
-function snap() {
-  const v = $("cam");
+function snap(v = $("cam")) {
   if (!v.videoWidth) return null;
   for (const w of [360, 280, 220]) {
     const c = document.createElement("canvas");
