@@ -68,6 +68,24 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 #cd::after{content:"";position:absolute;bottom:0;right:0;height:3px;width:calc(var(--p,1) * 100%);background:#3b82f6;transition:width 1s linear}
 .tag{font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px}
 
+.tabs{display:flex;gap:6px;background:#f1f5f9;padding:5px;border-radius:16px;margin-bottom:16px}
+.tabs button{flex:1;border:0;background:transparent;padding:9px 4px;border-radius:12px;font:700 .78rem 'Cairo',sans-serif;color:#64748b;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .2s}
+.tabs button.on{background:#fff;color:#4f46e5;box-shadow:0 4px 10px -4px rgba(79,70,229,.4)}
+.np{padding-right:14px!important}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sec{font-size:.95rem;margin:18px 0 10px;color:#334155}
+.days{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.days label{margin:0!important;cursor:pointer}.days input{display:none}
+.days span{display:block;padding:8px 12px;border-radius:12px;border:1.5px solid #e2e8f0;font-size:.82rem;font-weight:600;color:#475569;transition:all .15s}
+.days input:checked+span{background:#4f46e5;border-color:#4f46e5;color:#fff}
+.item{border:1px solid #e2e8f0;border-radius:14px;padding:12px;margin-bottom:10px;font-size:.85rem}
+.item .top{display:flex;justify-content:space-between;gap:8px;align-items:center;font-weight:700}.item .sub{color:#64748b;margin-top:4px;font-size:.78rem}
+.st{padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.st.pending{background:#fffbeb;color:#b45309}.st.approved,.st.in{background:#f0fdf4;color:#15803d}.st.rejected,.st.late{background:#fef2f2;color:#b91c1c}.st.none{background:#f1f5f9;color:#64748b}
+.mini{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:8px 12px;font:700 .8rem 'Cairo',sans-serif;cursor:pointer}
+.mini.g{background:#16a34a;color:#fff}.mini.r{background:#fee2e2;color:#b91c1c}.mini.b{background:#eef2ff;color:#4f46e5}.mini:disabled{opacity:.5}
+.acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{border-radius:16px;padding:14px;background:#f8fafc;border:1px solid #e2e8f0}.stat b{display:block;font-size:1.5rem;color:#4f46e5}.stat small{color:#64748b;font-size:.78rem}
+.score{font-weight:800;font-size:.85rem;padding:4px 12px;border-radius:12px;white-space:nowrap}
 @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.8);opacity:0}}
@@ -83,6 +101,13 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 <div class="card">
   <div class="header"><h1><i class="fa-solid fa-user-check"></i> Attendance System</h1><p>نظام الحضور والانصراف</p></div>
   <div class="content">
+    <div id="tabs" class="tabs" style="display:none">
+      <button data-t="punch" class="on"><i class="fa-solid fa-fingerprint"></i> تسجيل</button>
+      <button data-t="req"><i class="fa-solid fa-file-pen"></i> طلباتي</button>
+      <button data-t="dash"><i class="fa-solid fa-chart-pie"></i> لوحتي</button>
+      <button data-t="mgr" id="tabMgr" style="display:none"><i class="fa-solid fa-user-tie"></i> الإدارة</button>
+    </div>
+    <div id="locBanner" class="badge warn" style="display:none;flex-direction:column;gap:10px"></div>
 
     <!-- Landing -->
     <div id="vLanding" class="view active">
@@ -142,6 +167,36 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
       <div id="result" class="badge" style="display:none;margin:14px 0 0"></div>
     </div>
 
+    <!-- طلباتي -->
+    <div id="vReq" class="view">
+      <div id="myInfo" class="badge info"></div>
+      <div class="fg"><label>نوع الطلب</label><div class="iw"><i class="fa-solid fa-list"></i>
+        <select id="rKind" class="fc"><option value="leave">إجازة</option><option value="permission">إذن</option><option value="weekoff">تغيير الإجازة الأسبوعية</option></select></div></div>
+      <div id="fLeave">
+        <div class="fg"><label>نوع الإجازة</label><select id="lType" class="fc np"></select></div>
+        <div class="two"><div class="fg"><label>من</label><input type="date" id="lFrom" class="fc np"></div><div class="fg"><label>إلى</label><input type="date" id="lTo" class="fc np"></div></div>
+      </div>
+      <div id="fPerm" style="display:none">
+        <div class="fg"><label>نوع الإذن</label><select id="pType" class="fc np"></select></div>
+        <div class="two"><div class="fg"><label>التاريخ</label><input type="date" id="pDate" class="fc np"></div><div class="fg"><label>المدة (دقيقة)</label><input type="number" id="pMins" class="fc np" min="10" max="480" value="60"></div></div>
+      </div>
+      <div id="fOff" style="display:none"><label style="display:block;font-size:.85rem;font-weight:600;margin-bottom:8px;color:#475569">اختر أيام الإجازة الأسبوعية (حتى 3 أيام)</label><div id="dayChips" class="days"></div></div>
+      <div class="fg"><label>ملاحظات (اختياري)</label><input id="rNote" class="fc np" maxlength="200"></div>
+      <button class="btn b-pri" id="rSend"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب للمدير</button>
+      <div id="rMsg" class="badge" style="display:none;margin:14px 0 0"></div>
+      <h3 class="sec">طلباتي</h3><div id="myReqs"></div>
+    </div>
+
+    <!-- لوحتي -->
+    <div id="vDash" class="view"><h3 class="sec" id="dashTitle" style="margin-top:0"></h3><div id="dashBody"></div></div>
+
+    <!-- الإدارة -->
+    <div id="vMgr" class="view">
+      <div id="mgrAlert" class="badge warn" style="display:none"></div>
+      <h3 class="sec" style="margin-top:0">طلبات بانتظار الموافقة</h3><div id="pendList"></div>
+      <h3 class="sec">تقييم الموظفين (هذا الشهر)</h3><div id="teamList"></div>
+    </div>
+
     <div class="tag">Device: <span id="devTag"></span></div>
   </div>
 </div>
@@ -181,7 +236,11 @@ async function api(fn, data) {
   if (j.error) { const e = new Error(j.error); e.data = j; throw e; }
   return j;
 }
-function show(id) { document.querySelectorAll(".view").forEach(v => v.classList.remove("active")); $(id).classList.add("active"); }
+function show(id) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active")); $(id).classList.add("active");
+  const main = Object.values(TABS).includes(id);
+  $("tabs").style.display = main ? "flex" : "none"; if (!main) $("locBanner").style.display = "none";
+}
 function badge(el, cls, icon, msg) {
   el.className = "badge " + cls; el.style.display = "flex";
   if (["result", "loginMsg", "unlockMsg", "state"].includes(el.id)) { void el.offsetWidth; el.classList.add("pop"); }
@@ -200,7 +259,12 @@ const fmt = m => m > 999 ? +(m / 1000).toFixed(2) + " كم" : m + " متر";
 const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
 const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 const empId = () => S.token.split(".")[0];
-const bioSupported = () => !!(window.PublicKeyCredential && navigator.credentials && window.isSecureContext);
+// زرار البصمة بيظهر بس لو الجهاز فيه بصمة/وجه/قفل شاشة فعلاً (على كمبيوتر من غير Windows Hello مش هيظهر)
+let bioAvail = false;
+const bioReady = (window.PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable && window.isSecureContext
+  ? PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable() : Promise.resolve(false))
+  .then(v => (bioAvail = !!v)).catch(() => false);
+const bioSupported = () => bioAvail;
 const bioOn = () => { try { const b = JSON.parse(localStorage.getItem("bio") || "null"); return !!(b && S && b.emp === empId()); } catch (e) { return false; } };
 $("bioBtn").onclick = async () => {
   try {
@@ -267,7 +331,7 @@ function logout() { localStorage.removeItem("sess"); S = null; stopAll(); show("
 
 // ===== شاشة التسجيل =====
 async function enterApp() {
-  $("empName").textContent = S.name; show("vApp"); $("result").style.display = "none";
+  $("empName").textContent = S.name; tabName = "punch"; show("vApp"); markTab("punch"); $("result").style.display = "none";
   $("bioBtn").style.display = (bioSupported() && !bioOn()) ? "flex" : "none";
   try { const r0 = await api("branches"); branches = r0.branches; if (r0.wait > 0) startCooldown(r0.wait); setAllowed(r0.allowed); }
   catch (err) {
@@ -277,16 +341,29 @@ async function enterApp() {
   const sel = $("branch"); sel.innerHTML = "";
   sel.add(new Option("اختر الفرع", ""));
   branches.forEach(b => sel.add(new Option(b.name, b.name)));
+  loadMe();
+  startCam();
+}
+
+let camBusy = false;
+async function startCam() {
+  if (stream || camBusy) return; camBusy = true;
   try {
     stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
     $("cam").srcObject = stream; $("cam").parentElement.classList.add("live");
-  } catch (err) { return badge($("geo"), "bad", "fa-video-slash", "الكاميرا مطلوبة للتسجيل، فعّل الصلاحية وأعد تحميل الصفحة"); }
+  } catch (err) { camBusy = false; return badge($("geo"), "bad", "fa-video-slash", "الكاميرا مطلوبة للتسجيل، فعّل الصلاحية وأعد تحميل الصفحة"); }
+  camBusy = false;
   if (!navigator.geolocation) return badge($("geo"), "bad", "fa-location-crosshairs", ERR.GPS);
   watchId = navigator.geolocation.watchPosition(
     p => { pos = p.coords; refresh(); },
     () => { pos = null; badge($("geo"), "bad", "fa-location-crosshairs", "فعّل الـ GPS وصلاحية الموقع"); },
     { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
   );
+}
+function stopCam() { // لما الموظف يروح لتبويب تاني الكاميرا والـ GPS بيقفلوا
+  if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
+  if (watchId !== null) navigator.geolocation.clearWatch(watchId); watchId = null; pos = null;
+  $("cam").parentElement.classList.remove("live"); refresh();
 }
 function stopAll() {
   $("cam").parentElement.classList.remove("live");
@@ -363,8 +440,9 @@ async function punch(action) {
     const p = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }));
     const r = await api("punch", { branch: $("branch").value, action, lat: p.latitude, lng: p.longitude, acc: p.accuracy, photo });
     const what = action === "Check-In" ? "الحضور" : "الانصراف";
-    if (r.far) badge($("result"), "warn", "fa-triangle-exclamation", `⚠️ تحذير: تم تسجيل ${what} خارج نطاق الفرع (تبعد ${fmt(r.dist)}) — ${r.time}`);
-    else badge($("result"), "ok", "fa-circle-check", `✅ تم تسجيل ${what} (${r.time})`);
+    const lateTxt = r.late > 0 ? ` — تأخير ${r.late} دقيقة${r.excused ? " (مبرر بإذن)" : ""}` : "";
+    if (r.far) badge($("result"), "warn", "fa-triangle-exclamation", `⚠️ تحذير: تم تسجيل ${what} خارج نطاق الفرع (تبعد ${fmt(r.dist)}) — ${r.time}${lateTxt}`);
+    else badge($("result"), r.late > 0 && !r.excused ? "warn" : "ok", "fa-circle-check", `✅ تم تسجيل ${what} (${r.time})${lateTxt}`);
     setAllowed(r.allowed);
     startCooldown(r.wait || 300);
   } catch (err) {
@@ -378,6 +456,108 @@ async function punch(action) {
 $("inBtn").onclick = () => punch("Check-In");
 $("outBtn").onclick = () => punch("Check-Out");
 
+// ===== الإصدار 2: التبويبات والطلبات والداشبورد ولوحة المدير =====
+const TABS = { punch: "vApp", req: "vReq", dash: "vDash", mgr: "vMgr" };
+const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+const LEAVE_TYPES = ["سنوية", "مرضية", "عارضة", "بدون مرتب"], PERM_TYPES = ["تأخير", "انصراف مبكر", "خروج أثناء العمل"];
+const POLL_MS = 60000; // كل قد إيه الموظف يسأل عن طلبات المدير (تقليله بيستهلك من حصة Apps Script اليومية)
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let tabName = "punch", me = null, team = null;
+const markTab = t => document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => go(b.dataset.t));
+function go(t) {
+  tabName = t; show(TABS[t]); markTab(t);
+  if (t === "punch") startCam(); else stopCam();
+  if (t === "mgr") loadTeam(); else if (t !== "punch") loadMe();
+}
+const iso = d => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+$("lType").innerHTML = LEAVE_TYPES.map(t => `<option>${t}</option>`).join("");
+$("pType").innerHTML = PERM_TYPES.map(t => `<option>${t}</option>`).join("");
+$("dayChips").innerHTML = DAYS.map((d, i) => `<label><input type="checkbox" value="${i}"><span>${d}</span></label>`).join("");
+$("dayChips").onchange = e => { if (document.querySelectorAll("#dayChips input:checked").length > 3) e.target.checked = false; };
+$("lFrom").value = $("lTo").value = $("pDate").value = iso(new Date());
+$("rKind").onchange = () => { const k = $("rKind").value; $("fLeave").style.display = k === "leave" ? "" : "none"; $("fPerm").style.display = k === "permission" ? "" : "none"; $("fOff").style.display = k === "weekoff" ? "" : "none"; };
+
+async function loadMe() {
+  try { me = await api("me"); }
+  catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); logout(); } return; }
+  $("tabMgr").style.display = me.role === "manager" ? "" : "none";
+  renderReq(); renderDash(); showLocs(me.locs);
+}
+const reqText = r => r.kind === "leave" ? `إجازة ${r.type}: ${r.from} ← ${r.to}` : r.kind === "permission" ? `إذن ${r.type}: ${r.from} (${r.mins} دقيقة)` : `أيام الإجازة الأسبوعية: ${r.from.split(",").map(i => DAYS[i]).join("، ")}`;
+const ST = { pending: "قيد المراجعة", approved: "مقبول", rejected: "مرفوض" };
+function renderReq() {
+  $("myInfo").innerHTML = `<i class="fa-solid fa-clock"></i><span>موعد الحضور ${esc(me.shift)} · الإجازة الأسبوعية: ${esc(me.off.map(i => DAYS[i]).join("، "))}</span>`;
+  $("myReqs").innerHTML = me.requests.length ? me.requests.map(r => `<div class="item"><div class="top"><span>${esc(reqText(r))}</span><span class="st ${r.status}">${ST[r.status]}</span></div>${r.mgrNote ? `<div class="sub">ملاحظة المدير: ${esc(r.mgrNote)}</div>` : ""}</div>`).join("") : '<div class="item sub">لا توجد طلبات بعد</div>';
+}
+function renderDash() {
+  const s = me.stats, c = (l, v, i) => `<div class="stat"><i class="fa-solid ${i}" style="color:#94a3b8"></i><b>${esc(v)}</b><small>${l}</small></div>`;
+  $("dashTitle").textContent = "إحصائيات " + new Date().toLocaleDateString("ar-EG", { month: "long", year: "numeric" });
+  $("dashBody").innerHTML = `<div class="grid2">${c("أيام العمل", s.present, "fa-briefcase")}${c("أيام الإجازات", s.leave, "fa-umbrella-beach")}${c("أيام الغياب", s.absent, "fa-user-xmark")}${c("التأخيرات", s.lateCount + " · " + s.lateMin + " د", "fa-clock")}</div><h3 class="sec">الأذونات (${s.permCount})</h3><div class="grid2">${PERM_TYPES.map(t => c(t, s.perms[t] || 0, "fa-hourglass-half")).join("")}</div>`;
+}
+$("rSend").onclick = async () => {
+  const k = $("rKind").value, m = $("rMsg"), btn = $("rSend"), p = { kind: k, note: $("rNote").value.trim() };
+  if (k === "leave") Object.assign(p, { type: $("lType").value, from: $("lFrom").value, to: $("lTo").value });
+  else if (k === "permission") Object.assign(p, { type: $("pType").value, from: $("pDate").value, mins: +$("pMins").value });
+  else { p.days = [...document.querySelectorAll("#dayChips input:checked")].map(i => i.value).join(","); if (!p.days) return badge(m, "bad", "fa-circle-xmark", "اختر يوم واحد على الأقل"); }
+  btn.disabled = true;
+  try { await api("submit", p); badge(m, "ok", "fa-circle-check", "تم إرسال الطلب للمدير ✅"); $("rNote").value = ""; loadMe(); }
+  catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); return logout(); } badge(m, "bad", "fa-circle-xmark", e.message === "BAD_REQUEST" ? "راجع بيانات الطلب (التواريخ أو المدة)" : ERR.NETWORK); }
+  finally { btn.disabled = false; }
+};
+
+// طلب موقع من المدير: الموظف بيوافق أو يرفض في كل مرة
+function showLocs(list) {
+  const el = $("locBanner"), L = list && list[0];
+  if (!L || !S) { el.style.display = "none"; return; }
+  el.className = "badge warn"; el.dataset.id = L.id; el.style.display = "flex";
+  el.innerHTML = `<span><i class="fa-solid fa-location-crosshairs"></i> ${esc(L.mgr)} يطلب موقعك الحالي</span><div class="acts" style="margin:0"><button class="mini g" data-ok="1">موافقة</button><button class="mini r" data-ok="0">رفض</button></div>`;
+}
+$("locBanner").onclick = async e => {
+  const b = e.target.closest("button[data-ok]"); if (!b) return;
+  const id = $("locBanner").dataset.id, ok = b.dataset.ok === "1"; b.disabled = true;
+  try {
+    let c = {};
+    if (ok) { const p = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 })); c = { lat: p.latitude, lng: p.longitude, acc: p.accuracy }; }
+    await api("locAnswer", { id, ok, ...c });
+    $("locBanner").style.display = "none";
+  } catch (err) { badge($("locBanner"), "bad", "fa-circle-xmark", "تعذر تحديد موقعك أو إرسال الرد، حاول مرة أخرى"); }
+};
+setInterval(async () => { if (!S || document.hidden) return; try { showLocs((await api("ping")).locs); } catch (e) {} }, POLL_MS);
+
+// ===== لوحة المدير =====
+async function loadTeam() {
+  try { team = await api("team"); }
+  catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); logout(); } return; }
+  renderMgr();
+}
+const toM = t => { const p = String(t).split(":"); return (+p[0] || 0) * 60 + (+p[1] || 0); };
+const scoreCls = s => s >= 90 ? "background:#dcfce7;color:#15803d" : s >= 75 ? "background:#dbeafe;color:#1d4ed8" : s >= 60 ? "background:#fef3c7;color:#b45309" : "background:#fee2e2;color:#b91c1c";
+const TODAY = { in: "حاضر", late: "متأخر", none: "لم يسجل" };
+const locText = l => !l ? "" : l.status === "approved" ? `<a href="https://www.google.com/maps?q=${+l.lat},${+l.lng}" target="_blank" rel="noopener">📍 آخر موقع (${esc(l.at)})</a>` : l.status === "declined" ? "رفض الموظف" : "بانتظار رد الموظف...";
+function renderMgr() {
+  const n = new Date(), nowM = n.getHours() * 60 + n.getMinutes(), al = $("mgrAlert");
+  const late = team.team.filter(t => !t.offToday && (t.today === "late" || (t.today === "none" && nowM > toM(t.shift) + 30)));
+  if (late.length) badge(al, "warn", "fa-triangle-exclamation", "تنبيه تأخير: " + late.map(t => t.name).join("، ")); else al.style.display = "none";
+  $("pendList").innerHTML = team.pending.length ? team.pending.map(r => `<div class="item"><div class="top"><span>${esc(r.emp)}</span><span class="st pending">قيد المراجعة</span></div><div class="sub">${esc(reqText(r))}${r.note ? " — " + esc(r.note) : ""}</div><div class="acts"><button class="mini g" data-d="approve" data-id="${esc(r.id)}">موافقة</button><button class="mini r" data-d="reject" data-id="${esc(r.id)}">رفض</button></div></div>`).join("") : '<div class="item sub">لا توجد طلبات معلقة</div>';
+  $("teamList").innerHTML = team.team.map(t => `<div class="item"><div class="top"><span>${esc(t.name)} <span class="st ${t.today}">${TODAY[t.today]}${t.offToday ? " (إجازة)" : ""}</span></span><span class="score" style="${scoreCls(t.score)}">${t.score} · ${t.grade}</span></div><div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div><div class="acts"><button class="mini b" data-loc="${esc(t.id)}"><i class="fa-solid fa-location-dot"></i> اطلب موقعه</button><span class="sub" id="loc_${esc(t.id)}">${locText(t.loc)}</span></div></div>`).join("");
+}
+$("vMgr").onclick = async e => {
+  const d = e.target.closest("[data-d]"), l = e.target.closest("[data-loc]");
+  try {
+    if (d) { const note = d.dataset.d === "reject" ? (prompt("سبب الرفض (اختياري)") || "") : ""; d.disabled = true; await api("decide", { id: d.dataset.id, decision: d.dataset.d, note }); loadTeam(); }
+    else if (l) { l.disabled = true; const out = $("loc_" + l.dataset.loc); out.textContent = "تم إرسال الطلب، بانتظار موافقة الموظف..."; const r = await api("reqLoc", { emp: l.dataset.loc }); pollLoc(r.id, out); setTimeout(() => (l.disabled = false), 4000); }
+  } catch (err) { if (err.message === "SESSION") { alert(ERR.SESSION); logout(); } else alert(err.message === "SELF" ? "لا يمكنك الموافقة على طلبك أنت" : err.message === "DONE" ? "تم البت في هذا الطلب بالفعل" : ERR.NETWORK); }
+};
+async function pollLoc(id, out) {
+  for (let i = 0; i < 36; i++) { // لحد 3 دقائق، كل 5 ثواني
+    await new Promise(r => setTimeout(r, 5000));
+    if (!S) return;
+    try { const r = await api("locPoll", { id }); if (r.status !== "pending") { out.innerHTML = locText(r.status === "approved" ? { status: "approved", lat: r.lat, lng: r.lng, at: r.at } : { status: "declined" }); return; } } catch (e) {}
+  }
+  out.textContent = "لم يرد الموظف بعد";
+}
+
 // تأثير موجة عند الضغط على أي زرار
 document.addEventListener("click", e => {
   const b = e.target.closest(".btn"); if (!b || b.disabled) return;
@@ -386,10 +566,13 @@ document.addEventListener("click", e => {
   b.appendChild(x); setTimeout(() => x.remove(), 700);
 });
 
-if (S) { // جلسة محفوظة: لو البصمة مفعّلة نطلبها الأول
-  if (bioSupported() && bioOn()) { $("unlockName").textContent = S.name; show("vUnlock"); }
-  else enterApp();
-}
+bioReady.then(() => {
+  if (!S) return;
+  if (bioOn()) { // البصمة كانت مفعّلة على الجهاز: لازم تتطلب، ولو مبقتش متاحة نرجع لكلمة السر
+    if (bioSupported()) { $("unlockName").textContent = S.name; show("vUnlock"); }
+    else { logout(); show("vLogin"); }
+  } else enterApp();
+});
 </script>
 </body>
 </html>
