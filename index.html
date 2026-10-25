@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Attendance System</title>
-<meta name="theme-color" content="#2563eb">
+<meta name="theme-color" content="#4f46e5">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Attendance">
-<link rel="manifest" href="?pwa=manifest">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%232563eb'/%3E%3Cpath d='M27 51l15 15 32-34' fill='none' stroke='white' stroke-width='11' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Attendance System</title>
+<meta name="theme-color" content="#4f46e5">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -107,8 +108,6 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 @keyframes pop{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
 .quick-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 18px;max-width:1040px}.quick-summary>div{background:linear-gradient(145deg,#f8fafc,#fff);border:1px solid #e2e8f0;border-radius:15px;padding:10px 13px;box-shadow:0 8px 20px -18px rgba(15,23,42,.45)}.quick-summary span{display:block;color:#94a3b8;font-size:.7rem}.quick-summary b{display:block;color:#334155;font-size:.84rem;margin-top:2px}@media(max-width:560px){.quick-summary{grid-template-columns:1fr 1fr}.quick-summary>div:last-child{grid-column:1/-1}}
 
-.header-main{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px}.install-app-btn{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.12);color:#fff;border-radius:12px;padding:10px 14px;font:700 .8rem 'Cairo',sans-serif;cursor:pointer;backdrop-filter:blur(8px);transition:.2s;white-space:nowrap}.install-app-btn:hover{background:rgba(255,255,255,.2);transform:translateY(-1px)}@media(max-width:560px){.header-main{align-items:flex-start}.install-app-btn span{display:none}.install-app-btn{width:42px;height:42px;padding:0;display:grid;place-items:center;border-radius:12px}}
-
 /* ===== سطح المكتب / الشاشات الكبيرة ===== */
 @media (min-width:900px){
   .content{padding:28px 34px}
@@ -139,9 +138,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 </head>
 <body>
 <div class="card">
-  <div class="header">
-  <div class="header-main"><div><h1><i class="fa-solid fa-user-check"></i> Attendance System</h1><p>نظام الحضور والانصراف</p></div><button id="installAppBtn" class="install-app-btn" type="button" style="display:none"><i class="fa-solid fa-mobile-screen-button"></i><span>تثبيت التطبيق</span></button></div>
-</div>
+  <div class="header"><h1><i class="fa-solid fa-user-check"></i> Attendance System</h1><p>نظام الحضور والانصراف</p></div>
   <div class="content">
     <div id="tabs" class="tabs" style="display:none">
       <button data-t="punch" class="on"><i class="fa-solid fa-fingerprint"></i> تسجيل</button>
@@ -169,6 +166,8 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
         <li><i class="fa-solid fa-camera"></i> هتتصور تلقائياً لحظة التسجيل</li>
       </ul>
       <button class="btn b-pri" id="startBtn"><i class="fa-solid fa-arrow-left"></i> ابدأ الآن</button>
+      <button class="mini b" id="installBtn" style="display:none;width:100%;margin-top:10px"><i class="fa-solid fa-download"></i> تثبيت التطبيق على الموبايل</button>
+      <div id="installHint" class="sub" style="display:none;text-align:center;margin-top:8px">يمكنك تثبيت النظام كتطبيق مستقل على الهاتف.</div>
     </div>
 
     <!-- Login -->
@@ -278,7 +277,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
       <section id="mgrPanelPerformance" class="mgr-panel">
         <div class="mgr-kpis" id="mgrKpis"></div>
         <div class="mgr-section">
-          <div class="sec-head"><h3 class="sec" style="margin:0">تحليل الأداء</h3><div class="mgr-tools"><input id="mgrMonth" type="month" class="fc mgr-month"><input id="mgrSearch" class="fc mgr-search searchable-employee" list="employeeNames" placeholder="اختر أو ابحث باسم الموظف..."><datalist id="employeeNames"></datalist><button id="mgrExport" class="mini b"><i class="fa-solid fa-file-csv"></i> تصدير CSV</button></div></div>
+          <div class="sec-head"><h3 class="sec" style="margin:0">تحليل الأداء</h3><div class="mgr-tools"><input id="mgrMonth" type="month" class="fc mgr-month"><select id="mgrEmployeeSelect" class="fc mgr-search" aria-label="اختيار الموظف"><option value="">كل الموظفين</option></select><input id="mgrSearch" class="fc mgr-search searchable-employee" list="employeeNames" placeholder="أو ابحث باسم الموظف..."><datalist id="employeeNames"></datalist><button id="mgrExport" class="mini b"><i class="fa-solid fa-file-csv"></i> تصدير CSV</button></div></div>
           <div id="mgrChart" class="mgr-chart"></div>
         </div>
         <div class="mgr-section"><div class="sec-head"><h3 class="sec" style="margin:0">تقييم الموظفين</h3><span id="mgrMonthLabel" class="sub"></span></div><div id="teamList"></div></div>
@@ -707,7 +706,8 @@ function renderMgrChart(){
 }
 function renderTeamList(){
   const q = String($("mgrSearch").value || "").trim().toLowerCase();
-  const rows = team.team.filter(t => !q || String(t.name).toLowerCase().includes(q) || String(t.id).toLowerCase().includes(q));
+  const selected = String($("mgrEmployeeSelect").value || "").trim();
+  const rows = team.team.filter(t => (!selected || String(t.id)===selected) && (!q || String(t.name).toLowerCase().includes(q) || String(t.id).toLowerCase().includes(q)));
   $("teamList").innerHTML = rows.length ? rows.map(t => `<div class="item"><div class="top"><span>${esc(t.name)} <span class="st ${t.today}">${TODAY[t.today]}${t.offToday ? " (إجازة)" : ""}</span></span><span class="score" style="${scoreCls(t.score)}">${t.score} · ${t.grade}</span></div><div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div><div class="acts"><button class="mini b" data-loc="${esc(t.id)}"><i class="fa-solid fa-location-dot"></i> اطلب موقعه</button><span class="sub" id="loc_${esc(t.id)}">${locText(t.loc)}</span></div></div>`).join("") : '<div class="item sub">لا توجد نتائج مطابقة</div>';
 }
 async function loadAudit(){
@@ -716,7 +716,8 @@ async function loadAudit(){
 $("mgrRefresh").onclick = () => loadTeam();
 $("mgrMonth").value = new Date().toISOString().slice(0,7);
 $("mgrMonth").onchange = () => loadTeam();
-$("mgrSearch").oninput = () => renderTeamList();
+$("mgrSearch").oninput = () => { $("mgrEmployeeSelect").value=""; renderTeamList(); };
+$("mgrEmployeeSelect").onchange = () => { const id=$("mgrEmployeeSelect").value; const e=employeeCache.find(x=>String(x.id)===String(id)); $("mgrSearch").value=e?e.name:""; renderTeamList(); };
 $("mgrExport").onclick = () => {
   const rows = team.team || [];
   const head = ["ID","الموظف","الحالة اليوم","التقييم","التقدير","الحضور","الإجازات","الغياب","التأخير","دقائق التأخير","الأذونات"];
@@ -757,45 +758,20 @@ bioReady.then(() => {
   } else enterApp();
 });
 
-// ===== PWA / تثبيت التطبيق =====
+// ===== PWA: التثبيت كتطبيق على الموبايل =====
 let deferredInstallPrompt = null;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  const btn = document.getElementById('installAppBtn');
-  if (btn) btn.style.display = 'inline-flex';
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault(); deferredInstallPrompt = e;
+  const b=$("installBtn"), h=$("installHint"); if(b){b.style.display="block"; b.disabled=false;} if(h) h.style.display="block";
 });
-window.addEventListener('appinstalled', () => {
-  deferredInstallPrompt = null;
-  const btn = document.getElementById('installAppBtn');
-  if (btn) btn.style.display = 'none';
-});
-function isStandaloneApp(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
-async function installAttendanceApp(){
-  if (deferredInstallPrompt) {
-    deferredInstallPrompt.prompt();
-    try { await deferredInstallPrompt.userChoice; } catch(e) {}
-    deferredInstallPrompt = null;
-    const btn=document.getElementById('installAppBtn');
-    if(btn) btn.style.display='none';
-    return;
-  }
-  if (isStandaloneApp()) return;
-  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  if(isIOS){
-    alert('لتثبيت التطبيق على iPhone/iPad: اضغط مشاركة في Safari ثم اختر «إضافة إلى الشاشة الرئيسية».');
-    return;
-  }
-  alert('إذا لم يظهر خيار التثبيت تلقائيًا، افتح قائمة المتصفح واختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».');
-}
-document.addEventListener('DOMContentLoaded',()=>{
-  const btn=document.getElementById('installAppBtn');
-  if(btn) btn.addEventListener('click',installAttendanceApp);
-  if('serviceWorker' in navigator){
-    window.addEventListener('load',()=>navigator.serviceWorker.register('?pwa=sw',{scope:'./'}).catch(()=>{}));
-  }
-  if(isStandaloneApp() && btn) btn.style.display='none';
-});
+$("installBtn").onclick = async () => {
+  if(!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  try { await deferredInstallPrompt.userChoice; } catch(e) {}
+  deferredInstallPrompt = null; $("installBtn").style.display="none";
+};
+window.addEventListener("appinstalled", () => { if($("installBtn")) $("installBtn").style.display="none"; });
+if("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 </script>
 </body>
 </html>
