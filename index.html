@@ -292,6 +292,7 @@ body{overflow-x:hidden}
           <button data-admin="audit"><i class="fa-solid fa-shield-halved"></i> سجل العمليات</button>
           <button data-admin="reports"><i class="fa-solid fa-file-export"></i> التقارير</button>
           <button data-admin="setup"><i class="fa-solid fa-gears"></i> تهيئة النظام</button>
+          <button data-admin="superadmin" id="superAdminNav" style="display:none"><i class="fa-solid fa-crown"></i> Superadmin</button>
         </aside>
         <main class="admin-main">
           <section class="admin-route on" data-route="overview"><div class="admin-head"><div><h2>لوحة الإدارة</h2><div class="sub">مؤشرات اليوم والشهر والطلبات المعلقة</div></div><button class="mini b" id="refreshAdmin"><i class="fa-solid fa-rotate"></i> تحديث</button></div><div id="mgrAlert" class="badge warn" style="display:none"></div><div id="adminKpis" class="kpis"></div><div class="admin-grid2"><div class="panel"><h3>طلبات بانتظار الموافقة</h3><div id="pendList"></div></div><div class="panel"><h3>ملخص الفريق</h3><div id="teamList"></div></div></div></section>
@@ -302,6 +303,16 @@ body{overflow-x:hidden}
           <section class="admin-route" data-route="evaluation"><div class="admin-head"><div><h2>التقييم والترتيب</h2><div class="sub">النتيجة الشهرية حسب الحضور والتأخير والغياب والأذونات</div></div></div><div class="toolbar"><input type="month" id="evalMonth" class="fc"><button class="mini b" id="loadEvaluation"><i class="fa-solid fa-ranking-star"></i> تحديث التقييم</button></div><div id="evaluationTable"></div></section>
           <section class="admin-route" data-route="audit"><div class="admin-head"><div><h2>سجل العمليات والأمان</h2><div class="sub">تسجيل تغييرات الموظفين والفروع والجهاز والقرارات الإدارية</div></div><button class="mini b" id="loadAudit"><i class="fa-solid fa-rotate"></i> تحديث</button></div><div id="auditTable"></div></section>
           <section class="admin-route" data-route="reports"><div class="admin-head"><div><h2>التقارير والتصدير</h2><div class="sub">تحميل بيانات النظام بصيغة CSV لفتحها في Excel</div></div></div><div class="admin-grid2"><div class="panel"><h3>تقرير الحضور</h3><p class="sub">الفترة المحددة في شاشة الحضور.</p><button class="mini b" data-report="attendance">تصدير CSV</button></div><div class="panel"><h3>تقرير الطلبات</h3><p class="sub">كل الطلبات الحالية.</p><button class="mini b" data-report="requests">تصدير CSV</button></div><div class="panel"><h3>تقرير التقييم</h3><p class="sub">تقييم الشهر المحدد.</p><button class="mini b" data-report="evaluation">تصدير CSV</button></div><div class="panel"><h3>تقرير العمليات</h3><p class="sub">آخر عمليات الإدارة والأمان.</p><button class="mini b" data-report="audit">تصدير CSV</button></div></div></section>
+          <section class="admin-route" data-route="superadmin">
+            <div class="admin-head"><div><h2><i class="fa-solid fa-crown"></i> Superadmin Control Center</h2><div class="sub">صلاحية عليا لإدارة الأدوار والإعدادات الجوهرية وبيانات النظام. كل تعديل يسجل في Audit.</div></div><button class="mini b" id="refreshSuperadmin"><i class="fa-solid fa-rotate"></i> تحديث</button></div>
+            <div class="kpis" id="superKpis"></div>
+            <div class="admin-grid2">
+              <div class="panel"><h3>المستخدمون والصلاحيات</h3><div id="superUsers"></div></div>
+              <div class="panel"><h3>إعدادات Backend الجوهرية</h3><div id="superSettings"></div></div>
+              <div class="panel"><h3>إعدادات Frontend التشغيلية</h3><div id="superFrontend"></div></div>
+              <div class="panel"><h3>سلامة البيانات والجلسات</h3><div id="superSheets"></div><div class="acts" style="margin-top:12px"><button class="mini r" id="clearSessions">إنهاء كل الجلسات</button><button class="mini b" id="refreshSheets">فحص الـ Sheets</button></div></div>
+            </div>
+          </section>
           <section class="admin-route" data-route="setup"><div class="admin-head"><div><h2>تهيئة النظام</h2><div class="sub">إنشاء/تحديث تبويبات V3 والعناوين المطلوبة دون حذف البيانات</div></div></div><div class="panel"><p class="sub" style="margin-bottom:12px">نفّذ التهيئة مرة واحدة بعد نشر نسخة Apps Script الجديدة.</p><button class="mini b" id="runSetup"><i class="fa-solid fa-wand-magic-sparkles"></i> تشغيل V3 Setup</button><div id="setupMsg" class="badge" style="display:none;margin-top:12px"></div></div></section>
         </main>
       </div>
@@ -330,7 +341,9 @@ const ERR = {
   WRONG_ACTION: "هذه الحركة غير متاحة حالياً",
   BRANCH: "الفرع غير معروف",
   MAKE: "تعذر إرسال البيانات للنظام، حاول مرة أخرى",
-  NETWORK: "تعذر الاتصال بالخادم، تأكد من الإنترنت وأعد المحاولة"
+  NETWORK: "تعذر الاتصال بالخادم، تأكد من الإنترنت وأعد المحاولة",
+  MAINTENANCE: "النظام في وضع الصيانة حالياً، حاول لاحقاً",
+  FORBIDDEN_SUPERADMIN: "هذه المنطقة مخصصة للـ Superadmin فقط"
 };
 
 const dev = localStorage.getItem("dev") || (() => { const v = crypto.randomUUID(); localStorage.setItem("dev", v); return v; })();
@@ -588,11 +601,19 @@ $("dayChips").onchange = e => { if (document.querySelectorAll("#dayChips input:c
 $("lFrom").value = $("lTo").value = $("pDate").value = iso(new Date());
 $("rKind").onchange = () => { const k = $("rKind").value; $("fLeave").style.display = k === "leave" ? "" : "none"; $("fPerm").style.display = k === "permission" ? "" : "none"; $("fOff").style.display = k === "weekoff" ? "" : "none"; };
 
+function applyRuntimeConfig(c){
+  if(!c)return;
+  if(c.appName){document.title=c.appName;document.querySelectorAll('.brand-name').forEach(x=>x.textContent=c.appName);}
+  const old=document.getElementById('runtimeNotice'); if(old) old.remove();
+  if(c.notice){const el=document.createElement('div');el.id='runtimeNotice';el.className='badge '+(c.noticeType||'info');el.style.cssText='margin:10px 0;display:flex';el.textContent=c.notice;const host=document.querySelector('#vApp');if(host)host.insertBefore(el,host.firstChild);}
+}
 async function loadMe() {
   try { me = await api("me"); }
   catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); logout(); } return; }
-  $("tabMgr").style.display = me.role === "manager" ? "" : "none";
+  $("tabMgr").style.display = ["manager","superadmin"].includes(me.role) ? "" : "none";
+  $("superAdminNav").style.display = me.role === "superadmin" ? "" : "none";
   renderReq(); renderDash(); showLocs(me.locs);
+  try { const fc = await api("runtimeConfig"); applyRuntimeConfig(fc.config); } catch(e) {}
 }
 const reqText = r => r.kind === "leave" ? `إجازة ${r.type}: ${r.from} ← ${r.to}` : r.kind === "permission" ? `إذن ${r.type}: ${r.from} (${r.mins} دقيقة)` : `أيام الإجازة الأسبوعية: ${r.from.split(",").map(i => DAYS[i]).join("، ")}`;
 const ST = { pending: "قيد المراجعة", approved: "مقبول", rejected: "مرفوض" };
@@ -652,7 +673,28 @@ $("vMgr").onclick=async e=>{const d=e.target.closest("[data-d]"),l=e.target.clos
 async function pollLoc(id,out){for(let i=0;i<36;i++){await new Promise(r=>setTimeout(r,5000));if(!S)return;try{const r=await api("locPoll",{id});if(r.status!=="pending"){out.innerHTML=locText(r.status==="approved"?{status:"approved",lat:r.lat,lng:r.lng,at:r.at}:{status:"declined"});return;}}catch(e){}}out.textContent="لم يرد الموظف بعد"}
 
 const adminRoutes=[...document.querySelectorAll(".admin-route")],adminNav=document.querySelectorAll("#adminNav [data-admin]"),adminCache={};
-function adminGo(route){if(!me||me.role!=="manager")return;adminNav.forEach(b=>b.classList.toggle("on",b.dataset.admin===route));adminRoutes.forEach(v=>v.classList.toggle("on",v.dataset.route===route));if(route==="overview")loadAdminOverview();if(route==="employees")loadEmployees();if(route==="branches")loadBranches();if(route==="attendance"){fillAttendanceEmployees();loadAttendance()}if(route==="requests")loadRequests();if(route==="evaluation"){setDefaultDates();loadEvaluation()}if(route==="audit")loadAudit();if(route==="reports"){setDefaultDates();fillAttendanceEmployees()}if(route==="setup"){$("setupMsg").style.display="none";}}
+function adminGo(route){if(!me||!["manager","superadmin"].includes(me.role))return;adminNav.forEach(b=>b.classList.toggle("on",b.dataset.admin===route));adminRoutes.forEach(v=>v.classList.toggle("on",v.dataset.route===route));if(route==="overview")loadAdminOverview();if(route==="employees")loadEmployees();if(route==="branches")loadBranches();if(route==="attendance"){fillAttendanceEmployees();loadAttendance()}if(route==="requests")loadRequests();if(route==="evaluation"){setDefaultDates();loadEvaluation()}if(route==="audit")loadAudit();if(route==="reports"){setDefaultDates();fillAttendanceEmployees()}if(route==="setup"){$("setupMsg").style.display="none";}if(route==="superadmin"&&me.role==="superadmin")loadSuperadmin();}
+async function loadSuperadmin(){
+  if(!me||me.role!=="superadmin")return;
+  try{
+    const [o,u,s,f,sh]=await Promise.all([api("superadminOverview"),api("superadminUsers"),api("superadminSettings"),api("superadminFrontend"),api("superadminSheets")]);
+    const c=o.counts||{};
+    $("superKpis").innerHTML=[['المستخدمون',c.users,'fa-users'],['المديرون',c.managers,'fa-user-tie'],['Superadmin',c.superadmins,'fa-crown'],['الفروع',c.branches,'fa-building']].map(x=>`<div class="kpi"><i class="fa-solid ${x[2]}"></i><b>${esc(x[1])}</b><small>${x[0]}</small></div>`).join("");
+    $("superUsers").innerHTML=(u.users||[]).map(x=>`<div class="item"><div class="top"><span><b>${esc(x.name)}</b> · ${esc(x.id)}</span><span class="st ${x.active?'approved':'rejected'}">${x.active?'نشط':'متوقف'}</span></div><div class="sub">${esc(x.phone)} · ${esc(x.email||'بدون بريد')} · ${x.device?'جهاز مرتبط':'بدون جهاز'}</div><div class="acts" style="margin-top:8px"><select class="fc sa-role" data-id="${esc(x.id)}"><option value="employee" ${x.role==='employee'?'selected':''}>موظف</option><option value="manager" ${x.role==='manager'?'selected':''}>مدير</option><option value="superadmin" ${x.role==='superadmin'?'selected':''}>Superadmin</option></select><button class="mini b sa-save-role" data-id="${esc(x.id)}">حفظ الصلاحية</button><button class="mini ${x.active?'r':'g'} sa-active" data-id="${esc(x.id)}" data-active="${x.active?'0':'1'}">${x.active?'تعطيل':'تفعيل'}</button></div></div>`).join('')||'<div class="empty">لا يوجد مستخدمون</div>';
+    const ss=s.settings||{};
+    $("superSettings").innerHTML=`<div class="form-grid">${['ADMIN_EMAIL','MAKE_URL','PHOTOS_FOLDER','WINDOW_S','SESSION_DAYS','COOLDOWN_S','GRACE','NOSHOW_AFTER','GPS_MAX_ACCURACY','SUPERADMIN_IDS'].map(k=>`<div class="${k==='MAKE_URL'||k==='SUPERADMIN_IDS'?'full':''}"><label>${esc(k)}</label><input class="fc sa-setting" data-key="${esc(k)}" value="${esc(ss[k]||'')}"></div>`).join('')}</div><div class="acts" style="margin-top:12px"><button class="mini g" id="saveSuperSettings">حفظ إعدادات Backend</button></div>`;
+    const fc=f.config||{};
+    $("superFrontend").innerHTML=`<div class="form-grid"><div><label>اسم التطبيق</label><input id="saAppName" class="fc" value="${esc(fc.appName)}"></div><div><label>بريد الدعم</label><input id="saSupport" class="fc" value="${esc(fc.supportEmail)}"></div><div class="full"><label>رسالة النظام</label><textarea id="saNotice" class="fc" style="min-height:90px">${esc(fc.notice)}</textarea></div><div><label>نوع الرسالة</label><select id="saNoticeType" class="fc"><option value="info" ${fc.noticeType==='info'?'selected':''}>معلومة</option><option value="warn" ${fc.noticeType==='warn'?'selected':''}>تحذير</option><option value="ok" ${fc.noticeType==='ok'?'selected':''}>نجاح</option><option value="bad" ${fc.noticeType==='bad'?'selected':''}>تنبيه</option></select></div><div><label class="checkline"><input id="saMaintenance" type="checkbox" ${fc.maintenance?'checked':''}> وضع الصيانة</label></div></div><div class="acts" style="margin-top:12px"><button class="mini g" id="saveSuperFrontend">حفظ إعدادات Frontend</button></div>`;
+    $("superSheets").innerHTML=(sh.sheets||[]).map(x=>`<div class="item"><b>${esc(x.name)}</b><span class="sub">${x.rows} صف · ${x.cols} عمود</span></div>`).join('');
+    $("saveSuperSettings").onclick=async()=>{const settings={};document.querySelectorAll('.sa-setting').forEach(i=>settings[i.dataset.key]=i.value);try{await api('superadminSaveSettings',{settings});alert('تم حفظ إعدادات Backend');loadSuperadmin()}catch(e){alert(errText(e))}};
+    $("saveSuperFrontend").onclick=async()=>{try{await api('superadminSaveFrontend',{config:{appName:$("saAppName").value,notice:$("saNotice").value,noticeType:$("saNoticeType").value,maintenance:$("saMaintenance").checked,supportEmail:$("saSupport").value}});alert('تم حفظ إعدادات Frontend');}catch(e){alert(errText(e))}};
+    document.querySelectorAll('.sa-save-role').forEach(b=>b.onclick=async()=>{const sel=document.querySelector(`.sa-role[data-id="${CSS.escape(b.dataset.id)}"]`);try{await api('superadminSetRole',{id:b.dataset.id,role:sel.value});alert('تم تحديث الصلاحية');loadSuperadmin()}catch(e){alert(errText(e))}});
+    document.querySelectorAll('.sa-active').forEach(b=>b.onclick=async()=>{try{await api('superadminSetActive',{id:b.dataset.id,active:b.dataset.active==='1'});loadSuperadmin()}catch(e){alert(errText(e))}});
+  }catch(e){alert(errText(e))}
+}
+$("refreshSuperadmin").onclick=loadSuperadmin;
+$("refreshSheets").onclick=loadSuperadmin;
+$("clearSessions").onclick=async()=>{if(!confirm('سيتم إنهاء جميع الجلسات الحالية. متابعة؟'))return;try{const r=await api('superadminClearSessions');alert('تم إنهاء '+r.count+' جلسة');}catch(e){alert(errText(e))}};
 adminNav.forEach(b=>b.onclick=()=>adminGo(b.dataset.admin));
 const errText=e=>({FORBIDDEN:"غير مصرح لك",NOT_FOUND:"العنصر غير موجود",BAD_EMPLOYEE:"بيانات الموظف غير صحيحة",PHONE_EXISTS:"رقم الهاتف مستخدم بالفعل",EMP_ID_EXISTS:"رقم الموظف مستخدم بالفعل",BAD_SHIFT:"مواعيد الشيفت غير صحيحة",BAD_OFF:"أيام الإجازة غير صحيحة",BAD_EMAIL:"البريد الإلكتروني غير صحيح",BRANCH_EXISTS:"اسم الفرع مستخدم بالفعل",BAD_BRANCH:"بيانات الفرع غير صحيحة",NO_CHANGES:"لا توجد تغييرات",DONE:"تم اتخاذ القرار بالفعل"}[e.message]||ERR[e.message]||"تعذر تنفيذ العملية");
 const kpi=(label,value,icon)=>`<div class="kpi"><i class="fa-solid ${icon}" style="color:#94a3b8"></i><b>${esc(value)}</b><small>${label}</small></div>`;
