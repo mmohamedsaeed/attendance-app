@@ -5,18 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Attendance System</title>
 <meta name="theme-color" content="#4f46e5">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Attendance">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:radial-gradient(1200px 500px at 50% -10%,#e0e7ff 0,#f1f5f9 60%);color:#1e293b;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:12px}
-.card{background:#fff;width:100%;max-width:440px;border-radius:28px;box-shadow:0 30px 60px -20px rgba(49,46,129,.28),0 2px 6px rgba(15,23,42,.05);overflow:hidden;animation:cardIn .7s cubic-bezier(.2,.8,.2,1)}
+.card{background:#fff;width:100%;max-width:1180px;border-radius:28px;box-shadow:0 30px 60px -20px rgba(49,46,129,.28),0 2px 6px rgba(15,23,42,.05);overflow:hidden;animation:cardIn .7s cubic-bezier(.2,.8,.2,1)}
 .header{background:linear-gradient(135deg,#4338ca,#3b82f6);color:#fff;padding:26px 20px;text-align:center}
 .header h1{font-size:1.4rem;font-weight:800;margin-bottom:4px}.header p{font-size:.85rem;opacity:.9}
 .content{padding:20px}
@@ -92,46 +86,21 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat{border-radius:16px;padding:14px;background:#f8fafc;border:1px solid #e2e8f0}.stat b{display:block;font-size:1.5rem;color:#4f46e5}.stat small{color:#64748b;font-size:.78rem}
 .score{font-weight:800;font-size:.85rem;padding:4px 12px;border-radius:12px;white-space:nowrap}
-/* ===== مشهد الدخول: موظف بيمشي ويحط الشنطة ثم الفورم يظهر (الحالة الأساسية = الحالة النهائية) ===== */
-.scene{position:relative;direction:ltr;aspect-ratio:360/190;margin:-4px -4px 12px;border-radius:20px;background:linear-gradient(180deg,#eef2ff,#fff 78%);overflow:hidden}
-.scene svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-.scene .lg,.scene .la,.scene .ra,.scene .ll,.scene .rl{transform-box:fill-box;transform-origin:50% 0}
-.scene .lean,.scene .torso{transform-box:fill-box;transform-origin:50% 100%}
-.scene .eyes{transform-box:fill-box;transform-origin:50% 50%}
-.scene .cover{opacity:0;transform:scale(.5) translateY(8px);transform-box:fill-box;transform-origin:50% 50%;transition:all .25s}
-.scene .hcase{opacity:0}
-.bubble{position:absolute;left:43%;top:7%;background:#fff;color:#4338ca;font-weight:800;font-size:.8rem;padding:6px 12px;border-radius:14px;box-shadow:0 8px 18px -8px rgba(79,70,229,.5);direction:rtl;white-space:nowrap}
-.bubble::after{content:"";position:absolute;left:-5px;top:14px;width:10px;height:10px;background:#fff;transform:rotate(45deg)}
-#vLogin.shy .eyes{animation:none;transform:scaleY(.1)}#vLogin.shy .cover{opacity:1;transform:none}
-#vLogin.look .pupil{transform:translate(1.6px,1px)}
-#vLogin.play .walker{animation:walkIn 1.8s cubic-bezier(.25,.6,.35,1) backwards}
-#vLogin.play .bob{animation:bob .45s ease-in-out 4}
-#vLogin.play .ll,#vLogin.play .ra{animation:stepA .45s linear 4 backwards}
-#vLogin.play .rl{animation:stepB .45s linear 4 backwards}
-#vLogin.play .la{animation:stepB .45s linear 4 backwards,wave 1.1s ease-in-out 2.45s}
-#vLogin.play .lean{animation:lean .7s ease-in-out 1.55s}
-#vLogin.play .hcase{animation:handCase 1.95s steps(1,end) backwards}
-#vLogin.play .fcase{animation:dropCase .6s cubic-bezier(.4,0,.8,.6) 1.95s backwards}
-#vLogin.play .bubble{animation:bubbleIn .5s cubic-bezier(.2,.9,.3,1.4) 2.6s backwards}
-#vLogin.play .min{animation:clock 1.8s ease-out}
-#vLogin.play #loginForm>*{animation:fieldIn .55s cubic-bezier(.2,.8,.2,1) backwards}
-#vLogin.play #loginForm>:nth-child(1){animation-delay:2.2s}#vLogin.play #loginForm>:nth-child(2){animation-delay:2.35s}
-#vLogin.play #loginForm>:nth-child(3){animation-delay:2.5s}#vLogin.play #loginForm>:nth-child(4){animation-delay:2.6s}
-.scene .eyes{animation:blink 4.5s infinite 3.6s}.scene .torso{animation:breathe 3.2s ease-in-out infinite 3.6s}
-@media (max-height:700px){.scene{aspect-ratio:360/150}}
-@keyframes walkIn{from{transform:translateX(-190px)}to{transform:none}}
-@keyframes bob{50%{transform:translateY(-3px)}}
-@keyframes stepA{0%,100%{transform:rotate(0)}25%{transform:rotate(26deg)}75%{transform:rotate(-26deg)}}
-@keyframes stepB{0%,100%{transform:rotate(0)}25%{transform:rotate(-26deg)}75%{transform:rotate(26deg)}}
-@keyframes wave{0%,100%{transform:rotate(0)}15%{transform:rotate(150deg)}35%{transform:rotate(128deg)}55%{transform:rotate(158deg)}75%{transform:rotate(130deg)}90%{transform:rotate(150deg)}}
-@keyframes lean{40%{transform:rotate(16deg)}}
-@keyframes handCase{from,to{opacity:1}}
-@keyframes dropCase{0%{opacity:0;transform:translateY(-52px) rotate(-14deg)}50%{opacity:1;transform:translateY(0)}68%{transform:translateY(-9px)}84%{transform:translateY(0)}100%{transform:none}}
-@keyframes bubbleIn{from{opacity:0;transform:scale(.3) translateX(-14px)}to{opacity:1;transform:none}}
-@keyframes clock{to{transform:rotate(720deg)}}
-@keyframes fieldIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.08)}}
-@keyframes breathe{50%{transform:scaleY(1.018)}}
+
+/* ===== V3 Admin Dashboard ===== */
+.view{width:100%;max-width:560px;margin:0 auto}.view#vMgr{max-width:none}
+.admin-shell{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;align-items:start}
+.admin-side{position:sticky;top:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:10px}
+.admin-side button{width:100%;border:0;background:transparent;color:#475569;padding:11px 12px;border-radius:12px;text-align:right;font:700 .82rem 'Cairo',sans-serif;cursor:pointer;display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.admin-side button:hover,.admin-side button.on{background:#eef2ff;color:#4f46e5}.admin-side button i{width:20px;text-align:center}
+.admin-main{min-width:0}.admin-route{display:none}.admin-route.on{display:block;animation:viewIn .25s ease}
+.admin-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}.admin-head h2{font-size:1.05rem}.admin-head .sub{color:#64748b;font-size:.78rem}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.toolbar>*{min-height:40px}.admin-table-wrap{overflow:auto;border-radius:16px}
+.admin-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;font-size:.78rem}.admin-table th,.admin-table td{padding:10px 9px;border-bottom:1px solid #eef2f6;text-align:right;vertical-align:middle}.admin-table th{background:#f8fafc;color:#475569;font-weight:800}.admin-table tr:last-child td{border-bottom:0}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}.kpi{padding:15px;border:1px solid #e2e8f0;border-radius:17px;background:#fff}.kpi b{display:block;font-size:1.45rem;color:#4f46e5;margin-top:3px}.kpi small{color:#64748b}
+.admin-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.panel{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:14px}.panel h3{font-size:.9rem;margin-bottom:10px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.form-grid .full{grid-column:1/-1}.checkline{display:flex;gap:8px;align-items:center;font-size:.82rem}.checkline input{width:18px;height:18px}.empty{padding:25px;text-align:center;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:16px}
+@media(max-width:900px){.admin-shell{grid-template-columns:1fr}.admin-side{position:static;display:flex;overflow:auto;gap:5px}.admin-side button{min-width:max-content;margin:0}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){body{padding:0}.card{min-height:100vh;border-radius:0}.content{padding:14px}.admin-grid2,.form-grid{grid-template-columns:1fr}.admin-table{font-size:.72rem}.admin-table th,.admin-table td{padding:8px 7px}.header{padding:20px 14px}}
 @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.8);opacity:0}}
@@ -168,45 +137,10 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
         <li><i class="fa-solid fa-camera"></i> هتتصور تلقائياً لحظة التسجيل</li>
       </ul>
       <button class="btn b-pri" id="startBtn"><i class="fa-solid fa-arrow-left"></i> ابدأ الآن</button>
-      <button class="btn b-bio" id="installBtn" style="display:flex;margin-top:10px"><i class="fa-solid fa-mobile-screen-button"></i> تثبيت التطبيق على الموبايل</button>
-      <div id="installHint" class="tag" style="display:block">يمكنك تثبيت النظام على الشاشة الرئيسية ليظهر كتطبيق مستقل.</div>
     </div>
 
     <!-- Login -->
     <div id="vLogin" class="view">
-      <div class="scene" aria-hidden="true">
-        <svg viewBox="0 0 360 190" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="300" cy="44" r="21" fill="#fff" stroke="#c7d2fe" stroke-width="3"/>
-          <line x1="300" y1="44" x2="300" y2="32" stroke="#4f46e5" stroke-width="3" stroke-linecap="round"/>
-          <line class="min" x1="300" y1="44" x2="309" y2="44" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round" style="transform-origin:300px 44px;transform-box:view-box"/>
-          <ellipse cx="60" cy="40" rx="26" ry="7" fill="#e0e7ff"/><ellipse cx="82" cy="34" rx="18" ry="6" fill="#e0e7ff"/>
-          <path d="M0 170H360" stroke="#c7d2fe" stroke-width="2"/>
-          <g transform="translate(176 170)"><g class="fcase">
-            <rect x="-15" y="-23" width="30" height="23" rx="4" fill="#b45309"/><rect x="-15" y="-13" width="30" height="3" fill="#92400e"/>
-            <path d="M-6 -23q6-9 12 0" stroke="#78350f" stroke-width="2.4" fill="none" stroke-linecap="round"/><rect x="-3" y="-15" width="6" height="5" rx="1" fill="#fbbf24"/></g></g>
-          <g transform="translate(112 170)"><g class="walker">
-            <ellipse cx="0" cy="0" rx="27" ry="5" fill="#1e1b4b" opacity=".12"/>
-            <g class="bob">
-              <g class="ll"><rect x="-15" y="-50" width="13" height="46" rx="6" fill="#1e293b"/><rect x="-18" y="-7" width="19" height="7" rx="3.5" fill="#0f172a"/></g>
-              <g class="rl"><rect x="2" y="-50" width="13" height="46" rx="6" fill="#1e293b"/><rect x="-1" y="-7" width="19" height="7" rx="3.5" fill="#0f172a"/></g>
-              <g class="lean">
-                <g class="la"><rect x="-32" y="-100" width="10" height="44" rx="5" fill="#4338ca"/><circle cx="-27" cy="-54" r="5.5" fill="#f6c9a1"/></g>
-                <g class="torso"><rect x="-22" y="-104" width="44" height="58" rx="14" fill="#4f46e5"/><rect x="-22" y="-52" width="44" height="6" fill="#1e1b4b"/>
-                  <path d="M-7 -104L0 -93L7 -104Z" fill="#fff"/><path d="M0 -93L-3.6 -85L0 -66L3.6 -85Z" fill="#f59e0b"/></g>
-                <g class="ra"><rect x="22" y="-100" width="10" height="44" rx="5" fill="#4338ca"/><circle cx="27" cy="-54" r="5.5" fill="#f6c9a1"/>
-                  <g class="hcase"><rect x="13" y="-49" width="28" height="22" rx="4" fill="#b45309"/><rect x="13" y="-40" width="28" height="3" fill="#92400e"/><path d="M21 -49q6-9 12 0" stroke="#78350f" stroke-width="2.4" fill="none" stroke-linecap="round"/></g></g>
-                <rect x="-5" y="-108" width="10" height="9" fill="#e8b88c"/>
-                <g class="head"><circle cx="0" cy="-123" r="17" fill="#f6c9a1"/>
-                  <path d="M-17.5 -126q0-22 17.5-22t17.5 22q-9-10-17.5-10t-17.5 10z" fill="#1f2937"/>
-                  <g class="eyes"><circle class="pupil" cx="-6.5" cy="-122" r="2.2" fill="#111"/><circle class="pupil" cx="6.5" cy="-122" r="2.2" fill="#111"/></g>
-                  <path d="M-5 -114q5 5 10 0" stroke="#8a4b2d" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                  <circle class="cover" cx="-8.5" cy="-122" r="7.5" fill="#f6c9a1" stroke="#e0a57a"/><circle class="cover" cx="8.5" cy="-122" r="7.5" fill="#f6c9a1" stroke="#e0a57a"/></g>
-              </g>
-            </g>
-          </g></g>
-        </svg>
-        <div class="bubble" id="bubble">صباح الخير 👋</div>
-      </div>
       <div id="loginMsg" class="badge bad" style="display:none"></div>
       <form id="loginForm">
         <div class="fg"><label>رقم الموبايل</label><div class="iw"><i class="fa-solid fa-phone"></i>
@@ -271,11 +205,32 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
     <!-- لوحتي -->
     <div id="vDash" class="view"><h3 class="sec" id="dashTitle" style="margin-top:0"></h3><div id="dashBody"></div></div>
 
-    <!-- الإدارة -->
+    <!-- الإدارة / V3 -->
     <div id="vMgr" class="view">
-      <div id="mgrAlert" class="badge warn" style="display:none"></div>
-      <h3 class="sec" style="margin-top:0">طلبات بانتظار الموافقة</h3><div id="pendList"></div>
-      <h3 class="sec">تقييم الموظفين (هذا الشهر)</h3><div id="teamList"></div>
+      <div class="admin-shell">
+        <aside class="admin-side" id="adminNav">
+          <button data-admin="overview" class="on"><i class="fa-solid fa-gauge-high"></i> الرئيسية</button>
+          <button data-admin="employees"><i class="fa-solid fa-users"></i> الموظفون</button>
+          <button data-admin="branches"><i class="fa-solid fa-building"></i> الفروع</button>
+          <button data-admin="attendance"><i class="fa-solid fa-calendar-check"></i> الحضور</button>
+          <button data-admin="requests"><i class="fa-solid fa-file-circle-check"></i> الطلبات</button>
+          <button data-admin="evaluation"><i class="fa-solid fa-ranking-star"></i> التقييم</button>
+          <button data-admin="audit"><i class="fa-solid fa-shield-halved"></i> سجل العمليات</button>
+          <button data-admin="reports"><i class="fa-solid fa-file-export"></i> التقارير</button>
+          <button data-admin="setup"><i class="fa-solid fa-gears"></i> تهيئة النظام</button>
+        </aside>
+        <main class="admin-main">
+          <section class="admin-route on" data-route="overview"><div class="admin-head"><div><h2>لوحة الإدارة</h2><div class="sub">مؤشرات اليوم والشهر والطلبات المعلقة</div></div><button class="mini b" id="refreshAdmin"><i class="fa-solid fa-rotate"></i> تحديث</button></div><div id="mgrAlert" class="badge warn" style="display:none"></div><div id="adminKpis" class="kpis"></div><div class="admin-grid2"><div class="panel"><h3>طلبات بانتظار الموافقة</h3><div id="pendList"></div></div><div class="panel"><h3>ملخص الفريق</h3><div id="teamList"></div></div></div></section>
+          <section class="admin-route" data-route="employees"><div class="admin-head"><div><h2>إدارة الموظفين</h2><div class="sub">إضافة وتعديل وتفعيل وتعطيل الموظفين وإعادة ربط الجهاز</div></div><button class="mini b" id="newEmployee"><i class="fa-solid fa-user-plus"></i> موظف جديد</button></div><div class="toolbar"><input id="empSearch" class="fc" placeholder="بحث بالاسم أو الرقم أو الهاتف"><select id="empRole" class="fc" style="max-width:180px"><option value="">كل الصلاحيات</option><option value="employee">موظف</option><option value="manager">مدير</option></select></div><div id="employeeForm" class="panel" style="display:none;margin-bottom:12px"></div><div id="employeeTable"></div></section>
+          <section class="admin-route" data-route="branches"><div class="admin-head"><div><h2>إدارة الفروع</h2><div class="sub">الموقع الجغرافي ونطاق التسجيل وحالة الفرع</div></div><button class="mini b" id="newBranch"><i class="fa-solid fa-plus"></i> فرع جديد</button></div><div id="branchForm" class="panel" style="display:none;margin-bottom:12px"></div><div id="branchTable"></div></section>
+          <section class="admin-route" data-route="attendance"><div class="admin-head"><div><h2>سجل الحضور والانصراف</h2><div class="sub">بحث وتصفية حسب التاريخ والموظف والفرع والحركة</div></div></div><div class="toolbar"><input type="date" id="attFrom" class="fc"><input type="date" id="attTo" class="fc"><select id="attEmp" class="fc"><option value="">كل الموظفين</option></select><select id="attAction" class="fc"><option value="">كل الحركات</option><option value="Check-In">حضور</option><option value="Check-Out">انصراف</option></select><input id="attQ" class="fc" placeholder="بحث"><button class="mini b" id="loadAttendance"><i class="fa-solid fa-filter"></i> تطبيق</button></div><div id="attendanceTable"></div></section>
+          <section class="admin-route" data-route="requests"><div class="admin-head"><div><h2>إدارة الطلبات</h2><div class="sub">كل الإجازات والأذونات وأيام الإجازة الأسبوعية</div></div></div><div class="toolbar"><select id="reqStatus" class="fc"><option value="">كل الحالات</option><option value="pending">معلقة</option><option value="approved">مقبولة</option><option value="rejected">مرفوضة</option></select><select id="reqKind" class="fc"><option value="">كل الأنواع</option><option value="leave">إجازة</option><option value="permission">إذن</option><option value="weekoff">إجازة أسبوعية</option></select><button class="mini b" id="loadRequests"><i class="fa-solid fa-filter"></i> تطبيق</button></div><div id="requestsTable"></div></section>
+          <section class="admin-route" data-route="evaluation"><div class="admin-head"><div><h2>التقييم والترتيب</h2><div class="sub">النتيجة الشهرية حسب الحضور والتأخير والغياب والأذونات</div></div></div><div class="toolbar"><input type="month" id="evalMonth" class="fc"><button class="mini b" id="loadEvaluation"><i class="fa-solid fa-ranking-star"></i> تحديث التقييم</button></div><div id="evaluationTable"></div></section>
+          <section class="admin-route" data-route="audit"><div class="admin-head"><div><h2>سجل العمليات والأمان</h2><div class="sub">تسجيل تغييرات الموظفين والفروع والجهاز والقرارات الإدارية</div></div><button class="mini b" id="loadAudit"><i class="fa-solid fa-rotate"></i> تحديث</button></div><div id="auditTable"></div></section>
+          <section class="admin-route" data-route="reports"><div class="admin-head"><div><h2>التقارير والتصدير</h2><div class="sub">تحميل بيانات النظام بصيغة CSV لفتحها في Excel</div></div></div><div class="admin-grid2"><div class="panel"><h3>تقرير الحضور</h3><p class="sub">الفترة المحددة في شاشة الحضور.</p><button class="mini b" data-report="attendance">تصدير CSV</button></div><div class="panel"><h3>تقرير الطلبات</h3><p class="sub">كل الطلبات الحالية.</p><button class="mini b" data-report="requests">تصدير CSV</button></div><div class="panel"><h3>تقرير التقييم</h3><p class="sub">تقييم الشهر المحدد.</p><button class="mini b" data-report="evaluation">تصدير CSV</button></div><div class="panel"><h3>تقرير العمليات</h3><p class="sub">آخر عمليات الإدارة والأمان.</p><button class="mini b" data-report="audit">تصدير CSV</button></div></div></section>
+          <section class="admin-route" data-route="setup"><div class="admin-head"><div><h2>تهيئة النظام</h2><div class="sub">إنشاء/تحديث تبويبات V3 والعناوين المطلوبة دون حذف البيانات</div></div></div><div class="panel"><p class="sub" style="margin-bottom:12px">نفّذ التهيئة مرة واحدة بعد نشر نسخة Apps Script الجديدة.</p><button class="mini b" id="runSetup"><i class="fa-solid fa-wand-magic-sparkles"></i> تشغيل V3 Setup</button><div id="setupMsg" class="badge" style="display:none;margin-top:12px"></div></div></section>
+        </main>
+      </div>
     </div>
 
     <div class="tag">Device: <span id="devTag"></span></div>
@@ -317,15 +272,8 @@ async function api(fn, data) {
   if (j.error) { const e = new Error(j.error); e.data = j; throw e; }
   return j;
 }
-// أنيميشن شاشة الدخول: يتعاد كل ما الشاشة تظهر، وبيتفاعل مع الحقول (الباسورد: بيغطي عينيه)
-function replayLogin() {
-  const v = $("vLogin"), h = new Date().getHours();
-  $("bubble").textContent = h < 12 ? "صباح الخير 👋" : h < 18 ? "نهارك سعيد 👋" : "مساء الخير 👋";
-  v.classList.remove("play", "shy", "look"); void v.offsetWidth; v.classList.add("play");
-}
 function show(id) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active")); $(id).classList.add("active");
-  if (id === "vLogin") replayLogin();
   const main = Object.values(TABS).includes(id);
   $("tabs").style.display = main ? "flex" : "none"; if (!main) $("locBanner").style.display = "none";
 }
@@ -397,38 +345,6 @@ async function loginSnap() {
     if (!p) throw new Error("CAM");
     return p;
   } finally { st.getTracks().forEach(t => t.stop()); }
-}
-
-
-// ===== PWA / تثبيت التطبيق =====
-let deferredInstallPrompt = null;
-window.addEventListener("beforeinstallprompt", e => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  $("installBtn").style.display = "flex";
-  $("installHint").textContent = "اضغط تثبيت التطبيق لفتح نافذة التثبيت.";
-});
-$("installBtn").onclick = async () => {
-  if (deferredInstallPrompt) {
-    deferredInstallPrompt.prompt();
-    try { await deferredInstallPrompt.userChoice; } catch (_) {}
-    deferredInstallPrompt = null;
-    return;
-  }
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  if (isIOS) {
-    alert("على iPhone/iPad: افتح زر المشاركة في Safari ثم اختر إضافة إلى الشاشة الرئيسية.");
-  } else {
-    alert("إذا لم تظهر نافذة التثبيت، افتح قائمة المتصفح ⋮ ثم اختر: تثبيت التطبيق أو إضافة إلى الشاشة الرئيسية.");
-  }
-};
-window.addEventListener("appinstalled", () => {
-  deferredInstallPrompt = null;
-  $("installBtn").style.display = "none";
-  $("installHint").style.display = "none";
-});
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
 }
 
 // ===== Landing / Login =====
@@ -577,10 +493,6 @@ $("inBtn").onclick = () => punch("Check-In");
 $("outBtn").onclick = () => punch("Check-Out");
 
 // ===== الإصدار 2: التبويبات والطلبات والداشبورد ولوحة المدير =====
-$("pass").addEventListener("focus", () => { $("vLogin").classList.remove("look"); $("vLogin").classList.add("shy"); });
-$("pass").addEventListener("blur", () => $("vLogin").classList.remove("shy"));
-$("phone").addEventListener("focus", () => $("vLogin").classList.add("look"));
-$("phone").addEventListener("blur", () => $("vLogin").classList.remove("look"));
 const TABS = { punch: "vApp", req: "vReq", dash: "vDash", mgr: "vMgr" };
 const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
 const LEAVE_TYPES = ["سنوية", "مرضية", "عارضة", "بدون مرتب"], PERM_TYPES = ["تأخير", "انصراف مبكر", "خروج أثناء العمل"];
@@ -649,39 +561,54 @@ $("locBanner").onclick = async e => {
 };
 setInterval(async () => { if (!S || document.hidden) return; try { showLocs((await api("ping")).locs); } catch (e) {} }, POLL_MS);
 
-// ===== لوحة المدير =====
-async function loadTeam() {
-  try { team = await api("team"); }
-  catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); logout(); } return; }
-  renderMgr();
+// ===== لوحة المدير + مسارات V3 =====
+async function loadTeam(){try{team=await api("team");renderMgr();}catch(e){if(e.message==="SESSION")logout();}}
+const toM=t=>{const p=String(t).split(":");return(+p[0]||0)*60+(+p[1]||0)};
+const scoreCls=s=>s>=90?"background:#dcfce7;color:#15803d":s>=75?"background:#dbeafe;color:#1d4ed8":s>=60?"background:#fef3c7;color:#b45309":"background:#fee2e2;color:#b91c1c";
+const TODAY={in:"حاضر",late:"متأخر",none:"لم يسجل"};
+const locText=l=>!l?"":l.status==="approved"?`<a href="https://www.google.com/maps?q=${+l.lat},${+l.lng}" target="_blank" rel="noopener">📍 آخر موقع (${esc(l.at)})</a>`:l.status==="declined"?"رفض الموظف":"بانتظار رد الموظف...";
+function renderMgr(){
+  const n=new Date(),nowM=n.getHours()*60+n.getMinutes(),al=$("mgrAlert"), list=(team&&team.team)||[];
+  const late=list.filter(t=>!t.offToday&&(t.today==="late"||(t.today==="none"&&nowM>toM(t.shift)+30)));
+  if(late.length)badge(al,"warn","fa-triangle-exclamation","تنبيه تأخير: "+late.map(t=>t.name).join("، "));else al.style.display="none";
+  $("pendList").innerHTML=(team.pending||[]).length?team.pending.map(r=>`<div class="item"><div class="top"><span>${esc(r.emp)}</span><span class="st pending">قيد المراجعة</span></div><div class="sub">${esc(reqText(r))}${r.note?" — "+esc(r.note):""}</div><div class="acts"><button class="mini g" data-d="approve" data-id="${esc(r.id)}">موافقة</button><button class="mini r" data-d="reject" data-id="${esc(r.id)}">رفض</button></div></div>`).join(""):'<div class="empty">لا توجد طلبات معلقة</div>';
+  $("teamList").innerHTML=list.slice(0,12).map(t=>`<div class="item"><div class="top"><span>${esc(t.name)} <span class="st ${t.today}">${TODAY[t.today]}${t.offToday?" (إجازة)":""}</span></span><span class="score" style="${scoreCls(t.score)}">${t.score} · ${t.grade}</span></div><div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div></div>`).join("")||'<div class="empty">لا يوجد موظفون</div>';
 }
-const toM = t => { const p = String(t).split(":"); return (+p[0] || 0) * 60 + (+p[1] || 0); };
-const scoreCls = s => s >= 90 ? "background:#dcfce7;color:#15803d" : s >= 75 ? "background:#dbeafe;color:#1d4ed8" : s >= 60 ? "background:#fef3c7;color:#b45309" : "background:#fee2e2;color:#b91c1c";
-const TODAY = { in: "حاضر", late: "متأخر", none: "لم يسجل" };
-const locText = l => !l ? "" : l.status === "approved" ? `<a href="https://www.google.com/maps?q=${+l.lat},${+l.lng}" target="_blank" rel="noopener">📍 آخر موقع (${esc(l.at)})</a>` : l.status === "declined" ? "رفض الموظف" : "بانتظار رد الموظف...";
-function renderMgr() {
-  const n = new Date(), nowM = n.getHours() * 60 + n.getMinutes(), al = $("mgrAlert");
-  const late = team.team.filter(t => !t.offToday && (t.today === "late" || (t.today === "none" && nowM > toM(t.shift) + 30)));
-  if (late.length) badge(al, "warn", "fa-triangle-exclamation", "تنبيه تأخير: " + late.map(t => t.name).join("، ")); else al.style.display = "none";
-  $("pendList").innerHTML = team.pending.length ? team.pending.map(r => `<div class="item"><div class="top"><span>${esc(r.emp)}</span><span class="st pending">قيد المراجعة</span></div><div class="sub">${esc(reqText(r))}${r.note ? " — " + esc(r.note) : ""}</div><div class="acts"><button class="mini g" data-d="approve" data-id="${esc(r.id)}">موافقة</button><button class="mini r" data-d="reject" data-id="${esc(r.id)}">رفض</button></div></div>`).join("") : '<div class="item sub">لا توجد طلبات معلقة</div>';
-  $("teamList").innerHTML = team.team.map(t => `<div class="item"><div class="top"><span>${esc(t.name)} <span class="st ${t.today}">${TODAY[t.today]}${t.offToday ? " (إجازة)" : ""}</span></span><span class="score" style="${scoreCls(t.score)}">${t.score} · ${t.grade}</span></div><div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div><div class="acts"><button class="mini b" data-loc="${esc(t.id)}"><i class="fa-solid fa-location-dot"></i> اطلب موقعه</button><span class="sub" id="loc_${esc(t.id)}">${locText(t.loc)}</span></div></div>`).join("");
-}
-$("vMgr").onclick = async e => {
-  const d = e.target.closest("[data-d]"), l = e.target.closest("[data-loc]");
-  try {
-    if (d) { const note = d.dataset.d === "reject" ? (prompt("سبب الرفض (اختياري)") || "") : ""; d.disabled = true; await api("decide", { id: d.dataset.id, decision: d.dataset.d, note }); loadTeam(); }
-    else if (l) { l.disabled = true; const out = $("loc_" + l.dataset.loc); out.textContent = "تم إرسال الطلب، بانتظار موافقة الموظف..."; const r = await api("reqLoc", { emp: l.dataset.loc }); pollLoc(r.id, out); setTimeout(() => (l.disabled = false), 4000); }
-  } catch (err) { if (err.message === "SESSION") { alert(ERR.SESSION); logout(); } else alert(err.message === "SELF" ? "لا يمكنك الموافقة على طلبك أنت" : err.message === "DONE" ? "تم البت في هذا الطلب بالفعل" : ERR.NETWORK); }
-};
-async function pollLoc(id, out) {
-  for (let i = 0; i < 36; i++) { // لحد 3 دقائق، كل 5 ثواني
-    await new Promise(r => setTimeout(r, 5000));
-    if (!S) return;
-    try { const r = await api("locPoll", { id }); if (r.status !== "pending") { out.innerHTML = locText(r.status === "approved" ? { status: "approved", lat: r.lat, lng: r.lng, at: r.at } : { status: "declined" }); return; } } catch (e) {}
-  }
-  out.textContent = "لم يرد الموظف بعد";
-}
+$("vMgr").onclick=async e=>{const d=e.target.closest("[data-d]"),l=e.target.closest("[data-loc]");try{if(d){const note=d.dataset.d==="reject"?(prompt("سبب الرفض (اختياري)")||""):"";d.disabled=true;await api("decide",{id:d.dataset.id,decision:d.dataset.d,note});loadTeam();}else if(l){l.disabled=true;const out=$("loc_"+l.dataset.loc);out.textContent="تم إرسال الطلب، بانتظار موافقة الموظف...";const r=await api("reqLoc",{emp:l.dataset.loc});pollLoc(r.id,out);setTimeout(()=>l.disabled=false,4000);}}catch(err){if(err.message==="SESSION")logout();else alert(err.message==="SELF"?"لا يمكنك الموافقة على طلبك أنت":err.message==="DONE"?"تم البت في هذا الطلب بالفعل":ERR.NETWORK);}};
+async function pollLoc(id,out){for(let i=0;i<36;i++){await new Promise(r=>setTimeout(r,5000));if(!S)return;try{const r=await api("locPoll",{id});if(r.status!=="pending"){out.innerHTML=locText(r.status==="approved"?{status:"approved",lat:r.lat,lng:r.lng,at:r.at}:{status:"declined"});return;}}catch(e){}}out.textContent="لم يرد الموظف بعد"}
 
+const adminRoutes=[...document.querySelectorAll(".admin-route")],adminNav=document.querySelectorAll("#adminNav [data-admin]"),adminCache={};
+function adminGo(route){if(!me||me.role!=="manager")return;adminNav.forEach(b=>b.classList.toggle("on",b.dataset.admin===route));adminRoutes.forEach(v=>v.classList.toggle("on",v.dataset.route===route));if(route==="overview")loadAdminOverview();if(route==="employees")loadEmployees();if(route==="branches")loadBranches();if(route==="attendance"){fillAttendanceEmployees();loadAttendance()}if(route==="requests")loadRequests();if(route==="evaluation")loadEvaluation();if(route==="audit")loadAudit();}
+adminNav.forEach(b=>b.onclick=()=>adminGo(b.dataset.admin));
+const errText=e=>({FORBIDDEN:"غير مصرح لك",NOT_FOUND:"العنصر غير موجود",BAD_EMPLOYEE:"بيانات الموظف غير صحيحة",PHONE_EXISTS:"رقم الهاتف مستخدم بالفعل",EMP_ID_EXISTS:"رقم الموظف مستخدم بالفعل",BAD_SHIFT:"مواعيد الشيفت غير صحيحة",BAD_OFF:"أيام الإجازة غير صحيحة",BAD_EMAIL:"البريد الإلكتروني غير صحيح",BRANCH_EXISTS:"اسم الفرع مستخدم بالفعل",BAD_BRANCH:"بيانات الفرع غير صحيحة",NO_CHANGES:"لا توجد تغييرات",DONE:"تم اتخاذ القرار بالفعل"}[e.message]||ERR[e.message]||"تعذر تنفيذ العملية");
+const kpi=(label,value,icon)=>`<div class="kpi"><i class="fa-solid ${icon}" style="color:#94a3b8"></i><b>${esc(value)}</b><small>${label}</small></div>`;
+async function loadAdminOverview(){try{const r=await api("adminDashboard",{date:iso(new Date())});$("adminKpis").innerHTML=[kpi("إجمالي الموظفين",r.totalEmployees,"fa-users"),kpi("حاضر اليوم",r.present,"fa-user-check"),kpi("غياب",r.absent,"fa-user-xmark"),kpi("تأخير",r.late,"fa-clock"),kpi("طلبات معلقة",r.pending,"fa-file-circle-exclamation"),kpi("نسبة الحضور",r.attendanceRate+"%","fa-chart-pie"),kpi("متوسط التقييم",r.monthly.averageScore,"fa-star"),kpi("دقائق التأخير",r.monthly.lateMin,"fa-hourglass-half")].join("");await loadTeam();}catch(e){if(e.message==="SESSION")logout();else alert(errText(e));}}
+$("refreshAdmin").onclick=loadAdminOverview;
+function renderEmployees(){const q=$("empSearch").value.trim().toLowerCase(),role=$("empRole").value,rows=(adminCache.employees||[]).filter(x=>(!role||x.role===role)&&(!q||[x.id,x.name,x.phone].some(v=>String(v).toLowerCase().includes(q))));$("employeeTable").innerHTML=rows.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الموظف</th><th>الهاتف</th><th>الصلاحية</th><th>الشيفت</th><th>الإجازة</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${esc(x.name)}</b><br><small>${esc(x.id)}</small></td><td>${esc(x.phone)}</td><td>${x.role==="manager"?"مدير":"موظف"}</td><td>${esc(x.shift)}${x.shiftEnd?" → "+esc(x.shiftEnd):""}</td><td>${esc((x.off||[]).map(i=>DAYS[i]).join("، "))}</td><td><span class="st ${x.active?"approved":"rejected"}">${x.active?"نشط":"متوقف"}</span></td><td><div class="acts"><button class="mini b" data-edit-emp="${esc(x.id)}">تعديل</button><button class="mini r" data-reset-emp="${esc(x.id)}">إعادة الجهاز</button></div></td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد نتائج</div>'}
+async function loadEmployees(){try{adminCache.employees=(await api("employeeList")).employees||[];renderEmployees()}catch(e){alert(errText(e))}}
+$("empSearch").oninput=renderEmployees;$("empRole").onchange=renderEmployees;
+function employeeForm(x={}){const off=new Set(x.off||[5]);return `<h3>${x.id?"تعديل موظف":"إضافة موظف جديد"}</h3><div class="form-grid"><div><label>رقم الموظف</label><input id="efId" class="fc" value="${esc(x.id||"")}" ${x.id?"readonly":""}></div><div><label>الاسم</label><input id="efName" class="fc" value="${esc(x.name||"")}"></div><div><label>الهاتف</label><input id="efPhone" class="fc" value="${esc(x.phone||"")}"></div><div><label>كلمة السر</label><input id="efPass" type="password" class="fc"></div><div><label>الصلاحية</label><select id="efRole" class="fc"><option value="employee" ${x.role!=="manager"?"selected":""}>موظف</option><option value="manager" ${x.role==="manager"?"selected":""}>مدير</option></select></div><div><label>البريد</label><input id="efEmail" class="fc" value="${esc(x.email||"")}"></div><div><label>بداية الشيفت</label><input id="efShift" type="time" class="fc" value="${esc(x.shift||"09:00")}"></div><div><label>نهاية الشيفت</label><input id="efEnd" type="time" class="fc" value="${esc(x.shiftEnd||"17:00")}"></div><div class="full"><label>الإجازة الأسبوعية</label><div class="days">${DAYS.map((d,i)=>`<label><input type="checkbox" class="efOff" value="${i}" ${off.has(i)?"checked":""}><span>${d}</span></label>`).join("")}</div></div><div class="full"><label class="checkline"><input id="efActive" type="checkbox" ${x.active!==false?"checked":""}> الموظف نشط ويمكنه الدخول</label></div></div><div class="acts"><button class="mini g" id="saveEmployee">حفظ</button><button class="mini r" id="cancelEmployee">إلغاء</button></div>`}
+function openEmployee(x){$("employeeForm").innerHTML=employeeForm(x);$("employeeForm").style.display="block";$("saveEmployee").onclick=async()=>{const p={id:$("efId").value.trim(),name:$("efName").value.trim(),phone:$("efPhone").value.trim(),password:$("efPass").value,role:$("efRole").value,email:$("efEmail").value.trim(),shift:$("efShift").value,shiftEnd:$("efEnd").value,weeklyOff:[...document.querySelectorAll(".efOff:checked")].map(x=>x.value).join(","),active:$("efActive").checked};try{await api(x.id?"editEmployee":"createEmployee",p);$("employeeForm").style.display="none";loadEmployees()}catch(e){alert(errText(e))}};$("cancelEmployee").onclick=()=>$("employeeForm").style.display="none"}
+$("newEmployee").onclick=()=>openEmployee();$("employeeTable").onclick=async e=>{const b=e.target.closest("button");if(!b)return;try{if(b.dataset.editEmp)openEmployee((adminCache.employees||[]).find(v=>v.id===b.dataset.editEmp));else if(b.dataset.resetEmp&&confirm("سيتم إلغاء ربط الجهاز الحالي وإنهاء جلسة الموظف. متابعة؟")){await api("resetEmployeeDevice",{id:b.dataset.resetEmp});alert("تم إعادة ضبط الجهاز");loadEmployees()}}catch(err){alert(errText(err))}};
+async function loadBranches(){try{adminCache.branches=(await api("branchList")).branches||[];renderBranches()}catch(e){alert(errText(e))}}
+function renderBranches(){const rows=adminCache.branches||[];$("branchTable").innerHTML=rows.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الفرع</th><th>الإحداثيات</th><th>النطاق</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${esc(x.name)}</b></td><td>${Number(x.lat).toFixed(6)}, ${Number(x.lng).toFixed(6)}</td><td>${esc(x.radius)} متر</td><td><span class="st ${x.active?"approved":"rejected"}">${x.active?"نشط":"متوقف"}</span></td><td><button class="mini b" data-edit-branch="${esc(x.name)}">تعديل</button> ${x.active?`<button class="mini r" data-del-branch="${esc(x.name)}">تعطيل</button>`:""}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد فروع</div>'}
+function branchForm(x={}){return `<h3>${x.name?"تعديل الفرع":"إضافة فرع"}</h3><div class="form-grid"><div><label>اسم الفرع</label><input id="bfName" class="fc" value="${esc(x.name||"")}"></div><div><label>النطاق بالمتر</label><input id="bfRadius" type="number" min="10" max="5000" class="fc" value="${x.radius||100}"></div><div><label>Latitude</label><input id="bfLat" type="number" step="any" class="fc" value="${x.lat??""}"></div><div><label>Longitude</label><input id="bfLng" type="number" step="any" class="fc" value="${x.lng??""}"></div><div class="full"><label class="checkline"><input id="bfActive" type="checkbox" ${x.active!==false?"checked":""}> الفرع نشط ويظهر للموظفين</label></div></div><div class="acts"><button class="mini g" id="saveBranch">حفظ</button><button class="mini r" id="cancelBranch">إلغاء</button></div>`}
+function openBranch(x){$("branchForm").innerHTML=branchForm(x);$("branchForm").style.display="block";$("saveBranch").onclick=async()=>{const p={id:x.name||"",name:$("bfName").value.trim(),lat:+$("bfLat").value,lng:+$("bfLng").value,radius:+$("bfRadius").value,active:$("bfActive").checked};try{await api(x.name?"editBranch":"createBranch",p);$("branchForm").style.display="none";loadBranches()}catch(e){alert(errText(e))}};$("cancelBranch").onclick=()=>$("branchForm").style.display="none"}
+$("newBranch").onclick=()=>openBranch();$("branchTable").onclick=async e=>{const b=e.target.closest("button");if(!b)return;try{if(b.dataset.editBranch)openBranch((adminCache.branches||[]).find(x=>x.name===b.dataset.editBranch));else if(b.dataset.delBranch&&confirm("سيتم تعطيل الفرع مع الاحتفاظ بالسجلات القديمة. متابعة؟")){await api("deleteBranch",{id:b.dataset.delBranch});loadBranches()}}catch(err){alert(errText(err))}};
+async function fillAttendanceEmployees(){if(!adminCache.employees)try{adminCache.employees=(await api("employeeList")).employees||[]}catch(e){}const s=$("attEmp"),v=s.value;s.innerHTML='<option value="">كل الموظفين</option>'+(adminCache.employees||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.name)} (${esc(x.id)})</option>`).join("");s.value=v}
+function setDefaultDates(){const t=iso(new Date());if(!$("attFrom").value)$("attFrom").value=t;if(!$("attTo").value)$("attTo").value=t;if(!$("evalMonth").value)$("evalMonth").value=t.slice(0,7)}
+async function loadAttendance(){setDefaultDates();try{const r=await api("attendanceList",{from:$("attFrom").value,to:$("attTo").value,emp:$("attEmp").value,action:$("attAction").value,q:$("attQ").value,limit:1000});adminCache.attendance=r.rows||[];$("attendanceTable").innerHTML=adminCache.attendance.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الوقت</th><th>الموظف</th><th>الحركة</th><th>الفرع</th><th>الحالة</th><th>تأخير</th><th>إذن</th></tr></thead><tbody>${adminCache.attendance.map(x=>`<tr><td>${esc(x.ts)}</td><td>${esc(x.name)}<br><small>${esc(x.empId)}</small></td><td>${x.action==="Check-In"?"حضور":"انصراف"}</td><td>${esc(x.branch)}</td><td>${esc(x.status)}</td><td>${x.lateMin?x.lateMin+" د":"-"}</td><td>${x.excused?"نعم":"-"}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد سجلات في الفترة المحددة</div>'}catch(e){alert(errText(e))}}
+$("loadAttendance").onclick=loadAttendance;
+async function loadRequests(){try{const r=await api("requestsList",{status:$("reqStatus").value,kind:$("reqKind").value});adminCache.requests=r.rows||[];$("requestsTable").innerHTML=adminCache.requests.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الموظف</th><th>النوع</th><th>التفاصيل</th><th>الحالة</th><th>الملاحظة</th></tr></thead><tbody>${adminCache.requests.map(x=>`<tr><td>${esc(x.emp)}</td><td>${esc(x.kind)} / ${esc(x.type)}</td><td>${esc(reqText(x))}${x.note?`<br><small>${esc(x.note)}</small>`:""}</td><td><span class="st ${x.status}">${ST[x.status]||x.status}</span></td><td>${esc(x.mgrNote||"-")}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد طلبات</div>'}catch(e){alert(errText(e))}}
+$("loadRequests").onclick=loadRequests;
+async function loadEvaluation(){setDefaultDates();try{const r=await api("evaluationList",{ym:$("evalMonth").value});adminCache.evaluation=r||[];$("evaluationTable").innerHTML=adminCache.evaluation.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>#</th><th>الموظف</th><th>النتيجة</th><th>حضور</th><th>غياب</th><th>تأخير</th><th>دقائق</th><th>أذونات</th></tr></thead><tbody>${adminCache.evaluation.map(x=>`<tr><td><b>${x.rank}</b></td><td>${esc(x.name)}<br><small>${esc(x.id)}</small></td><td><span class="score" style="${scoreCls(x.score)}">${x.score} · ${esc(x.grade)}</span></td><td>${x.present}</td><td>${x.absent}</td><td>${x.lateCount}</td><td>${x.lateMin}</td><td>${x.permCount}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد بيانات تقييم</div>'}catch(e){alert(errText(e))}}
+$("loadEvaluation").onclick=loadEvaluation;
+async function loadAudit(){try{const r=await api("auditList");adminCache.audit=r.rows||[];$("auditTable").innerHTML=adminCache.audit.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الوقت</th><th>المنفذ</th><th>العملية</th><th>الهدف</th><th>التفاصيل</th></tr></thead><tbody>${adminCache.audit.map(x=>`<tr><td>${esc(x.ts)}</td><td>${esc(x.actor)}</td><td>${esc(x.action)}</td><td>${esc(x.target)}</td><td>${esc(x.details)}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد عمليات مسجلة</div>'}catch(e){alert(errText(e))}}
+$("loadAudit").onclick=loadAudit;
+$("runSetup").onclick=async()=>{const b=$("runSetup"),m=$("setupMsg");b.disabled=true;try{const r=await api("v3Setup");badge(m,"ok","fa-circle-check","تمت تهيئة V3 بنجاح: "+(r.sheets||[]).join("، "));}catch(e){badge(m,"bad","fa-circle-xmark",errText(e));}finally{b.disabled=false}};
+const escCsv=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';function downloadCsv(rows,filename){if(!rows||!rows.length)return alert("لا توجد بيانات للتصدير");const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))],csv="\ufeff"+keys.map(escCsv).join(",")+"\n"+rows.map(r=>keys.map(k=>escCsv(r[k])).join(",")).join("\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+document.querySelectorAll("[data-report]").forEach(b=>b.onclick=async()=>{try{const type=b.dataset.report;let p={type};if(type==="attendance")p={...p,from:$("attFrom").value||iso(new Date()),to:$("attTo").value||iso(new Date()),emp:$("attEmp").value,action:$("attAction").value,q:$("attQ").value};if(type==="evaluation")p.ym=$("evalMonth").value||iso(new Date()).slice(0,7);const r=await api("reportData",p);downloadCsv(r.rows||r,`attendance-${type}-${Date.now()}.csv`)}catch(e){alert(errText(e))}});
+adminNav.forEach(b=>b.onclick=()=>adminGo(b.dataset.admin));
 // تأثير موجة عند الضغط على أي زرار
 document.addEventListener("click", e => {
   const b = e.target.closest(".btn"); if (!b || b.disabled) return;
