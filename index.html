@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Attendance System</title>
-<meta name="theme-color" content="#4f46e5">
+<meta name="theme-color" content="#2563eb">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Attendance">
+<link rel="manifest" href="?pwa=manifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%232563eb'/%3E%3Cpath d='M27 51l15 15 32-34' fill='none' stroke='white' stroke-width='11' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -101,6 +107,8 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 @keyframes pop{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
 .quick-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 18px;max-width:1040px}.quick-summary>div{background:linear-gradient(145deg,#f8fafc,#fff);border:1px solid #e2e8f0;border-radius:15px;padding:10px 13px;box-shadow:0 8px 20px -18px rgba(15,23,42,.45)}.quick-summary span{display:block;color:#94a3b8;font-size:.7rem}.quick-summary b{display:block;color:#334155;font-size:.84rem;margin-top:2px}@media(max-width:560px){.quick-summary{grid-template-columns:1fr 1fr}.quick-summary>div:last-child{grid-column:1/-1}}
 
+.header-main{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px}.install-app-btn{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.12);color:#fff;border-radius:12px;padding:10px 14px;font:700 .8rem 'Cairo',sans-serif;cursor:pointer;backdrop-filter:blur(8px);transition:.2s;white-space:nowrap}.install-app-btn:hover{background:rgba(255,255,255,.2);transform:translateY(-1px)}@media(max-width:560px){.header-main{align-items:flex-start}.install-app-btn span{display:none}.install-app-btn{width:42px;height:42px;padding:0;display:grid;place-items:center;border-radius:12px}}
+
 /* ===== سطح المكتب / الشاشات الكبيرة ===== */
 @media (min-width:900px){
   .content{padding:28px 34px}
@@ -131,7 +139,9 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 </head>
 <body>
 <div class="card">
-  <div class="header"><h1><i class="fa-solid fa-user-check"></i> Attendance System</h1><p>نظام الحضور والانصراف</p></div>
+  <div class="header">
+  <div class="header-main"><div><h1><i class="fa-solid fa-user-check"></i> Attendance System</h1><p>نظام الحضور والانصراف</p></div><button id="installAppBtn" class="install-app-btn" type="button" style="display:none"><i class="fa-solid fa-mobile-screen-button"></i><span>تثبيت التطبيق</span></button></div>
+</div>
   <div class="content">
     <div id="tabs" class="tabs" style="display:none">
       <button data-t="punch" class="on"><i class="fa-solid fa-fingerprint"></i> تسجيل</button>
@@ -745,6 +755,46 @@ bioReady.then(() => {
     if (bioSupported()) { $("unlockName").textContent = S.name; show("vUnlock"); }
     else { logout(); show("vLogin"); }
   } else enterApp();
+});
+
+// ===== PWA / تثبيت التطبيق =====
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const btn = document.getElementById('installAppBtn');
+  if (btn) btn.style.display = 'inline-flex';
+});
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  const btn = document.getElementById('installAppBtn');
+  if (btn) btn.style.display = 'none';
+});
+function isStandaloneApp(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
+async function installAttendanceApp(){
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    try { await deferredInstallPrompt.userChoice; } catch(e) {}
+    deferredInstallPrompt = null;
+    const btn=document.getElementById('installAppBtn');
+    if(btn) btn.style.display='none';
+    return;
+  }
+  if (isStandaloneApp()) return;
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(isIOS){
+    alert('لتثبيت التطبيق على iPhone/iPad: اضغط مشاركة في Safari ثم اختر «إضافة إلى الشاشة الرئيسية».');
+    return;
+  }
+  alert('إذا لم يظهر خيار التثبيت تلقائيًا، افتح قائمة المتصفح واختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».');
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const btn=document.getElementById('installAppBtn');
+  if(btn) btn.addEventListener('click',installAttendanceApp);
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>navigator.serviceWorker.register('?pwa=sw',{scope:'./'}).catch(()=>{}));
+  }
+  if(isStandaloneApp() && btn) btn.style.display='none';
 });
 </script>
 </body>
