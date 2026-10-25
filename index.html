@@ -9,11 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:radial-gradient(1200px 500px at 50% -10%,#e0e7ff 0,#f1f5f9 60%);color:#1e293b;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:12px}
-.card{background:#fff;width:100%;max-width:440px;border-radius:28px;box-shadow:0 30px 60px -20px rgba(49,46,129,.28),0 2px 6px rgba(15,23,42,.05);overflow:hidden;animation:cardIn .7s cubic-bezier(.2,.8,.2,1)}
-.header{background:linear-gradient(135deg,#4338ca,#3b82f6);color:#fff;padding:26px 20px;text-align:center}
-.header h1{font-size:1.4rem;font-weight:800;margin-bottom:4px}.header p{font-size:.85rem;opacity:.9}
-.content{padding:20px}
+body{background:radial-gradient(1200px 520px at 50% -10%,#dbeafe 0,#f8fafc 55%,#eef2f7 100%);color:#1e293b;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:18px;overflow-x:hidden}
+.card{background:#fff;width:100%;max-width:1180px;min-height:min(900px,calc(100vh - 36px));border-radius:30px;box-shadow:0 30px 70px -28px rgba(15,23,42,.28),0 2px 8px rgba(15,23,42,.05);overflow:hidden;animation:cardIn .7s cubic-bezier(.2,.8,.2,1)}
+.header{background:linear-gradient(135deg,#172554,#2563eb 58%,#0ea5e9);color:#fff;padding:22px 28px;text-align:right;position:relative;overflow:hidden}
+.header::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;left:-70px;top:-120px;background:rgba(255,255,255,.08);animation:floatGlow 7s ease-in-out infinite}
+.header h1{font-size:1.45rem;font-weight:800;margin-bottom:4px;position:relative;z-index:1}.header p{font-size:.85rem;opacity:.9;position:relative;z-index:1}
+.content{padding:24px;max-width:1120px;margin:auto}
 .view{display:none}.view.active{display:block;animation:viewIn .4s cubic-bezier(.2,.8,.2,1)}
 .hero{text-align:center;padding:10px 0 6px}
 .ico{position:relative;width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:#eef2ff;color:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:2.2rem}
@@ -86,6 +87,10 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat{border-radius:16px;padding:14px;background:#f8fafc;border:1px solid #e2e8f0}.stat b{display:block;font-size:1.5rem;color:#4f46e5}.stat small{color:#64748b;font-size:.78rem}
 .score{font-weight:800;font-size:.85rem;padding:4px 12px;border-radius:12px;white-space:nowrap}
+
+.emp-admin{display:grid;grid-template-columns:1fr 1fr;gap:12px}.emp-admin .full{grid-column:1/-1}.emp-off{display:flex;gap:7px;flex-wrap:wrap}.emp-off label{margin:0;cursor:pointer}.emp-off input{display:none}.emp-off span{display:inline-flex;padding:8px 11px;border:1px solid #e2e8f0;border-radius:11px;background:#f8fafc;color:#475569;font-size:.78rem;transition:.2s}.emp-off input:checked+span{background:#eef2ff;border-color:#818cf8;color:#4338ca;font-weight:700}.emp-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.emp-row{border:1px solid #e2e8f0;border-radius:14px;padding:12px;background:#fff}.emp-row .top{margin-bottom:5px}.emp-meta{color:#64748b;font-size:.76rem;line-height:1.8}.emp-actions{display:flex;gap:7px;align-items:center;margin-top:8px}.emp-state{font-size:.72rem;padding:3px 8px;border-radius:999px;background:#dcfce7;color:#15803d}.emp-state.off{background:#fee2e2;color:#b91c1c}@media(max-width:760px){.emp-admin,.emp-list{grid-template-columns:1fr}}
+.mgr-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 20px}.mgr-kpi{position:relative;overflow:hidden;background:linear-gradient(145deg,#fff,#f8fafc);border:1px solid #e2e8f0;border-radius:18px;padding:16px;box-shadow:0 12px 28px -22px rgba(15,23,42,.55);transition:transform .25s,box-shadow .25s}.mgr-kpi:hover{transform:translateY(-3px);box-shadow:0 18px 34px -22px rgba(15,23,42,.5)}.mgr-kpi i{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#eff6ff;color:#2563eb;margin-bottom:10px}.mgr-kpi b{display:block;font-size:1.65rem;color:#0f172a}.mgr-kpi small{color:#64748b}.mgr-section{margin-top:18px}.sec-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.audit-row{display:grid;grid-template-columns:150px 150px 1fr 130px;gap:10px;align-items:center;padding:11px 12px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;font-size:.78rem;margin-bottom:8px}.audit-row b{color:#334155}.audit-row .muted{color:#64748b}.action-ok{color:#15803d}.action-bad{color:#b91c1c}.action-new{color:#2563eb}.mgr-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.mgr-month{width:150px;padding:9px 12px}.mgr-search{width:190px;padding:9px 12px}.mgr-chart{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.chart-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:14px;box-shadow:0 10px 24px -20px rgba(15,23,42,.5)}.chart-card h4{margin:0 0 10px;color:#334155;font-size:.82rem}.bar-track{height:9px;background:#eef2f7;border-radius:999px;overflow:hidden}.bar-fill{height:100%;border-radius:999px;transition:width .7s ease}.chart-value{display:flex;justify-content:space-between;margin-top:7px;font-size:.78rem;color:#64748b}.score-bar{margin-top:7px}.score-bar .bar-fill{background:linear-gradient(90deg,#6366f1,#38bdf8)}.present-bar .bar-fill{background:linear-gradient(90deg,#22c55e,#14b8a6)}.late-bar .bar-fill{background:linear-gradient(90deg,#f59e0b,#f97316)}.absent-bar .bar-fill{background:linear-gradient(90deg,#fb7185,#ef4444)}
+@media(max-width:900px){.mgr-chart{grid-template-columns:1fr 1fr}}@media(max-width:760px){.mgr-kpis{grid-template-columns:1fr 1fr}.audit-row{grid-template-columns:1fr 1fr}.audit-row .details{grid-column:1/-1}.mgr-tools{width:100%}.mgr-month,.mgr-search{flex:1;min-width:140px}}@media(max-width:520px){.mgr-kpis{grid-template-columns:1fr 1fr}.mgr-chart{grid-template-columns:1fr}.sec-head{align-items:flex-start;flex-direction:column}}
 @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.8);opacity:0}}
@@ -94,6 +99,33 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 @keyframes scan{0%,100%{top:8%}50%{top:90%}}
 @keyframes vflash{0%{filter:brightness(3.2)}100%{filter:brightness(1)}}
 @keyframes pop{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
+.quick-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 18px;max-width:1040px}.quick-summary>div{background:linear-gradient(145deg,#f8fafc,#fff);border:1px solid #e2e8f0;border-radius:15px;padding:10px 13px;box-shadow:0 8px 20px -18px rgba(15,23,42,.45)}.quick-summary span{display:block;color:#94a3b8;font-size:.7rem}.quick-summary b{display:block;color:#334155;font-size:.84rem;margin-top:2px}@media(max-width:560px){.quick-summary{grid-template-columns:1fr 1fr}.quick-summary>div:last-child{grid-column:1/-1}}
+
+/* ===== سطح المكتب / الشاشات الكبيرة ===== */
+@media (min-width:900px){
+  .content{padding:28px 34px}
+  .tabs{max-width:760px;margin:0 auto 22px}
+  .tabs button{font-size:.84rem;padding:11px 8px}
+  .view.active{min-height:520px}
+  #vApp .cam{height:390px}
+  #vApp .row{max-width:760px;margin-inline:auto}
+  #vApp .badge,#vApp #cd{max-width:760px;margin-inline:auto}
+  #vReq,#vDash,#vMgr{max-width:1040px;margin-inline:auto}
+  #myReqs,#teamList,#pendList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  #myReqs .item,#teamList .item,#pendList .item{margin:0;height:100%}
+  .grid2{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #vReq .two{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #vLanding,#vLogin,#vUnlock{max-width:620px;margin-inline:auto}
+}
+@media (max-width:899px){
+  .card{max-width:760px;min-height:calc(100vh - 36px)}
+}
+@media (max-width:600px){
+  body{padding:0;background:#f8fafc}
+  .card{border-radius:0;min-height:100vh;box-shadow:none}
+  .header{padding:20px 18px}.content{padding:18px 14px}
+}
+@keyframes floatGlow{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,18px)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -106,6 +138,11 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
       <button data-t="req"><i class="fa-solid fa-file-pen"></i> طلباتي</button>
       <button data-t="dash"><i class="fa-solid fa-chart-pie"></i> لوحتي</button>
       <button data-t="mgr" id="tabMgr" style="display:none"><i class="fa-solid fa-user-tie"></i> الإدارة</button>
+    </div>
+    <div id="quickSummary" class="quick-summary" style="display:none">
+      <div><span>الحالة</span><b id="qsState">جاهز</b></div>
+      <div><span>الموظف</span><b id="qsName">—</b></div>
+      <div><span>آخر تحديث</span><b id="qsTime">—</b></div>
     </div>
     <div id="locBanner" class="badge warn" style="display:none;flex-direction:column;gap:10px"></div>
 
@@ -193,8 +230,33 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
     <!-- الإدارة -->
     <div id="vMgr" class="view">
       <div id="mgrAlert" class="badge warn" style="display:none"></div>
-      <h3 class="sec" style="margin-top:0">طلبات بانتظار الموافقة</h3><div id="pendList"></div>
-      <h3 class="sec">تقييم الموظفين (هذا الشهر)</h3><div id="teamList"></div>
+      <div id="mgrKpis" class="mgr-kpis"></div>
+
+      <div class="mgr-section">
+        <div class="sec-head"><h3 class="sec" style="margin:0">إضافة موظف جديد</h3><span class="sub">يتم إنشاء الحساب مباشرة داخل Employees</span></div>
+        <form id="empForm" class="emp-admin">
+          <div class="fg"><label>رقم الموظف <span class="sub">اختياري</span></label><input id="empId" class="fc np" placeholder="يُنشأ تلقائياً مثل E0001"></div>
+          <div class="fg"><label>اسم الموظف</label><input id="empNameNew" class="fc np" required maxlength="100" placeholder="الاسم بالكامل"></div>
+          <div class="fg"><label>رقم الموبايل</label><input id="empPhone" class="fc np" required inputmode="numeric" placeholder="01XXXXXXXXX"></div>
+          <div class="fg"><label>كلمة السر</label><div style="display:flex;gap:8px"><input id="empPass" class="fc np" required minlength="4" maxlength="60" type="password" placeholder="4 أحرف/أرقام على الأقل"><button type="button" id="empGenPass" class="mini b">توليد</button></div></div>
+          <div class="fg"><label>الصلاحية</label><select id="empRole" class="fc np"><option value="employee">موظف</option><option value="manager">مدير</option></select></div>
+          <div class="fg"><label>البريد الإلكتروني <span class="sub">اختياري</span></label><input id="empEmail" class="fc np" type="email" placeholder="employee@example.com"></div>
+          <div class="fg"><label>بداية الوردية</label><input id="empShift" class="fc np" type="time" value="09:00" required></div>
+          <div class="fg"><label>نهاية الوردية <span class="sub">اختياري</span></label><input id="empShiftEnd" class="fc np" type="time"></div>
+          <div class="fg full"><label>الإجازة الأسبوعية (حتى 3 أيام)</label><div id="empOff" class="emp-off"></div></div>
+          <label class="full" style="display:flex;gap:9px;align-items:center;font-size:.85rem;color:#475569"><input id="empActive" type="checkbox" checked> الحساب نشط فوراً</label>
+          <div class="full" style="display:flex;gap:9px;align-items:center"><button type="submit" id="empCreate" class="btn b-pri" style="flex:1"><i class="fa-solid fa-user-plus"></i> إضافة الموظف</button><button type="button" id="empReset" class="mini b">مسح</button></div>
+          <div id="empMsg" class="badge full" style="display:none;margin:0"></div>
+        </form>
+        <h4 class="sec" style="margin-top:18px">الموظفون المسجلون</h4><div id="empList" class="emp-list"></div>
+      </div>
+      <div class="mgr-section"><div class="sec-head"><h3 class="sec" style="margin:0">طلبات بانتظار الموافقة</h3><button id="mgrRefresh" class="mini b"><i class="fa-solid fa-rotate"></i> تحديث</button></div><div id="pendList"></div></div>
+      <div class="mgr-section">
+        <div class="sec-head"><h3 class="sec" style="margin:0">تحليل الأداء</h3><div class="mgr-tools"><input id="mgrMonth" type="month" class="fc mgr-month"><input id="mgrSearch" class="fc mgr-search" placeholder="بحث باسم الموظف..."><button id="mgrExport" class="mini b"><i class="fa-solid fa-file-csv"></i> تصدير CSV</button></div></div>
+        <div id="mgrChart" class="mgr-chart"></div>
+      </div>
+      <div class="mgr-section"><div class="sec-head"><h3 class="sec" style="margin:0">تقييم الموظفين</h3><span id="mgrMonthLabel" class="sub"></span></div><div id="teamList"></div></div>
+      <div class="mgr-section"><div class="sec-head"><h3 class="sec" style="margin:0">سجل العمليات</h3><span class="sub">آخر 100 عملية</span></div><div id="auditList"></div></div>
     </div>
 
     <div class="tag">Device: <span id="devTag"></span></div>
@@ -245,6 +307,7 @@ function badge(el, cls, icon, msg) {
   el.className = "badge " + cls; el.style.display = "flex";
   if (["result", "loginMsg", "unlockMsg", "state"].includes(el.id)) { void el.offsetWidth; el.classList.add("pop"); }
   el.innerHTML = `<i class="fa-solid ${icon}"></i><span></span>`; el.lastChild.textContent = msg;
+  if (el.id === "geo" || el.id === "state" || el.id === "result") { const q=$("qsState"); if(q){ q.textContent=msg; $("qsTime").textContent=new Date().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit"}); } }
 }
 function hav(a, b, c, d) {
   const R = 6371000, r = x => x * Math.PI / 180;
@@ -331,7 +394,7 @@ function logout() { localStorage.removeItem("sess"); S = null; stopAll(); show("
 
 // ===== شاشة التسجيل =====
 async function enterApp() {
-  $("empName").textContent = S.name; tabName = "punch"; show("vApp"); markTab("punch"); $("result").style.display = "none";
+  $("empName").textContent = S.name; $("qsName").textContent = S.name; $("qsTime").textContent = new Date().toLocaleTimeString("ar-EG", {hour:"2-digit", minute:"2-digit"}); $("quickSummary").style.display = "grid"; tabName = "punch"; show("vApp"); markTab("punch"); $("result").style.display = "none";
   $("bioBtn").style.display = (bioSupported() && !bioOn()) ? "flex" : "none";
   try { const r0 = await api("branches"); branches = r0.branches; if (r0.wait > 0) startCooldown(r0.wait); setAllowed(r0.allowed); }
   catch (err) {
@@ -526,22 +589,84 @@ $("locBanner").onclick = async e => {
 setInterval(async () => { if (!S || document.hidden) return; try { showLocs((await api("ping")).locs); } catch (e) {} }, POLL_MS);
 
 // ===== لوحة المدير =====
+function renderEmployeeOff(){
+  $("empOff").innerHTML = DAYS.map((d,i)=>`<label><input type="checkbox" value="${i}"><span>${d}</span></label>`).join("");
+  $("empOff").onchange = e => { if(document.querySelectorAll("#empOff input:checked").length>3) e.target.checked=false; };
+}
+function resetEmployeeForm(hideMsg=false){
+  $("empForm").reset(); $("empShift").value="09:00"; $("empActive").checked=true; document.querySelectorAll("#empOff input").forEach(x=>x.checked=false); if(hideMsg) $("empMsg").style.display="none";
+}
+function empError(e){ return ({BAD_EMPLOYEE:"راجع الاسم والموبايل وكلمة السر (4 أحرف/أرقام على الأقل)",BAD_SHIFT:"صيغة الوردية غير صحيحة",BAD_OFF:"اختر يوم إجازة أسبوعية واحداً على الأقل وبحد أقصى 3 أيام",BAD_EMAIL:"البريد الإلكتروني غير صحيح",EMP_ID_EXISTS:"رقم الموظف مستخدم بالفعل",PHONE_EXISTS:"رقم الموبايل مستخدم بالفعل"}[e]||ERR.NETWORK); }
+async function loadEmployees(){
+  try { const r=await api("employeeList"); const list=r.employees||[]; $("empList").innerHTML=list.length?list.map(e=>`<div class="emp-row"><div class="top"><span><b>${esc(e.name)}</b> <small>(${esc(e.id)})</small></span><span class="emp-state ${e.active?'':'off'}">${e.active?'نشط':'موقوف'}</span></div><div class="emp-meta">📱 ${esc(e.phone)} · ${e.role==='manager'?'مدير':'موظف'} · 🕘 ${esc(e.shift)}${e.shiftEnd?' → '+esc(e.shiftEnd):''}<br>📅 ${esc(e.off.map(i=>DAYS[i]).join('، '))}${e.email?' · ✉️ '+esc(e.email):''}</div></div>`).join(''): '<div class="item sub">لا يوجد موظفون مسجلون</div>'; } catch(e) { if(e.message==='SESSION'){alert(ERR.SESSION);logout();} }
+}
+$("empGenPass").onclick=()=>{ const a="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789"; let p=""; for(let i=0;i<10;i++) p+=a[Math.floor(Math.random()*a.length)]; $("empPass").value=p; $("empPass").type="text"; };
+$("empReset").onclick=resetEmployeeForm;
+$("empForm").addEventListener("submit",async e=>{
+  e.preventDefault(); const btn=$("empCreate"), old=btn.innerHTML; const off=[...document.querySelectorAll("#empOff input:checked")].map(x=>x.value).join(",");
+  if(!off) return badge($("empMsg"),"bad","fa-circle-xmark","اختر يوم إجازة أسبوعية واحداً على الأقل");
+  btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> جاري إنشاء الحساب...';
+  try{ const r=await api("createEmployee",{id:$("empId").value.trim(),name:$("empNameNew").value.trim(),phone:$("empPhone").value.trim(),password:$("empPass").value,role:$("empRole").value,email:$("empEmail").value.trim(),shift:$("empShift").value,shiftEnd:$("empShiftEnd").value,weeklyOff:off,active:$("empActive").checked}); badge($("empMsg"),"ok","fa-circle-check",`تم إنشاء حساب ${r.employee.name} بنجاح — رقم الموظف ${r.employee.id}. الجهاز سيتم ربطه تلقائياً عند أول دخول.`); resetEmployeeForm(false); loadEmployees(); loadAudit(); }catch(err){ if(err.message==='SESSION'){alert(ERR.SESSION);return logout();} badge($("empMsg"),"bad","fa-circle-xmark",empError(err.message)); } finally{btn.disabled=false;btn.innerHTML=old;}
+});
+renderEmployeeOff();
+
 async function loadTeam() {
-  try { team = await api("team"); }
+  try { team = await api("team", { ym: $("mgrMonth").value || "" }); }
   catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); logout(); } return; }
   renderMgr();
+  loadAudit();
+  loadEmployees();
 }
 const toM = t => { const p = String(t).split(":"); return (+p[0] || 0) * 60 + (+p[1] || 0); };
 const scoreCls = s => s >= 90 ? "background:#dcfce7;color:#15803d" : s >= 75 ? "background:#dbeafe;color:#1d4ed8" : s >= 60 ? "background:#fef3c7;color:#b45309" : "background:#fee2e2;color:#b91c1c";
 const TODAY = { in: "حاضر", late: "متأخر", none: "لم يسجل" };
 const locText = l => !l ? "" : l.status === "approved" ? `<a href="https://www.google.com/maps?q=${+l.lat},${+l.lng}" target="_blank" rel="noopener">📍 آخر موقع (${esc(l.at)})</a>` : l.status === "declined" ? "رفض الموظف" : "بانتظار رد الموظف...";
 function renderMgr() {
+  const sm = team.summary || {present:0,late:0,absent:0,attendanceRate:100,pending:team.pending.length};
+  const month = team.ym || $("mgrMonth").value || new Date().toISOString().slice(0,7);
+  $("mgrMonth").value = month;
+  $("mgrMonthLabel").textContent = new Date(month + "-01T00:00:00").toLocaleDateString("ar-EG", {month:"long", year:"numeric"});
+  $("mgrKpis").innerHTML = `<div class="mgr-kpi"><i class="fa-solid fa-users"></i><b>${sm.present}</b><small>حضور مسجل</small></div><div class="mgr-kpi"><i class="fa-solid fa-clock"></i><b>${sm.late}</b><small>حالات تأخير</small></div><div class="mgr-kpi"><i class="fa-solid fa-user-xmark"></i><b>${sm.absent}</b><small>حالات غياب</small></div><div class="mgr-kpi"><i class="fa-solid fa-chart-line"></i><b>${sm.attendanceRate}%</b><small>نسبة الحضور</small></div>`;
+
   const n = new Date(), nowM = n.getHours() * 60 + n.getMinutes(), al = $("mgrAlert");
   const late = team.team.filter(t => !t.offToday && (t.today === "late" || (t.today === "none" && nowM > toM(t.shift) + 30)));
   if (late.length) badge(al, "warn", "fa-triangle-exclamation", "تنبيه تأخير: " + late.map(t => t.name).join("، ")); else al.style.display = "none";
   $("pendList").innerHTML = team.pending.length ? team.pending.map(r => `<div class="item"><div class="top"><span>${esc(r.emp)}</span><span class="st pending">قيد المراجعة</span></div><div class="sub">${esc(reqText(r))}${r.note ? " — " + esc(r.note) : ""}</div><div class="acts"><button class="mini g" data-d="approve" data-id="${esc(r.id)}">موافقة</button><button class="mini r" data-d="reject" data-id="${esc(r.id)}">رفض</button></div></div>`).join("") : '<div class="item sub">لا توجد طلبات معلقة</div>';
-  $("teamList").innerHTML = team.team.map(t => `<div class="item"><div class="top"><span>${esc(t.name)} <span class="st ${t.today}">${TODAY[t.today]}${t.offToday ? " (إجازة)" : ""}</span></span><span class="score" style="${scoreCls(t.score)}">${t.score} · ${t.grade}</span></div><div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div><div class="acts"><button class="mini b" data-loc="${esc(t.id)}"><i class="fa-solid fa-location-dot"></i> اطلب موقعه</button><span class="sub" id="loc_${esc(t.id)}">${locText(t.loc)}</span></div></div>`).join("");
+  renderMgrChart();
+  renderTeamList();
 }
+function renderMgrChart(){
+  const sm = team.summary || {present:0,late:0,absent:0,attendanceRate:100};
+  const total = Math.max(1, sm.present + sm.absent);
+  const avg = team.team.length ? Math.round(team.team.reduce((a,t)=>a+t.score,0)/team.team.length) : 0;
+  const cards = [
+    ["الحضور", sm.present, Math.min(100, Math.round(sm.present/total*100)), "present-bar"],
+    ["الغياب", sm.absent, Math.min(100, Math.round(sm.absent/total*100)), "absent-bar"],
+    ["التأخير", sm.late, Math.min(100, Math.round(sm.late/Math.max(1,sm.present+sm.late)*100)), "late-bar"],
+    ["متوسط التقييم", avg + "%", avg, "score-bar"]
+  ];
+  $("mgrChart").innerHTML = cards.map(c=>`<div class="chart-card"><h4>${c[0]}</h4><div class="bar-track"><div class="bar-fill ${c[3]}" style="width:${c[2]}%"></div></div><div class="chart-value"><span>${c[0]}</span><b>${c[1]}</b></div></div>`).join("");
+}
+function renderTeamList(){
+  const q = String($("mgrSearch").value || "").trim().toLowerCase();
+  const rows = team.team.filter(t => !q || String(t.name).toLowerCase().includes(q));
+  $("teamList").innerHTML = rows.length ? rows.map(t => `<div class="item"><div class="top"><span>${esc(t.name)} <span class="st ${t.today}">${TODAY[t.today]}${t.offToday ? " (إجازة)" : ""}</span></span><span class="score" style="${scoreCls(t.score)}">${t.score} · ${t.grade}</span></div><div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div><div class="acts"><button class="mini b" data-loc="${esc(t.id)}"><i class="fa-solid fa-location-dot"></i> اطلب موقعه</button><span class="sub" id="loc_${esc(t.id)}">${locText(t.loc)}</span></div></div>`).join("") : '<div class="item sub">لا توجد نتائج مطابقة</div>';
+}
+async function loadAudit(){
+  try { const r = await api("auditList"); $("auditList").innerHTML = r.rows.length ? r.rows.map(x => { const a=String(x.action||''); const cls=a.includes('APPROVED')?'action-ok':a.includes('REJECTED')?'action-bad':'action-new'; return `<div class="audit-row"><span class="muted">${esc(x.ts)}</span><b>${esc(x.actor||'النظام')}</b><span class="${cls}">${esc(a)}</span><span class="details">${esc(x.details||x.target||'')}</span></div>`; }).join('') : '<div class="item sub">لا توجد عمليات مسجلة بعد</div>'; } catch(e) {}
+}
+$("mgrRefresh").onclick = () => loadTeam();
+$("mgrMonth").value = new Date().toISOString().slice(0,7);
+$("mgrMonth").onchange = () => loadTeam();
+$("mgrSearch").oninput = () => renderTeamList();
+$("mgrExport").onclick = () => {
+  const rows = team.team || [];
+  const head = ["ID","الموظف","الحالة اليوم","التقييم","التقدير","الحضور","الإجازات","الغياب","التأخير","دقائق التأخير","الأذونات"];
+  const data = rows.map(t => [t.id,t.name,TODAY[t.today]+(t.offToday?" (إجازة)":""),t.score,t.grade,t.present,t.leave,t.absent,t.lateCount,t.lateMin,t.permCount]);
+  const csv = "\ufeff" + [head,...data].map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\r\n");
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"})); a.download=`attendance-${team.ym||"month"}.csv`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+};
+
 $("vMgr").onclick = async e => {
   const d = e.target.closest("[data-d]"), l = e.target.closest("[data-loc]");
   try {
