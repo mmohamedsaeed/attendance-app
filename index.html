@@ -110,6 +110,80 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 @keyframes vflash{0%{filter:brightness(3.2)}100%{filter:brightness(1)}}
 @keyframes pop{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ===== V3 FINAL RESPONSIVE FIX =====
+   Desktop: keep the administration layout stable.
+   Mobile: show ALL admin routes in a visible 2-column menu instead of
+   hiding them inside a horizontal scroller.
+*/
+html,body{width:100%;min-width:0}
+body{overflow-x:hidden}
+.card{width:min(1180px,100%);max-width:1180px}
+.view#vMgr{width:100%;max-width:none}
+
+/* Keep desktop/tablet admin navigation as a real sidebar until small phones */
+@media (min-width:701px){
+  .admin-shell{grid-template-columns:230px minmax(0,1fr)}
+  .admin-side{display:block;overflow:visible}
+  .admin-side button{width:100%;min-width:0}
+}
+
+/* Phones / small screens */
+@media (max-width:700px){
+  body{padding:0;display:block;min-height:100vh}
+  .card{width:100%;max-width:none;min-height:100vh;border-radius:0}
+  .content{padding:12px}
+  .tabs{position:sticky;top:0;z-index:20}
+  .view#vMgr{width:100%;max-width:none}
+  .admin-shell{display:flex;flex-direction:column;gap:12px;width:100%}
+  .admin-side{
+    position:static;
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px;
+    padding:8px;
+    overflow:visible;
+    border-radius:16px;
+  }
+  .admin-side button{
+    width:100%;
+    min-width:0;
+    margin:0;
+    min-height:46px;
+    padding:8px 6px;
+    justify-content:center;
+    text-align:center;
+    flex-direction:column;
+    gap:3px;
+    font-size:.70rem;
+    line-height:1.25;
+  }
+  .admin-side button i{width:auto;font-size:.95rem}
+  .admin-main{width:100%;min-width:0}
+  .admin-head{align-items:stretch}
+  .admin-head>div{min-width:0}
+  .admin-head .mini{width:auto;align-self:flex-start}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .kpi{padding:11px}
+  .kpi b{font-size:1.2rem}
+  .admin-grid2{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .form-grid .full{grid-column:auto}
+  .toolbar{display:grid;grid-template-columns:1fr}
+  .toolbar>*{max-width:none!important;width:100%}
+  .admin-table-wrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .admin-table{min-width:680px}
+}
+
+/* Very narrow phones */
+@media (max-width:380px){
+  .admin-side{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:6px}
+  .admin-side button{min-height:43px;font-size:.64rem}
+  .content{padding:9px}
+  .kpis{gap:6px}
+}
+
 </style>
 </head>
 <body>
