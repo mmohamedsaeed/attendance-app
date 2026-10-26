@@ -9,21 +9,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#edf3fb;
-  --bg-2:#dfe9ff;
-  --topbar:#2a3ec4;
-  --primary:#4d5df5;
-  --primary-2:#2f7df6;
-  --surface:#f5f7fb;
-  --card:#f4f6fa;
-  --white:#ffffff;
-  --text:#1f2937;
+  --bg:#edf4ff;
+  --bg-soft:#eef4ff;
+  --panel:#f8fafd;
+  --card:#ffffff;
+  --card-2:#f4f7ff;
+  --primary:#3f5efb;
+  --primary-2:#5b7cff;
+  --primary-3:#273dd7;
+  --primary-soft:rgba(63,94,251,0.12);
+  --primary-soft-2:rgba(63,94,251,0.08);
+  --text:#1d2433;
   --muted:#64748b;
-  --border:rgba(148,163,184,0.22);
-  --success:#22c55e;
-  --warning:#f59e0b;
-  --danger:#ef4444;
-  --shadow:0 28px 60px rgba(34,51,94,0.12);
+  --muted-2:#8aa0bd;
+  --line:#e5ebf7;
+  --success:#27c06d;
+  --success-soft:#eafaf2;
+  --warning:#ffb534;
+  --warning-soft:#fff3d7;
+  --danger:#ef476f;
+  --danger-soft:#ffe9ef;
+  --shadow:0 22px 44px rgba(44,62,112,0.12);
+  --shadow-soft:0 10px 30px rgba(31,55,123,0.09);
+  --radius-xl:28px;
+  --radius-lg:20px;
+  --radius-md:16px;
+  --radius-sm:12px;
 }
 
 *{
@@ -41,29 +52,32 @@ html,body{
 }
 
 body{
-  background:linear-gradient(180deg,#edf4ff 0%, #e8eefb 100%);
+  background:linear-gradient(180deg,#edf4ff 0%, #e9f1ff 100%);
   color:var(--text);
   min-height:100vh;
-  display:block;
   overflow-x:hidden;
   padding:0;
+}
+
+button,input,select{
+  font-family:'Cairo',sans-serif;
 }
 
 .app-shell{
   width:100%;
   min-height:100vh;
-  background:linear-gradient(180deg,#edf4ff 0%, #eaf1ff 100%);
+  background:linear-gradient(180deg,#edf4ff 0%, #eef4ff 100%);
 }
 
 .topbar{
-  height:54px;
-  background:linear-gradient(90deg, #2a3ec4 0%, #2d5ff0 100%);
+  height:56px;
+  background:linear-gradient(90deg,#2d3eb4 0%, #2b5fe9 100%);
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:0 22px;
   color:#fff;
-  box-shadow:0 12px 24px rgba(42,62,196,0.14);
+  box-shadow:0 14px 28px rgba(51,71,180,0.2);
 }
 
 .brand{
@@ -72,17 +86,19 @@ body{
   gap:10px;
   font-size:1.04rem;
   font-weight:800;
+  letter-spacing:.2px;
 }
 
 .brand-mark{
-  width:24px;
-  height:24px;
+  width:28px;
+  height:28px;
   border-radius:8px;
   background:rgba(255,255,255,0.12);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:.74rem;
+  font-size:.8rem;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.15);
 }
 
 .top-actions{
@@ -92,31 +108,31 @@ body{
 }
 
 .top-icon{
-  width:30px;
-  height:30px;
+  width:32px;
+  height:32px;
   border:0;
-  border-radius:9px;
+  border-radius:10px;
   background:rgba(255,255,255,0.09);
   color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  transition:all .2s ease;
+  transition:all .18s ease;
 }
 
 .top-icon:hover{
   background:rgba(255,255,255,0.18);
+  transform:translateY(-1px);
 }
 
 .page-wrap{
   width:100%;
-  min-height:calc(100vh - 54px);
+  min-height:calc(100vh - 56px);
   padding:10px 8px;
   display:flex;
   align-items:flex-start;
   justify-content:center;
-  box-sizing:border-box;
 }
 
 .card{
@@ -125,26 +141,26 @@ body{
   min-height:auto;
   height:auto;
   margin:0 auto;
-  background:rgba(247,249,252,0.98);
-  border-radius:20px;
+  background:rgba(248,250,253,0.96);
+  border-radius:22px;
   border:1px solid rgba(255,255,255,0.5);
   box-shadow:var(--shadow);
   overflow:hidden;
 }
 
 .header{
-  background:linear-gradient(135deg,#3c4ddb 0%, #3b7df5 100%);
-  padding:18px 20px;
+  background:linear-gradient(135deg,#3b48d6 0%, #3f80f3 100%);
+  padding:20px 24px;
   text-align:center;
   position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-  min-height:82px;
+  min-height:88px;
 }
 
 .header h1{
-  font-size:clamp(1.45rem, 2vw, 2rem);
+  font-size:clamp(1.45rem, 2.1vw, 2.1rem);
   font-weight:800;
   color:#fff;
 }
@@ -154,28 +170,30 @@ body{
   left:18px;
   top:50%;
   transform:translateY(-50%);
-  width:34px;
-  height:34px;
+  width:36px;
+  height:36px;
   border-radius:50%;
   background:rgba(255,255,255,0.12);
   display:flex;
   align-items:center;
   justify-content:center;
   color:#fff;
-  font-size:.95rem;
+  font-size:1rem;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12);
 }
 
 .content{
-  background:var(--surface);
-  padding:20px;
+  background:linear-gradient(180deg,#f7faff 0%, #f3f7ff 100%);
+  padding:20px 18px 18px;
 }
 
 .view{
   display:none;
 }
+
 .view.active{
   display:block;
-  animation:viewIn .35s ease;
+  animation:viewIn .32s ease;
 }
 
 @keyframes viewIn{
@@ -183,7 +201,6 @@ body{
   to{opacity:1; transform:translateY(0);}
 }
 
-/* Landing */
 .hero{
   text-align:center;
   padding-top:8px;
@@ -192,25 +209,25 @@ body{
 
 .hero-badge{
   position:relative;
-  width:108px;
-  height:108px;
+  width:110px;
+  height:110px;
   margin:0 auto 18px;
   border-radius:50%;
-  background:linear-gradient(135deg,#f3f4ff 0%, #eef1ff 100%);
+  background:linear-gradient(135deg,#f3f5ff 0%, #eef3ff 100%);
   display:flex;
   align-items:center;
   justify-content:center;
   color:var(--primary);
-  font-size:2.4rem;
-  box-shadow:inset 0 0 0 1px rgba(77,93,245,0.08);
+  font-size:2.5rem;
+  box-shadow:inset 0 0 0 1px rgba(79,93,245,0.08), 0 15px 28px rgba(79,93,245,0.08);
 }
 
 .hero-badge::before{
   content:"";
   position:absolute;
-  inset:10px;
+  inset:11px;
   border-radius:50%;
-  background:rgba(77,93,245,0.05);
+  background:rgba(79,93,245,0.06);
 }
 
 .hero-badge i{
@@ -234,7 +251,7 @@ body{
 
 .steps{
   list-style:none;
-  max-width:620px;
+  max-width:640px;
   margin:0 auto 24px;
 }
 
@@ -244,18 +261,19 @@ body{
   gap:14px;
   padding:12px 14px;
   border-radius:14px;
-  background:rgba(255,255,255,0.12);
-  border:1px solid var(--border);
+  background:rgba(255,255,255,0.35);
+  border:1px solid var(--line);
   color:#49576c;
-  font-size:.98rem;
+  font-size:.97rem;
   margin-bottom:8px;
+  box-shadow:var(--shadow-soft);
 }
 
 .step-icon{
-  width:36px;
-  height:36px;
+  width:38px;
+  height:38px;
   border-radius:50%;
-  background:rgba(77,93,245,0.08);
+  background:linear-gradient(135deg,#eef2ff 0%, #e7edff 100%);
   color:var(--primary);
   display:flex;
   align-items:center;
@@ -296,8 +314,35 @@ body{
 }
 
 .b-pri{
-  background:linear-gradient(135deg,#4b5eef 0%, #3a7ef7 100%);
-  box-shadow:0 18px 26px rgba(75,94,239,.24), inset 0 -3px 0 rgba(0,0,0,.12);
+  background:linear-gradient(135deg,#4d5ef7 0%, #3e7efb 100%);
+  box-shadow:0 16px 26px rgba(77,94,247,.26), inset 0 -3px 0 rgba(0,0,0,.12);
+}
+
+.b-bio{
+  background:linear-gradient(135deg,#00b4ff 0%, #6277ff 100%);
+  box-shadow:0 16px 24px rgba(0,180,255,.22), inset 0 -3px 0 rgba(0,0,0,.12);
+}
+
+.b-in{
+  background:linear-gradient(135deg,#27c06d 0%, #1d9a57 100%);
+  box-shadow:0 16px 24px rgba(39,192,109,.25), inset 0 -3px 0 rgba(0,0,0,.12);
+}
+
+.b-out{
+  background:linear-gradient(135deg,#ff6b7d 0%, #d93c5a 100%);
+  box-shadow:0 16px 24px rgba(217,60,90,.24), inset 0 -3px 0 rgba(0,0,0,.12);
+}
+
+.btn:disabled{
+  background:#e7edf8;
+  color:#9aa8bb;
+  box-shadow:none;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.btn:disabled::before,.btn:disabled::after{
+  display:none;
 }
 
 .badge{
@@ -314,27 +359,28 @@ body{
   justify-content:center;
   gap:8px;
   border:1px solid transparent;
+  box-shadow:var(--shadow-soft);
 }
 
 .badge.info{
-  background:#eff6ff;
+  background:#edf5ff;
   color:#1d4ed8;
   border-color:#bfdbfe;
 }
 .badge.ok{
-  background:#f0fdf4;
-  color:#15803d;
+  background:#edfdf5;
+  color:#18794e;
   border-color:#bbf7d0;
 }
 .badge.warn{
-  background:#fffbeb;
-  color:#b45309;
-  border-color:#fde68a;
+  background:#fff9ea;
+  color:#b76d00;
+  border-color:#f9db8b;
 }
 .badge.bad{
-  background:#fef2f2;
-  color:#b91c1c;
-  border-color:#fecaca;
+  background:#fff0f4;
+  color:#b02048;
+  border-color:#f6c2d3;
 }
 
 .fg{
@@ -358,7 +404,7 @@ body{
   right:14px;
   top:50%;
   transform:translateY(-50%);
-  color:#94a3b8;
+  color:#98a7bf;
   transition:color .2s ease;
 }
 
@@ -370,18 +416,19 @@ body{
   width:100%;
   min-height:46px;
   padding:12px 42px 12px 14px;
-  border:1.5px solid #e2e8f0;
+  border:1.5px solid var(--line);
   border-radius:14px;
   font-size:0.95rem;
   outline:none;
   background:#fff;
   transition:border-color .2s ease, box-shadow .2s ease;
-  color:#1e293b;
+  color:var(--text);
+  box-shadow:0 2px 10px rgba(15,23,42,0.02);
 }
 
 .fc:focus{
   border-color:var(--primary);
-  box-shadow:0 0 0 4px rgba(77,93,245,0.12);
+  box-shadow:0 0 0 4px rgba(63,94,251,0.12);
 }
 
 select.fc{
@@ -392,7 +439,7 @@ select.fc{
 
 .tag{
   font-size:0.72rem;
-  color:#94a3b8;
+  color:var(--muted);
   text-align:center;
   margin-top:14px;
 }
@@ -406,6 +453,7 @@ select.fc{
   text-decoration:none;
   transition:color .2s ease;
 }
+
 .link:hover{
   color:#4f46e5;
 }
@@ -443,7 +491,7 @@ select.fc{
   overflow:hidden;
   background:#0b1020;
   margin-bottom:14px;
-  box-shadow:0 0 0 2px #e2e8f0;
+  box-shadow:0 0 0 2px #e2e8f0, 0 12px 24px rgba(15,23,42,0.05);
 }
 
 video{
@@ -453,13 +501,27 @@ video{
   transform:scaleX(-1);
 }
 
+.cam::after{
+  content:"";
+  position:absolute;
+  inset:12px;
+  pointer-events:none;
+  z-index:2;
+  opacity:.9;
+  background-repeat:no-repeat;
+  background-image:linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff);
+  background-size:24px 3px,3px 24px,24px 3px,3px 24px,24px 3px,3px 24px,24px 3px,3px 24px;
+  background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%;
+}
+
 .tabs{
   display:flex;
   gap:6px;
-  background:#f1f5f9;
-  padding:5px;
+  background:#edf2ff;
+  padding:6px;
   border-radius:16px;
   margin-bottom:16px;
+  border:1px solid rgba(63,94,251,0.08);
 }
 
 .tabs button{
@@ -481,7 +543,7 @@ video{
 .tabs button.on{
   background:#fff;
   color:var(--primary);
-  box-shadow:0 4px 10px -4px rgba(79,70,229,.4);
+  box-shadow:0 6px 10px -5px rgba(63,94,251,.35);
 }
 
 .two{
@@ -508,25 +570,27 @@ video{
   display:block;
   padding:8px 12px;
   border-radius:12px;
-  border:1.5px solid #e2e8f0;
+  border:1.5px solid var(--line);
   font-size:.82rem;
   font-weight:700;
   color:#475569;
   transition:all .15s;
+  background:#fff;
 }
 .days input:checked + span{
-  background:var(--primary);
-  border-color:var(--primary);
+  background:linear-gradient(135deg,#4d5ef7 0%, #3e7efb 100%);
+  border-color:transparent;
   color:#fff;
 }
 
 .item{
-  border:1px solid #e2e8f0;
+  border:1px solid var(--line);
   border-radius:14px;
   padding:12px;
   margin-bottom:10px;
   font-size:0.85rem;
-  background:#fff;
+  background:rgba(255,255,255,0.88);
+  box-shadow:0 3px 12px rgba(15,23,42,0.02);
 }
 .item .top{
   display:flex;
@@ -539,18 +603,19 @@ video{
   color:#64748b;
   margin-top:4px;
   font-size:.78rem;
+  line-height:1.7;
 }
 
 .st{
-  padding:3px 10px;
+  padding:4px 10px;
   border-radius:99px;
   font-size:.72rem;
   font-weight:800;
   white-space:nowrap;
 }
-.st.pending{background:#fffbeb;color:#b45309;}
-.st.approved,.st.in{background:#f0fdf4;color:#15803d;}
-.st.rejected,.st.late{background:#fef2f2;color:#b91c1c;}
+.st.pending{background:#fff4d8;color:#b56b02;}
+.st.approved,.st.in{background:#eafaf2;color:#18794e;}
+.st.rejected,.st.late{background:#ffeaf0;color:#b02048;}
 .st.none{background:#f1f5f9;color:#64748b;}
 
 .mini{
@@ -562,9 +627,11 @@ video{
   padding:8px 12px;
   font:700 .8rem 'Cairo',sans-serif;
   cursor:pointer;
+  transition:all .15s ease;
 }
-.mini.g{ background:#16a34a; color:#fff; }
-.mini.r{ background:#fee2e2; color:#b91c1c; }
+.mini:hover{ transform:translateY(-1px); }
+.mini.g{ background:#1bbd66; color:#fff; }
+.mini.r{ background:#ffe6ed; color:#b02048; }
 .mini.b{ background:#eef2ff; color:#4f46e5; }
 .mini:disabled{ opacity:.5; }
 
@@ -586,12 +653,13 @@ video{
   border-radius:16px;
   padding:14px;
   background:#f8fafc;
-  border:1px solid #e2e8f0;
+  border:1px solid var(--line);
+  box-shadow:0 3px 12px rgba(15,23,42,0.02);
 }
 .stat b{
   display:block;
   font-size:1.5rem;
-  color:#4f46e5;
+  color:var(--primary);
 }
 .stat small{ color:#64748b; font-size:.78rem; }
 
@@ -613,9 +681,10 @@ video{
   position:sticky;
   top:12px;
   background:#f8fafc;
-  border:1px solid #e2e8f0;
+  border:1px solid var(--line);
   border-radius:20px;
   padding:10px;
+  box-shadow:var(--shadow-soft);
 }
 .admin-side button{
   width:100%;
@@ -631,11 +700,12 @@ video{
   align-items:center;
   gap:9px;
   margin-bottom:4px;
+  transition:all .15s ease;
 }
 .admin-side button:hover,
 .admin-side button.on{
-  background:#eef2ff;
-  color:#4f46e5;
+  background:linear-gradient(135deg,#eef2ff 0%, #edf4ff 100%);
+  color:var(--primary);
 }
 .admin-side button i{
   width:20px;
@@ -655,10 +725,11 @@ video{
   flex-wrap:wrap;
 }
 .admin-head h2{
-  font-size:1.05rem;
+  font-size:1.08rem;
+  color:var(--text);
 }
 .admin-head .sub{
-  color:#64748b;
+  color:var(--muted);
   font-size:.78rem;
 }
 
@@ -676,14 +747,15 @@ video{
   border-collapse:separate;
   border-spacing:0;
   background:#fff;
-  border:1px solid #e2e8f0;
+  border:1px solid var(--line);
   border-radius:16px;
   overflow:hidden;
   font-size:.78rem;
+  box-shadow:var(--shadow-soft);
 }
 .admin-table th,.admin-table td{
   padding:10px 9px;
-  border-bottom:1px solid #eef2f6;
+  border-bottom:1px solid #edf1f7;
   text-align:right;
   vertical-align:middle;
 }
@@ -704,14 +776,15 @@ video{
 }
 .kpi{
   padding:15px;
-  border:1px solid #e2e8f0;
+  border:1px solid var(--line);
   border-radius:17px;
   background:#fff;
+  box-shadow:var(--shadow-soft);
 }
 .kpi b{
   display:block;
   font-size:1.45rem;
-  color:#4f46e5;
+  color:var(--primary);
   margin-top:3px;
 }
 .kpi small{ color:#64748b; }
@@ -723,9 +796,10 @@ video{
 }
 .panel{
   background:#fff;
-  border:1px solid #e2e8f0;
+  border:1px solid var(--line);
   border-radius:18px;
   padding:14px;
+  box-shadow:var(--shadow-soft);
 }
 .panel h3{
   font-size:0.9rem;
@@ -743,10 +817,7 @@ video{
   align-items:center;
   font-size:.82rem;
 }
-.checkline input{
-  width:18px;
-  height:18px;
-}
+.checkline input{ width:18px; height:18px; }
 .empty{
   padding:25px;
   text-align:center;
@@ -757,10 +828,7 @@ video{
 }
 
 @media (max-width:700px){
-  body{
-    display:block;
-    min-height:100vh;
-  }
+  body{ display:block; min-height:100vh; }
   .page-wrap{
     padding:8px;
   }
@@ -799,18 +867,12 @@ video{
     gap:6px;
     padding:8px;
   }
-  .admin-main{
-    width:100%;
-  }
+  .admin-main{ width:100%; }
 }
 
 @media (max-width:430px){
-  .brand{
-    font-size:.9rem;
-  }
-  .header-badge{
-    left:12px;
-  }
+  .brand{ font-size:.9rem; }
+  .header-badge{ left:12px; }
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1021,32 +1083,53 @@ async function api(fn, data) {
   if (j.error) { const e = new Error(j.error); e.data = j; throw e; }
   return j;
 }
+
 function show(id) {
-  document.querySelectorAll(".view").forEach(v => v.classList.remove("active")); $(id).classList.add("active");
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  $(id).classList.add("active");
   const main = Object.values(TABS).includes(id);
-  $("tabs").style.display = main ? "flex" : "none"; if (!main) $("locBanner").style.display = "none";
+  $("tabs").style.display = main ? "flex" : "none";
+  if (!main) $("locBanner").style.display = "none";
 }
+
 function badge(el, cls, icon, msg) {
-  el.className = "badge " + cls; el.style.display = "flex";
-  if (["result", "loginMsg", "unlockMsg", "state"].includes(el.id)) { void el.offsetWidth; el.classList.add("pop"); }
-  el.innerHTML = `<i class="fa-solid ${icon}"></i><span></span>`; el.lastChild.textContent = msg;
+  el.className = "badge " + cls;
+  el.style.display = "flex";
+  if (["result", "loginMsg", "unlockMsg", "state"].includes(el.id)) {
+    void el.offsetWidth;
+    el.classList.add("pop");
+  }
+  el.innerHTML = `<i class="fa-solid ${icon}"></i><span></span>`;
+  el.lastChild.textContent = msg;
 }
+
 function hav(a, b, c, d) {
   const R = 6371000, r = x => x * Math.PI / 180;
   const h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
 }
+
 const fmt = m => m > 999 ? +(m / 1000).toFixed(2) + " كم" : m + " متر";
 
 const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
 const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 const empId = () => S.token.split(".")[0];
 let bioAvail = false;
+
 const bioReady = (window.PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable && window.isSecureContext
   ? PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable() : Promise.resolve(false))
   .then(v => (bioAvail = !!v)).catch(() => false);
+
 const bioSupported = () => bioAvail;
-const bioOn = () => { try { const b = JSON.parse(localStorage.getItem("bio") || "null"); return !!(b && S && b.emp === empId()); } catch (e) { return false; } };
+
+const bioOn = () => {
+  try {
+    const b = JSON.parse(localStorage.getItem("bio") || "null");
+    return !!(b && S && b.emp === empId());
+  } catch (e) {
+    return false;
+  }
+};
 
 $("bioBtn").onclick = async () => {
   try {
@@ -1061,7 +1144,9 @@ $("bioBtn").onclick = async () => {
     localStorage.setItem("bio", JSON.stringify({ id: b64(cred.rawId), emp: empId() }));
     $("bioBtn").style.display = "none";
     badge($("result"), "ok", "fa-fingerprint", "تم تفعيل الدخول بالبصمة ✅");
-  } catch (e) { badge($("result"), "bad", "fa-circle-xmark", "تعذر تفعيل البصمة، تأكد إن بصمة الموبايل أو قفل الشاشة مفعّل"); }
+  } catch (e) {
+    badge($("result"), "bad", "fa-circle-xmark", "تعذر تفعيل البصمة، تأكد إن بصمة الموبايل أو قفل الشاشة مفعّل");
+  }
 };
 
 $("unlockBtn").onclick = async () => {
@@ -1074,52 +1159,107 @@ $("unlockBtn").onclick = async () => {
       userVerification: "required", timeout: 60000
     } });
     enterApp();
-  } catch (e) { badge($("unlockMsg"), "bad", "fa-circle-xmark", "تعذر التحقق بالبصمة، حاول مرة أخرى"); }
+  } catch (e) {
+    badge($("unlockMsg"), "bad", "fa-circle-xmark", "تعذر التحقق بالبصمة، حاول مرة أخرى");
+  }
 };
-$("unlockPass").onclick = e => { e.preventDefault(); logout(); show("vLogin"); };
+
+$("unlockPass").onclick = e => {
+  e.preventDefault();
+  logout();
+  show("vLogin");
+};
 
 async function loginSnap() {
   let st;
-  try { st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false }); }
-  catch (e) { throw new Error("CAM"); }
   try {
-    const v = document.createElement("video"); v.muted = true; v.playsInline = true; v.srcObject = st;
+    st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+  } catch (e) {
+    throw new Error("CAM");
+  }
+
+  try {
+    const v = document.createElement("video");
+    v.muted = true;
+    v.playsInline = true;
+    v.srcObject = st;
     await v.play();
     if (!v.videoWidth) await new Promise(r => v.addEventListener("loadeddata", r, { once: true }));
     await new Promise(r => setTimeout(r, 500));
     const p = snap(v);
     if (!p) throw new Error("CAM");
     return p;
-  } finally { st.getTracks().forEach(t => t.stop()); }
+  } finally {
+    st.getTracks().forEach(t => t.stop());
+  }
 }
 
 $("startBtn").onclick = () => show("vLogin");
 $("backLink").onclick = e => { e.preventDefault(); show("vLanding"); };
+
 $("loginForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const btn = $("loginBtn"), h = btn.innerHTML; btn.disabled = true; $("loginMsg").style.display = "none";
+  const btn = $("loginBtn"), h = btn.innerHTML;
+  btn.disabled = true;
+  $("loginMsg").style.display = "none";
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
+
   try {
     const photo = await loginSnap();
-    const r = await api("login", { phone: $("phone").value.trim(), password: $("pass").value, ua: navigator.userAgent, photo });
-    S = { token: r.token, name: r.name }; localStorage.setItem("sess", JSON.stringify(S));
+    const r = await api("login", {
+      phone: $("phone").value.trim(),
+      password: $("pass").value,
+      ua: navigator.userAgent,
+      photo
+    });
+
+    S = { token: r.token, name: r.name };
+    localStorage.setItem("sess", JSON.stringify(S));
     $("pass").value = "";
     enterApp();
-  } catch (err) { badge($("loginMsg"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK); }
-  finally { btn.disabled = false; btn.innerHTML = h; }
+  } catch (err) {
+    badge($("loginMsg"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = h;
+  }
 });
-$("logoutLink").onclick = e => { e.preventDefault(); logout(); };
-function logout() { localStorage.removeItem("sess"); S = null; stopAll(); show("vLanding"); }
+
+$("logoutLink").onclick = e => {
+  e.preventDefault();
+  logout();
+};
+
+function logout() {
+  localStorage.removeItem("sess");
+  S = null;
+  stopAll();
+  show("vLanding");
+}
 
 async function enterApp() {
-  $("empName").textContent = S.name; tabName = "punch"; show("vApp"); markTab("punch"); $("result").style.display = "none";
+  $("empName").textContent = S.name;
+  tabName = "punch";
+  show("vApp");
+  markTab("punch");
+  $("result").style.display = "none";
   $("bioBtn").style.display = (bioSupported() && !bioOn()) ? "flex" : "none";
-  try { const r0 = await api("branches"); branches = r0.branches; if (r0.wait > 0) startCooldown(r0.wait); setAllowed(r0.allowed); }
-  catch (err) {
-    if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
+
+  try {
+    const r0 = await api("branches");
+    branches = r0.branches;
+    if (r0.wait > 0) startCooldown(r0.wait);
+    setAllowed(r0.allowed);
+  } catch (err) {
+    if (err.message === "SESSION") {
+      alert(ERR.SESSION);
+      return logout();
+    }
     return badge($("geo"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK);
   }
-  const sel = $("branch"); sel.innerHTML = "";
+
+  const sel = $("branch");
+  sel.innerHTML = "";
   sel.add(new Option("اختر الفرع", ""));
   branches.forEach(b => sel.add(new Option(b.name, b.name)));
   loadMe();
@@ -1127,132 +1267,252 @@ async function enterApp() {
 }
 
 let camBusy = false;
+
 async function startCam() {
-  if (stream || camBusy) return; camBusy = true;
+  if (stream || camBusy) return;
+  camBusy = true;
+
   try {
     stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
-    $("cam").srcObject = stream; $("cam").parentElement.classList.add("live");
-  } catch (err) { camBusy = false; return badge($("geo"), "bad", "fa-video-slash", "الكاميرا مطلوبة للتسجيل، فعّل الصلاحية وأعد تحميل الصفحة"); }
+    $("cam").srcObject = stream;
+    $("cam").parentElement.classList.add("live");
+  } catch (err) {
+    camBusy = false;
+    return badge($("geo"), "bad", "fa-video-slash", "الكاميرا مطلوبة للتسجيل، فعّل الصلاحية وأعد تحميل الصفحة");
+  }
+
   camBusy = false;
-  if (!navigator.geolocation) return badge($("geo"), "bad", "fa-location-crosshairs", ERR.GPS);
+  if (!navigator.geolocation) {
+    return badge($("geo"), "bad", "fa-location-crosshairs", ERR.GPS);
+  }
+
   watchId = navigator.geolocation.watchPosition(
     p => { pos = p.coords; refresh(); },
     () => { pos = null; badge($("geo"), "bad", "fa-location-crosshairs", "فعّل الـ GPS وصلاحية الموقع"); },
     { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
   );
 }
+
 function stopCam() {
-  if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
-  if (watchId !== null) navigator.geolocation.clearWatch(watchId); watchId = null; pos = null;
-  $("cam").parentElement.classList.remove("live"); refresh();
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  stream = null;
+  if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+  watchId = null;
+  pos = null;
+  $("cam").parentElement.classList.remove("live");
+  refresh();
 }
+
 function stopAll() {
   $("cam").parentElement.classList.remove("live");
-  if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
-  if (watchId !== null) navigator.geolocation.clearWatch(watchId); watchId = null; pos = null;
-  cdEnd = 0; clearInterval(cdTimer); $("cd").style.display = "none"; allowed = "both"; $("state").style.display = "none";
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  stream = null;
+  if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+  watchId = null;
+  pos = null;
+  cdEnd = 0; clearInterval(cdTimer);
+  $("cd").style.display = "none";
+  allowed = "both";
+  $("state").style.display = "none";
 }
+
 $("branch").onchange = refresh;
+
 function refresh() {
   const b = branches.find(x => x.name === $("branch").value);
   let can = false;
-  if (!pos) badge($("geo"), "warn", "fa-spinner fa-spin", "جاري تحديد موقعك...");
-  else if (!b) badge($("geo"), "info", "fa-location-dot", "اختر الفرع لحساب المسافة");
-  else {
+
+  if (!pos) {
+    badge($("geo"), "warn", "fa-spinner fa-spin", "جاري تحديد موقعك...");
+  } else if (!b) {
+    badge($("geo"), "info", "fa-location-dot", "اختر الفرع لحساب المسافة");
+  } else {
     const m = Math.round(hav(pos.latitude, pos.longitude, b.lat, b.lng));
     can = true;
-    if (m <= b.radius) badge($("geo"), "ok", "fa-circle-check", `داخل نطاق الفرع (${fmt(m)}) ✅`);
-    else badge($("geo"), "warn", "fa-triangle-exclamation", `خارج نطاق الفرع، تبعد ${fmt(m)} — يمكنك التسجيل وسيظهر تحذير ⚠️`);
+    if (m <= b.radius) {
+      badge($("geo"), "ok", "fa-circle-check", `داخل نطاق الفرع (${fmt(m)}) ✅`);
+    } else {
+      badge($("geo"), "warn", "fa-triangle-exclamation", `خارج نطاق الفرع، تبعد ${fmt(m)} — يمكنك التسجيل وسيظهر تحذير ⚠️`);
+    }
   }
+
   const base = can && stream && !busy && !cdActive();
   $("inBtn").disabled = !(base && allowed !== "Check-Out");
   $("outBtn").disabled = !(base && allowed !== "Check-In");
 }
 
 const cdActive = () => Date.now() < cdEnd;
+
 function startCooldown(sec) {
-  cdEnd = Date.now() + sec * 1000; const total = sec;
+  cdEnd = Date.now() + sec * 1000;
+  const total = sec;
   clearInterval(cdTimer);
+
   const tick = () => {
     const left = Math.ceil((cdEnd - Date.now()) / 1000);
-    if (left <= 0) { clearInterval(cdTimer); $("cd").style.display = "none"; refresh(); return; }
+    if (left <= 0) {
+      clearInterval(cdTimer);
+      $("cd").style.display = "none";
+      refresh();
+      return;
+    }
     const t = String(Math.floor(left / 60)).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0");
     badge($("cd"), "info", "fa-hourglass-half", `يمكنك التسجيل مرة أخرى بعد ${t}`);
     $("cd").style.setProperty("--p", Math.max(0, left / total));
     $("inBtn").disabled = $("outBtn").disabled = true;
   };
-  tick(); cdTimer = setInterval(tick, 1000);
+
+  tick();
+  cdTimer = setInterval(tick, 1000);
 }
 
 function setAllowed(a) {
   allowed = a || "both";
   const el = $("state");
-  if (allowed === "Check-Out") badge(el, "ok", "fa-briefcase", "أنت مسجّل حضور ✅ — المتاح الآن: تسجيل الانصراف فقط");
-  else if (allowed === "Check-In") badge(el, "info", "fa-flag-checkered", "تم تسجيل انصرافك — المتاح الآن: تسجيل الحضور فقط");
-  else el.style.display = "none";
+
+  if (allowed === "Check-Out") {
+    badge(el, "ok", "fa-briefcase", "أنت مسجّل حضور ✅ — المتاح الآن: تسجيل الانصراف فقط");
+  } else if (allowed === "Check-In") {
+    badge(el, "info", "fa-flag-checkered", "تم تسجيل انصرافك — المتاح الآن: تسجيل الحضور فقط");
+  } else {
+    el.style.display = "none";
+  }
+
   refresh();
 }
 
 function snap(v = $("cam")) {
   if (!v.videoWidth) return null;
+
   for (const w of [360, 280, 220]) {
     const c = document.createElement("canvas");
-    c.width = w; c.height = Math.round(w * v.videoHeight / v.videoWidth);
+    c.width = w;
+    c.height = Math.round(w * v.videoHeight / v.videoWidth);
     c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+
     for (const q of [0.6, 0.45, 0.3]) {
       const s = c.toDataURL("image/jpeg", q);
       if (s.length <= 45000) return s;
     }
   }
+
   return null;
 }
+
 async function punch(action) {
   if (busy) return;
-  busy = true; refresh();
+  busy = true;
+  refresh();
+
   const photo = snap();
-  if (!photo) { busy = false; refresh(); return badge($("result"), "bad", "fa-circle-xmark", ERR.NO_PHOTO); }
-  const cam = $("cam").parentElement; cam.classList.remove("flash"); void cam.offsetWidth; cam.classList.add("flash");
+  if (!photo) {
+    busy = false;
+    refresh();
+    return badge($("result"), "bad", "fa-circle-xmark", ERR.NO_PHOTO);
+  }
+
+  const cam = $("cam").parentElement;
+  cam.classList.remove("flash");
+  void cam.offsetWidth;
+  cam.classList.add("flash");
+
   badge($("result"), "info", "fa-spinner fa-spin", "جاري إرسال البيانات...");
+
   try {
-    const p = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }));
-    const r = await api("punch", { branch: $("branch").value, action, lat: p.latitude, lng: p.longitude, acc: p.accuracy, photo });
+    const p = await new Promise((res, rej) =>
+      navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      })
+    );
+
+    const r = await api("punch", {
+      branch: $("branch").value,
+      action,
+      lat: p.latitude,
+      lng: p.longitude,
+      acc: p.accuracy,
+      photo
+    });
+
     const what = action === "Check-In" ? "الحضور" : "الانصراف";
     const lateTxt = r.late > 0 ? ` — تأخير ${r.late} دقيقة${r.excused ? " (مبرر بإذن)" : ""}` : "";
-    if (r.far) badge($("result"), "warn", "fa-triangle-exclamation", `⚠️ تحذير: تم تسجيل ${what} خارج نطاق الفرع (تبعد ${fmt(r.dist)}) — ${r.time}${lateTxt}`);
-    else badge($("result"), r.late > 0 && !r.excused ? "warn" : "ok", "fa-circle-check", `✅ تم تسجيل ${what} (${r.time})${lateTxt}`);
+
+    if (r.far) {
+      badge($("result"), "warn", "fa-triangle-exclamation",
+        `⚠️ تحذير: تم تسجيل ${what} خارج نطاق الفرع (تبعد ${fmt(r.dist)}) — ${r.time}${lateTxt}`);
+    } else {
+      badge($("result"), r.late > 0 && !r.excused ? "warn" : "ok", "fa-circle-check",
+        `✅ تم تسجيل ${what} (${r.time})${lateTxt}`);
+    }
+
     setAllowed(r.allowed);
     startCooldown(r.wait || 300);
+
   } catch (err) {
-    if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
+    if (err.message === "SESSION") {
+      alert(ERR.SESSION);
+      return logout();
+    }
     if (err.message === "WRONG_ACTION") setAllowed(err.data.allowed);
     if (err.message === "COOLDOWN") startCooldown(err.data.wait);
+
     const m = ERR[err.message] || (err.code ? ERR.GPS : ERR.NETWORK);
     badge($("result"), "bad", "fa-circle-xmark", m);
-  } finally { setTimeout(() => { busy = false; refresh(); }, 2500); }
+  } finally {
+    setTimeout(() => {
+      busy = false;
+      refresh();
+    }, 2500);
+  }
 }
+
 $("inBtn").onclick = () => punch("Check-In");
 $("outBtn").onclick = () => punch("Check-Out");
 
+// ===== الإصدار 2: التبويبات والطلبات والداشبورد ولوحة المدير =====
 const TABS = { punch: "vApp", req: "vReq", dash: "vDash", mgr: "vMgr" };
 const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-const LEAVE_TYPES = ["سنوية", "مرضية", "عارضة", "بدون مرتب"], PERM_TYPES = ["تأخير", "انصراف مبكر", "خروج أثناء العمل"];
+const LEAVE_TYPES = ["سنوية", "مرضية", "عارضة", "بدون مرتب"];
+const PERM_TYPES = ["تأخير", "انصراف مبكر", "خروج أثناء العمل"];
 const POLL_MS = 60000;
-const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"
+}[c]));
+
 let tabName = "punch", me = null, team = null;
+
 const markTab = t => document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
 document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => go(b.dataset.t));
+
 function go(t) {
-  tabName = t; show(TABS[t]); markTab(t);
-  if (t === "punch") startCam(); else stopCam();
-  if (t === "mgr") loadTeam(); else if (t !== "punch") loadMe();
+  tabName = t;
+  show(TABS[t]);
+  markTab(t);
+
+  if (t === "punch") startCam();
+  else stopCam();
+
+  if (t === "mgr") loadTeam();
+  else if (t !== "punch") loadMe();
 }
+
 const iso = d => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+
 $("lType").innerHTML = LEAVE_TYPES.map(t => `<option>${t}</option>`).join("");
 $("pType").innerHTML = PERM_TYPES.map(t => `<option>${t}</option>`).join("");
 $("dayChips").innerHTML = DAYS.map((d, i) => `<label><input type="checkbox" value="${i}"><span>${d}</span></label>`).join("");
-$("dayChips").onchange = e => { if (document.querySelectorAll("#dayChips input:checked").length > 3) e.target.checked = false; };
+$("dayChips").onchange = e => {
+  if (document.querySelectorAll("#dayChips input:checked").length > 3) e.target.checked = false;
+};
 $("lFrom").value = $("lTo").value = $("pDate").value = iso(new Date());
-$("rKind").onchange = () => { const k = $("rKind").value; $("fLeave").style.display = k === "leave" ? "" : "none"; $("fPerm").style.display = k === "permission" ? "" : "none"; $("fOff").style.display = k === "weekoff" ? "" : "none"; };
+$("rKind").onchange = () => {
+  const k = $("rKind").value;
+  $("fLeave").style.display = k === "leave" ? "" : "none";
+  $("fPerm").style.display = k === "permission" ? "" : "none";
+  $("fOff").style.display = k === "weekoff" ? "" : "none";
+};
 
 function applyRuntimeConfig(c){
   if(!c)return;
@@ -1260,71 +1520,203 @@ function applyRuntimeConfig(c){
   const old=document.getElementById('runtimeNotice'); if(old) old.remove();
   if(c.notice){const el=document.createElement('div');el.id='runtimeNotice';el.className='badge '+(c.noticeType||'info');el.style.cssText='margin:10px 0;display:flex';el.textContent=c.notice;const host=document.querySelector('#vApp');if(host)host.insertBefore(el,host.firstChild);}
 }
+
 async function loadMe() {
   try { me = await api("me"); }
-  catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); logout(); } return; }
+  catch (e) {
+    if (e.message === "SESSION") { alert(ERR.SESSION); logout(); }
+    return;
+  }
+
   $("tabMgr").style.display = ["manager","superadmin"].includes(me.role) ? "" : "none";
   $("superAdminNav").style.display = me.role === "superadmin" ? "" : "none";
-  renderReq(); renderDash(); showLocs(me.locs);
-  try { const fc = await api("runtimeConfig"); applyRuntimeConfig(fc.config); } catch(e) {}
+  renderReq();
+  renderDash();
+  showLocs(me.locs);
+
+  try {
+    const fc = await api("runtimeConfig");
+    applyRuntimeConfig(fc.config);
+  } catch(e) {}
 }
-const reqText = r => r.kind === "leave" ? `إجازة ${r.type}: ${r.from} ← ${r.to}` : r.kind === "permission" ? `إذن ${r.type}: ${r.from} (${r.mins} دقيقة)` : `أيام الإجازة الأسبوعية: ${r.from.split(",").map(i => DAYS[i]).join("، ")}`;
+
+const reqText = r => r.kind === "leave"
+  ? `إجازة ${r.type}: ${r.from} ← ${r.to}`
+  : r.kind === "permission"
+    ? `إذن ${r.type}: ${r.from} (${r.mins} دقيقة)`
+    : `أيام الإجازة الأسبوعية: ${r.from.split(",").map(i => DAYS[i]).join("، ")}`;
+
 const ST = { pending: "قيد المراجعة", approved: "مقبول", rejected: "مرفوض" };
+
 function renderReq() {
   $("myInfo").innerHTML = `<i class="fa-solid fa-clock"></i><span>موعد الحضور ${esc(me.shift)} · الإجازة الأسبوعية: ${esc(me.off.map(i => DAYS[i]).join("، "))}</span>`;
-  $("myReqs").innerHTML = me.requests.length ? me.requests.map(r => `<div class="item"><div class="top"><span>${esc(reqText(r))}</span><span class="st ${r.status}">${ST[r.status]}</span></div>${r.mgrNote ? `<div class="sub">ملاحظة المدير: ${esc(r.mgrNote)}</div>` : ""}</div>`).join("") : '<div class="item sub">لا توجد طلبات بعد</div>';
+  $("myReqs").innerHTML = me.requests.length
+    ? me.requests.map(r => `<div class="item"><div class="top"><span>${esc(reqText(r))}</span><span class="st ${r.status}">${ST[r.status]}</span></div>${r.mgrNote ? `<div class="sub">ملاحظة المدير: ${esc(r.mgrNote)}</div>` : ""}</div>`).join("")
+    : '<div class="item sub">لا توجد طلبات بعد</div>';
 }
+
 function renderDash() {
-  const s = me.stats, c = (l, v, i) => `<div class="stat"><i class="fa-solid ${i}" style="color:#94a3b8"></i><b>${esc(v)}</b><small>${l}</small></div>`;
+  const s = me.stats;
+  const c = (l, v, i) => `<div class="stat"><i class="fa-solid ${i}" style="color:#94a3b8"></i><b>${esc(v)}</b><small>${l}</small></div>`;
   $("dashTitle").textContent = "إحصائيات " + new Date().toLocaleDateString("ar-EG", { month: "long", year: "numeric" });
   $("dashBody").innerHTML = `<div class="grid2">${c("أيام العمل", s.present, "fa-briefcase")}${c("أيام الإجازات", s.leave, "fa-umbrella-beach")}${c("أيام الغياب", s.absent, "fa-user-xmark")}${c("التأخيرات", s.lateCount + " · " + s.lateMin + " د", "fa-clock")}</div><h3 class="sec">الأذونات (${s.permCount})</h3><div class="grid2">${PERM_TYPES.map(t => c(t, s.perms[t] || 0, "fa-hourglass-half")).join("")}</div>`;
 }
+
 $("rSend").onclick = async () => {
   const k = $("rKind").value, m = $("rMsg"), btn = $("rSend"), p = { kind: k, note: $("rNote").value.trim() };
+
   if (k === "leave") Object.assign(p, { type: $("lType").value, from: $("lFrom").value, to: $("lTo").value });
   else if (k === "permission") Object.assign(p, { type: $("pType").value, from: $("pDate").value, mins: +$("pMins").value });
-  else { p.days = [...document.querySelectorAll("#dayChips input:checked")].map(i => i.value).join(","); if (!p.days) return badge(m, "bad", "fa-circle-xmark", "اختر يوم واحد على الأقل"); }
+  else {
+    p.days = [...document.querySelectorAll("#dayChips input:checked")].map(i => i.value).join(",");
+    if (!p.days) return badge(m, "bad", "fa-circle-xmark", "اختر يوم واحد على الأقل");
+  }
+
   btn.disabled = true;
-  try { await api("submit", p); badge(m, "ok", "fa-circle-check", "تم إرسال الطلب للمدير ✅"); $("rNote").value = ""; loadMe(); }
-  catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); return logout(); } badge(m, "bad", "fa-circle-xmark", e.message === "BAD_REQUEST" ? "راجع بيانات الطلب (التواريخ أو المدة)" : ERR.NETWORK); }
-  finally { btn.disabled = false; }
+  try {
+    await api("submit", p);
+    badge(m, "ok", "fa-circle-check", "تم إرسال الطلب للمدير ✅");
+    $("rNote").value = "";
+    loadMe();
+  } catch (e) {
+    if (e.message === "SESSION") { alert(ERR.SESSION); return logout(); }
+    badge(m, "bad", "fa-circle-xmark", e.message === "BAD_REQUEST" ? "راجع بيانات الطلب (التواريخ أو المدة)" : ERR.NETWORK);
+  } finally {
+    btn.disabled = false;
+  }
 };
 
 function showLocs(list) {
   const el = $("locBanner"), L = list && list[0];
   if (!L || !S) { el.style.display = "none"; return; }
-  el.className = "badge warn"; el.dataset.id = L.id; el.style.display = "flex";
+  el.className = "badge warn";
+  el.dataset.id = L.id;
+  el.style.display = "flex";
   el.innerHTML = `<span><i class="fa-solid fa-location-crosshairs"></i> ${esc(L.mgr)} يطلب موقعك الحالي</span><div class="acts" style="margin:0"><button class="mini g" data-ok="1">موافقة</button><button class="mini r" data-ok="0">رفض</button></div>`;
 }
+
 $("locBanner").onclick = async e => {
-  const b = e.target.closest("button[data-ok]"); if (!b) return;
-  const id = $("locBanner").dataset.id, ok = b.dataset.ok === "1"; b.disabled = true;
+  const b = e.target.closest("button[data-ok]");
+  if (!b) return;
+  const id = $("locBanner").dataset.id, ok = b.dataset.ok === "1";
+  b.disabled = true;
+
   try {
     let c = {};
-    if (ok) { const p = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 })); c = { lat: p.latitude, lng: p.longitude, acc: p.accuracy }; }
+    if (ok) {
+      const p = await new Promise((res, rej) =>
+        navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, {
+          enableHighAccuracy: true, timeout: 15000, maximumAge: 0
+        })
+      );
+      c = { lat: p.latitude, lng: p.longitude, acc: p.accuracy };
+    }
     await api("locAnswer", { id, ok, ...c });
     $("locBanner").style.display = "none";
-  } catch (err) { badge($("locBanner"), "bad", "fa-circle-xmark", "تعذر تحديد موقعك أو إرسال الرد، حاول مرة أخرى"); }
+  } catch (err) {
+    badge($("locBanner"), "bad", "fa-circle-xmark", "تعذر تحديد موقعك أو إرسال الرد، حاول مرة أخرى");
+  }
 };
-setInterval(async () => { if (!S || document.hidden) return; try { showLocs((await api("ping")).locs); } catch (e) {} }, POLL_MS);
 
+setInterval(async () => {
+  if (!S || document.hidden) return;
+  try {
+    showLocs((await api("ping")).locs);
+  } catch (e) {}
+}, POLL_MS);
+
+// ===== لوحة المدير + مسارات V3 =====
 async function loadTeam(){try{team=await api("team");renderMgr();}catch(e){if(e.message==="SESSION")logout();}}
+
 const toM=t=>{const p=String(t).split(":");return(+p[0]||0)*60+(+p[1]||0)};
 const scoreCls=s=>s>=90?"background:#dcfce7;color:#15803d":s>=75?"background:#dbeafe;color:#1d4ed8":s>=60?"background:#fef3c7;color:#b45309":"background:#fee2e2;color:#b91c1c";
 const TODAY={in:"حاضر",late:"متأخر",none:"لم يسجل"};
 const locText=l=>!l?"":l.status==="approved"?`<a href="https://www.google.com/maps?q=${+l.lat},${+l.lng}" target="_blank" rel="noopener">📍 آخر موقع (${esc(l.at)})</a>`:l.status==="declined"?"رفض الموظف":"بانتظار رد الموظف...";
+
 function renderMgr(){
   const n=new Date(),nowM=n.getHours()*60+n.getMinutes(),al=$("mgrAlert"), list=(team&&team.team)||[];
   const late=list.filter(t=>!t.offToday&&(t.today==="late"||(t.today==="none"&&nowM>toM(t.shift)+30)));
-  if(late.length)badge(al,"warn","fa-triangle-exclamation","تنبيه تأخير: "+late.map(t=>t.name).join("، "));else al.style.display="none";
-  $("pendList").innerHTML=(team.pending||[]).length?team.pending.map(r=>`<div class="item"><div class="top"><span>${esc(r.emp)}</span><span class="st pending">قيد المراجعة</span></div><div class="sub">${esc(reqText(r))}${r.note?" — "+esc(r.note):""}</div><div class="acts"><button class="mini g" data-d="approve" data-id="${esc(r.id)}">موافقة</button><button class="mini r" data-d="reject" data-id="${esc(r.id)}">رفض</button></div></div>`).join(""):'<div class="empty">لا توجد طلبات معلقة</div>';
-  $("teamList").innerHTML=list.slice(0,12).map(t=>`<div class="item"><div class="top"><span>${esc(t.name)} <span class="st ${t.today}">${TODAY[t.today]}${t.offToday?" (إجازة)":""}</span></span><span class="score" style="${scoreCls(t.score)}">${t.score} · ${t.grade}</span></div><div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div></div>`).join("")||'<div class="empty">لا يوجد موظفون</div>';
+
+  if(late.length) badge(al,"warn","fa-triangle-exclamation","تنبيه تأخير: "+late.map(t=>t.name).join("، "));
+  else al.style.display="none";
+
+  $("pendList").innerHTML=(team.pending||[]).length ? team.pending.map(r => `
+    <div class="item">
+      <div class="top"><span>${esc(r.emp)}</span><span class="st pending">قيد المراجعة</span></div>
+      <div class="sub">${esc(reqText(r))}${r.note?" — "+esc(r.note):""}</div>
+      <div class="acts">
+        <button class="mini g" data-d="approve" data-id="${esc(r.id)}">موافقة</button>
+        <button class="mini r" data-d="reject" data-id="${esc(r.id)}">رفض</button>
+      </div>
+    </div>
+  `).join("") : '<div class="empty">لا توجد طلبات معلقة</div>';
+
+  $("teamList").innerHTML=list.slice(0,12).map(t => `
+    <div class="item">
+      <div class="top">
+        <span>${esc(t.name)} <span class="st ${t.today}">${TODAY[t.today]}${t.offToday?" (إجازة)":""}</span></span>
+        <span class="score" style="${scoreCls(t.score)}">${t.score} · ${t.grade}</span>
+      </div>
+      <div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div>
+    </div>
+  `).join("") || '<div class="empty">لا يوجد موظفون</div>';
 }
-$("vMgr").onclick=async e=>{const d=e.target.closest("[data-d]"),l=e.target.closest("[data-loc]");try{if(d){const note=d.dataset.d==="reject"?(prompt("سبب الرفض (اختياري)")||""):"";d.disabled=true;await api("decide",{id:d.dataset.id,decision:d.dataset.d,note});loadTeam();}else if(l){l.disabled=true;const out=$("loc_"+l.dataset.loc);out.textContent="تم إرسال الطلب، بانتظار موافقة الموظف...";const r=await api("reqLoc",{emp:l.dataset.loc});pollLoc(r.id,out);setTimeout(()=>l.disabled=false,4000);}}catch(err){if(err.message==="SESSION")logout();else alert(err.message==="SELF"?"لا يمكنك الموافقة على طلبك أنت":err.message==="DONE"?"تم البت في هذا الطلب بالفعل":ERR.NETWORK);}};
-async function pollLoc(id,out){for(let i=0;i<36;i++){await new Promise(r=>setTimeout(r,5000));if(!S)return;try{const r=await api("locPoll",{id});if(r.status!=="pending"){out.innerHTML=locText(r.status==="approved"?{status:"approved",lat:r.lat,lng:r.lng,at:r.at}:{status:"declined"});return;}}catch(e){}}out.textContent="لم يرد الموظف بعد"}
+
+$("vMgr").onclick=async e=>{
+  const d=e.target.closest("[data-d]"),l=e.target.closest("[data-loc]");
+  try{
+    if(d){
+      const note=d.dataset.d==="reject"?(prompt("سبب الرفض (اختياري)")||""):"";
+      d.disabled=true;
+      await api("decide",{id:d.dataset.id,decision:d.dataset.d,note});
+      loadTeam();
+    } else if(l){
+      l.disabled=true;
+      const out=$("loc_"+l.dataset.loc);
+      out.textContent="تم إرسال الطلب، بانتظار موافقة الموظف...";
+      const r=await api("reqLoc",{emp:l.dataset.loc});
+      pollLoc(r.id,out);
+      setTimeout(()=>l.disabled=false,4000);
+    }
+  }catch(err){
+    if(err.message==="SESSION")logout();
+    else alert(err.message==="SELF"?"لا يمكنك الموافقة على طلبك أنت":err.message==="DONE"?"تم البت في هذا الطلب بالفعل":ERR.NETWORK);
+  }
+};
+
+async function pollLoc(id,out){
+  for(let i=0;i<36;i++){
+    await new Promise(r=>setTimeout(r,5000));
+    if(!S)return;
+    try{
+      const r=await api("locPoll",{id});
+      if(r.status!=="pending"){
+        out.innerHTML=locText(r.status==="approved"?{status:"approved",lat:r.lat,lng:r.lng,at:r.at}:{status:"declined"});
+        return;
+      }
+    }catch(e){}
+  }
+  out.textContent="لم يرد الموظف بعد";
+}
 
 const adminRoutes=[...document.querySelectorAll(".admin-route")],adminNav=document.querySelectorAll("#adminNav [data-admin]"),adminCache={};
-function adminGo(route){if(!me||!["manager","superadmin"].includes(me.role))return;adminNav.forEach(b=>b.classList.toggle("on",b.dataset.admin===route));adminRoutes.forEach(v=>v.classList.toggle("on",v.dataset.route===route));if(route==="overview")loadAdminOverview();if(route==="employees")loadEmployees();if(route==="branches")loadBranches();if(route==="attendance"){fillAttendanceEmployees();loadAttendance()}if(route==="requests")loadRequests();if(route==="evaluation"){setDefaultDates();loadEvaluation()}if(route==="audit")loadAudit();if(route==="reports"){setDefaultDates();fillAttendanceEmployees()}if(route==="setup"){$("setupMsg").style.display="none";}if(route==="superadmin"&&me.role==="superadmin")loadSuperadmin();}
+
+function adminGo(route){
+  if(!me||!["manager","superadmin"].includes(me.role))return;
+  adminNav.forEach(b=>b.classList.toggle("on",b.dataset.admin===route));
+  adminRoutes.forEach(v=>v.classList.toggle("on",v.dataset.route===route));
+  if(route==="overview")loadAdminOverview();
+  if(route==="employees")loadEmployees();
+  if(route==="branches")loadBranches();
+  if(route==="attendance"){fillAttendanceEmployees();loadAttendance();}
+  if(route==="requests")loadRequests();
+  if(route==="evaluation"){setDefaultDates();loadEvaluation();}
+  if(route==="audit")loadAudit();
+  if(route==="reports"){setDefaultDates();fillAttendanceEmployees();}
+  if(route==="setup"){$("setupMsg").style.display="none";}
+  if(route==="superadmin"&&me.role==="superadmin")loadSuperadmin();
+}
+
 async function loadSuperadmin(){
   if(!me||me.role!=="superadmin")return;
   try{
@@ -1343,54 +1735,379 @@ async function loadSuperadmin(){
     document.querySelectorAll('.sa-active').forEach(b=>b.onclick=async()=>{try{await api('superadminSetActive',{id:b.dataset.id,active:b.dataset.active==='1'});loadSuperadmin()}catch(e){alert(errText(e))}});
   }catch(e){alert(errText(e))}
 }
+
 $("refreshSuperadmin").onclick=loadSuperadmin;
 $("refreshSheets").onclick=loadSuperadmin;
-$("clearSessions").onclick=async()=>{if(!confirm('سيتم إنهاء جميع الجلسات الحالية. متابعة؟'))return;try{const r=await api('superadminClearSessions');alert('تم إنهاء '+r.count+' جلسة');}catch(e){alert(errText(e))}};
+
+$("clearSessions").onclick=async()=>{
+  if(!confirm('سيتم إنهاء جميع الجلسات الحالية. متابعة؟'))return;
+  try{
+    const r=await api('superadminClearSessions');
+    alert('تم إنهاء '+r.count+' جلسة');
+  }catch(e){alert(errText(e))}
+};
+
 adminNav.forEach(b=>b.onclick=()=>adminGo(b.dataset.admin));
-const errText=e=>({FORBIDDEN:"غير مصرح لك",NOT_FOUND:"العنصر غير موجود",BAD_EMPLOYEE:"بيانات الموظف غير صحيحة",PHONE_EXISTS:"رقم الهاتف مستخدم بالفعل",EMP_ID_EXISTS:"رقم الموظف مستخدم بالفعل",BAD_SHIFT:"مواعيد الشيفت غير صحيحة",BAD_OFF:"أيام الإجازة غير صحيحة",BAD_EMAIL:"البريد الإلكتروني غير صحيح",BRANCH_EXISTS:"اسم الفرع مستخدم بالفعل",BAD_BRANCH:"بيانات الفرع غير صحيحة",NO_CHANGES:"لا توجد تغييرات",DONE:"تم اتخاذ القرار بالفعل"}[e.message]||ERR[e.message]||"تعذر تنفيذ العملية");
+const errText=e=>({
+  FORBIDDEN:"غير مصرح لك",
+  NOT_FOUND:"العنصر غير موجود",
+  BAD_EMPLOYEE:"بيانات الموظف غير صحيحة",
+  PHONE_EXISTS:"رقم الهاتف مستخدم بالفعل",
+  EMP_ID_EXISTS:"رقم الموظف مستخدم بالفعل",
+  BAD_SHIFT:"مواعيد الشيفت غير صحيحة",
+  BAD_OFF:"أيام الإجازة غير صحيحة",
+  BAD_EMAIL:"البريد الإلكتروني غير صحيح",
+  BRANCH_EXISTS:"اسم الفرع مستخدم بالفعل",
+  BAD_BRANCH:"بيانات الفرع غير صحيحة",
+  NO_CHANGES:"لا توجد تغييرات",
+  DONE:"تم اتخاذ القرار بالفعل"
+}[e.message]||ERR[e.message]||"تعذر تنفيذ العملية");
+
 const kpi=(label,value,icon)=>`<div class="kpi"><i class="fa-solid ${icon}" style="color:#94a3b8"></i><b>${esc(value)}</b><small>${label}</small></div>`;
-async function loadAdminOverview(){try{const r=await api("adminDashboard",{date:iso(new Date())});$("adminKpis").innerHTML=[kpi("إجمالي الموظفين",r.totalEmployees,"fa-users"),kpi("حاضر اليوم",r.present,"fa-user-check"),kpi("غياب",r.absent,"fa-user-xmark"),kpi("تأخير",r.late,"fa-clock"),kpi("طلبات معلقة",r.pending,"fa-file-circle-exclamation"),kpi("نسبة الحضور",r.attendanceRate+"%","fa-chart-pie"),kpi("متوسط التقييم",r.monthly.averageScore,"fa-star"),kpi("دقائق التأخير",r.monthly.lateMin,"fa-hourglass-half")].join("");await loadTeam();}catch(e){if(e.message==="SESSION")logout();else alert(errText(e));}}
+
+async function loadAdminOverview(){
+  try{
+    const r=await api("adminDashboard",{date:iso(new Date())});
+    $("adminKpis").innerHTML=[
+      kpi("إجمالي الموظفين",r.totalEmployees,"fa-users"),
+      kpi("حاضر اليوم",r.present,"fa-user-check"),
+      kpi("غياب",r.absent,"fa-user-xmark"),
+      kpi("تأخير",r.late,"fa-clock"),
+      kpi("طلبات معلقة",r.pending,"fa-file-circle-exclamation"),
+      kpi("نسبة الحضور",r.attendanceRate+"%","fa-chart-pie"),
+      kpi("متوسط التقييم",r.monthly.averageScore,"fa-star"),
+      kpi("دقائق التأخير",r.monthly.lateMin,"fa-hourglass-half")
+    ].join("");
+    await loadTeam();
+  }catch(e){
+    if(e.message==="SESSION")logout();
+    else alert(errText(e));
+  }
+}
+
 $("refreshAdmin").onclick=loadAdminOverview;
-function renderEmployees(){const q=$("empSearch").value.trim().toLowerCase(),role=$("empRole").value,rows=(adminCache.employees||[]).filter(x=>(!role||x.role===role)&&(!q||[x.id,x.name,x.phone].some(v=>String(v).toLowerCase().includes(q))));$("employeeTable").innerHTML=rows.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الموظف</th><th>الهاتف</th><th>الصلاحية</th><th>الشيفت</th><th>الإجازة</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${esc(x.name)}</b><br><small>${esc(x.id)}</small></td><td>${esc(x.phone)}</td><td>${x.role==="manager"?"مدير":"موظف"}</td><td>${esc(x.shift)}${x.shiftEnd?" → "+esc(x.shiftEnd):""}</td><td>${esc((x.off||[]).map(i=>DAYS[i]).join("، "))}</td><td><span class="st ${x.active?"approved":"rejected"}">${x.active?"نشط":"متوقف"}</span></td><td><div class="acts"><button class="mini b" data-edit-emp="${esc(x.id)}">تعديل</button><button class="mini r" data-reset-emp="${esc(x.id)}">إعادة الجهاز</button></div></td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد نتائج</div>'}
-async function loadEmployees(){try{adminCache.employees=(await api("employeeList")).employees||[];renderEmployees()}catch(e){alert(errText(e))}}
-$("empSearch").oninput=renderEmployees;$("empRole").onchange=renderEmployees;
-function employeeForm(x={}){const off=new Set(x.off||[5]);return `<h3>${x.id?"تعديل موظف":"إضافة موظف جديد"}</h3><div class="form-grid"><div><label>رقم الموظف</label><input id="efId" class="fc" value="${esc(x.id||"")}" ${x.id?"readonly":""}></div><div><label>الاسم</label><input id="efName" class="fc" value="${esc(x.name||"")}"></div><div><label>الهاتف</label><input id="efPhone" class="fc" value="${esc(x.phone||"")}"></div><div><label>كلمة السر</label><input id="efPass" type="password" class="fc"></div><div><label>الصلاحية</label><select id="efRole" class="fc"><option value="employee" ${x.role!=="manager"?"selected":""}>موظف</option><option value="manager" ${x.role==="manager"?"selected":""}>مدير</option></select></div><div><label>البريد</label><input id="efEmail" class="fc" value="${esc(x.email||"")}"></div><div><label>بداية الشيفت</label><input id="efShift" type="time" class="fc" value="${esc(x.shift||"09:00")}"></div><div><label>نهاية الشيفت</label><input id="efEnd" type="time" class="fc" value="${esc(x.shiftEnd||"17:00")}"></div><div class="full"><label>الإجازة الأسبوعية</label><div class="days">${DAYS.map((d,i)=>`<label><input type="checkbox" class="efOff" value="${i}" ${off.has(i)?"checked":""}><span>${d}</span></label>`).join("")}</div></div><div class="full"><label class="checkline"><input id="efActive" type="checkbox" ${x.active!==false?"checked":""}> الموظف نشط ويمكنه الدخول</label></div></div><div class="acts"><button class="mini g" id="saveEmployee">حفظ</button><button class="mini r" id="cancelEmployee">إلغاء</button></div>`}
-function openEmployee(x){$("employeeForm").innerHTML=employeeForm(x);$("employeeForm").style.display="block";$("saveEmployee").onclick=async()=>{const p={id:$("efId").value.trim(),name:$("efName").value.trim(),phone:$("efPhone").value.trim(),password:$("efPass").value,role:$("efRole").value,email:$("efEmail").value.trim(),shift:$("efShift").value,shiftEnd:$("efEnd").value,weeklyOff:[...document.querySelectorAll(".efOff:checked")].map(x=>x.value).join(","),active:$("efActive").checked};try{await api(x.id?"editEmployee":"createEmployee",p);$("employeeForm").style.display="none";loadEmployees()}catch(e){alert(errText(e))}};$("cancelEmployee").onclick=()=>$("employeeForm").style.display="none"}
-$("newEmployee").onclick=()=>openEmployee();$("employeeTable").onclick=async e=>{const b=e.target.closest("button");if(!b)return;try{if(b.dataset.editEmp)openEmployee((adminCache.employees||[]).find(v=>v.id===b.dataset.editEmp));else if(b.dataset.resetEmp&&confirm("سيتم إلغاء ربط الجهاز الحالي وإنهاء جلسة الموظف. متابعة؟")){await api("resetEmployeeDevice",{id:b.dataset.resetEmp});alert("تم إعادة ضبط الجهاز");loadEmployees()}}catch(err){alert(errText(err))}}; 
-async function loadBranches(){try{adminCache.branches=(await api("branchList")).branches||[];renderBranches()}catch(e){alert(errText(e))}}
-function renderBranches(){const rows=adminCache.branches||[];$("branchTable").innerHTML=rows.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الفرع</th><th>الإحداثيات</th><th>النطاق</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${esc(x.name)}</b></td><td>${Number(x.lat).toFixed(6)}, ${Number(x.lng).toFixed(6)}</td><td>${esc(x.radius)} متر</td><td><span class="st ${x.active?"approved":"rejected"}">${x.active?"نشط":"متوقف"}</span></td><td><button class="mini b" data-edit-branch="${esc(x.name)}">تعديل</button> ${x.active?`<button class="mini r" data-del-branch="${esc(x.name)}">تعطيل</button>`:""}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد فروع</div>'}
-function branchForm(x={}){return `<h3>${x.name?"تعديل الفرع":"إضافة فرع"}</h3><div class="form-grid"><div><label>اسم الفرع</label><input id="bfName" class="fc" value="${esc(x.name||"")}"></div><div><label>النطاق بالمتر</label><input id="bfRadius" type="number" min="10" max="5000" class="fc" value="${x.radius||100}"></div><div><label>Latitude</label><input id="bfLat" type="number" step="any" class="fc" value="${x.lat??""}"></div><div><label>Longitude</label><input id="bfLng" type="number" step="any" class="fc" value="${x.lng??""}"></div><div class="full"><label class="checkline"><input id="bfActive" type="checkbox" ${x.active!==false?"checked":""}> الفرع نشط ويظهر للموظفين</label></div></div><div class="acts"><button class="mini g" id="saveBranch">حفظ</button><button class="mini r" id="cancelBranch">إلغاء</button></div>`}
-function openBranch(x){$("branchForm").innerHTML=branchForm(x);$("branchForm").style.display="block";$("saveBranch").onclick=async()=>{const p={id:x.name||"",name:$("bfName").value.trim(),lat:+$("bfLat").value,lng:+$("bfLng").value,radius:+$("bfRadius").value,active:$("bfActive").checked};try{await api(x.name?"editBranch":"createBranch",p);$("branchForm").style.display="none";loadBranches()}catch(e){alert(errText(e))}};$("cancelBranch").onclick=()=>$("branchForm").style.display="none"}
-$("newBranch").onclick=()=>openBranch();$("branchTable").onclick=async e=>{const b=e.target.closest("button");if(!b)return;try{if(b.dataset.editBranch)openBranch((adminCache.branches||[]).find(x=>x.name===b.dataset.editBranch));else if(b.dataset.delBranch&&confirm("سيتم تعطيل الفرع مع الاحتفاظ بالسجلات القديمة. متابعة؟")){await api("deleteBranch",{id:b.dataset.delBranch});loadBranches()}}catch(err){alert(errText(err))}}; 
-async function fillAttendanceEmployees(){if(!adminCache.employees)try{adminCache.employees=(await api("employeeList")).employees||[]}catch(e){}const s=$("attEmp"),v=s.value;s.innerHTML='<option value="">كل الموظفين</option>'+(adminCache.employees||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.name)} (${esc(x.id)})</option>`).join("");s.value=v}
-function setDefaultDates(){const t=iso(new Date());if(!$("attFrom").value)$("attFrom").value=t;if(!$("attTo").value)$("attTo").value=t;if(!$("evalMonth").value)$("evalMonth").value=t.slice(0,7)}
-async function loadAttendance(){setDefaultDates();try{const r=await api("attendanceList",{from:$("attFrom").value,to:$("attTo").value,emp:$("attEmp").value,action:$("attAction").value,q:$("attQ").value,limit:1000});adminCache.attendance=r.rows||[];$("attendanceTable").innerHTML=adminCache.attendance.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الوقت</th><th>الموظف</th><th>الحركة</th><th>الفرع</th><th>الحالة</th><th>تأخير</th><th>إذن</th></tr></thead><tbody>${adminCache.attendance.map(x=>`<tr><td>${esc(x.ts)}</td><td>${esc(x.name)}<br><small>${esc(x.empId)}</small></td><td>${x.action==="Check-In"?"حضور":"انصراف"}</td><td>${esc(x.branch)}</td><td>${esc(x.status)}</td><td>${x.lateMin?x.lateMin+" د":"-"}</td><td>${x.excused?"نعم":"-"}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد سجلات في الفترة المحددة</div>'}catch(e){alert(errText(e))}}
+
+function renderEmployees(){
+  const q=$("empSearch").value.trim().toLowerCase(), role=$("empRole").value;
+  const rows=(adminCache.employees||[]).filter(x=>(!role||x.role===role)&&(!q||[x.id,x.name,x.phone].some(v=>String(v).toLowerCase().includes(q))));
+  $("employeeTable").innerHTML=rows.length ? `
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>الموظف</th><th>الهاتف</th><th>الصلاحية</th><th>الشيفت</th><th>الإجازة</th><th>الحالة</th><th>إجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(x=>`
+            <tr>
+              <td><b>${esc(x.name)}</b><br><small>${esc(x.id)}</small></td>
+              <td>${esc(x.phone)}</td>
+              <td>${x.role==="manager"?"مدير":"موظف"}</td>
+              <td>${esc(x.shift)}${x.shiftEnd?" → "+esc(x.shiftEnd):""}</td>
+              <td>${esc((x.off||[]).map(i=>DAYS[i]).join("، "))}</td>
+              <td><span class="st ${x.active?"approved":"rejected"}">${x.active?"نشط":"متوقف"}</span></td>
+              <td><div class="acts"><button class="mini b" data-edit-emp="${esc(x.id)}">تعديل</button><button class="mini r" data-reset-emp="${esc(x.id)}">إعادة الجهاز</button></div></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  ` : '<div class="empty">لا توجد نتائج</div>';
+}
+
+async function loadEmployees(){
+  try{
+    adminCache.employees=(await api("employeeList")).employees||[];
+    renderEmployees();
+  }catch(e){alert(errText(e))}
+}
+
+$("empSearch").oninput=renderEmployees;
+$("empRole").onchange=renderEmployees;
+
+function employeeForm(x={}){
+  const off=new Set(x.off||[5]);
+  return `
+    <h3>${x.id?"تعديل موظف":"إضافة موظف جديد"}</h3>
+    <div class="form-grid">
+      <div><label>رقم الموظف</label><input id="efId" class="fc" value="${esc(x.id||"")}" ${x.id?"readonly":""}></div>
+      <div><label>الاسم</label><input id="efName" class="fc" value="${esc(x.name||"")}"></div>
+      <div><label>الهاتف</label><input id="efPhone" class="fc" value="${esc(x.phone||"")}"></div>
+      <div><label>كلمة السر</label><input id="efPass" type="password" class="fc"></div>
+      <div><label>الصلاحية</label><select id="efRole" class="fc"><option value="employee" ${x.role!=="manager"?"selected":""}>موظف</option><option value="manager" ${x.role==="manager"?"selected":""}>مدير</option></select></div>
+      <div><label>البريد</label><input id="efEmail" class="fc" value="${esc(x.email||"")}"></div>
+      <div><label>بداية الشيفت</label><input id="efShift" type="time" class="fc" value="${esc(x.shift||"09:00")}"></div>
+      <div><label>نهاية الشيفت</label><input id="efEnd" type="time" class="fc" value="${esc(x.shiftEnd||"17:00")}"></div>
+      <div class="full"><label>الإجازة الأسبوعية</label><div class="days">${DAYS.map((d,i)=>`<label><input type="checkbox" class="efOff" value="${i}" ${off.has(i)?"checked":""}><span>${d}</span></label>`).join("")}</div></div>
+      <div class="full"><label class="checkline"><input id="efActive" type="checkbox" ${x.active!==false?"checked":""}> الموظف نشط ويمكنه الدخول</label></div>
+    </div>
+    <div class="acts">
+      <button class="mini g" id="saveEmployee">حفظ</button>
+      <button class="mini r" id="cancelEmployee">إلغاء</button>
+    </div>
+  `;
+}
+
+function openEmployee(x){
+  $("employeeForm").innerHTML=employeeForm(x);
+  $("employeeForm").style.display="block";
+  $("saveEmployee").onclick=async()=>{
+    const p={
+      id:$("efId").value.trim(),
+      name:$("efName").value.trim(),
+      phone:$("efPhone").value.trim(),
+      password:$("efPass").value,
+      role:$("efRole").value,
+      email:$("efEmail").value.trim(),
+      shift:$("efShift").value,
+      shiftEnd:$("efEnd").value,
+      weeklyOff:[...document.querySelectorAll(".efOff:checked")].map(x=>x.value).join(","),
+      active:$("efActive").checked
+    };
+    try{
+      await api(x.id?"editEmployee":"createEmployee",p);
+      $("employeeForm").style.display="none";
+      loadEmployees();
+    }catch(e){alert(errText(e))}
+  };
+  $("cancelEmployee").onclick=()=>$("employeeForm").style.display="none";
+}
+
+$("newEmployee").onclick=()=>openEmployee();
+$("employeeTable").onclick=async e=>{
+  const b=e.target.closest("button");
+  if(!b)return;
+  try{
+    if(b.dataset.editEmp) openEmployee((adminCache.employees||[]).find(v=>v.id===b.dataset.editEmp));
+    else if(b.dataset.resetEmp && confirm("سيتم إلغاء ربط الجهاز الحالي وإنهاء جلسة الموظف. متابعة؟")){
+      await api("resetEmployeeDevice",{id:b.dataset.resetEmp});
+      alert("تم إعادة ضبط الجهاز");
+      loadEmployees();
+    }
+  }catch(err){alert(errText(err))}
+};
+
+async function loadBranches(){
+  try{
+    adminCache.branches=(await api("branchList")).branches||[];
+    renderBranches();
+  }catch(e){alert(errText(e))}
+}
+
+function renderBranches(){
+  const rows=adminCache.branches||[];
+  $("branchTable").innerHTML=rows.length ? `
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr><th>الفرع</th><th>الإحداثيات</th><th>النطاق</th><th>الحالة</th><th>إجراءات</th></tr>
+        </thead>
+        <tbody>
+          ${rows.map(x=>`
+            <tr>
+              <td><b>${esc(x.name)}</b></td>
+              <td>${Number(x.lat).toFixed(6)}, ${Number(x.lng).toFixed(6)}</td>
+              <td>${esc(x.radius)} متر</td>
+              <td><span class="st ${x.active?"approved":"rejected"}">${x.active?"نشط":"متوقف"}</span></td>
+              <td><button class="mini b" data-edit-branch="${esc(x.name)}">تعديل</button> ${x.active?`<button class="mini r" data-del-branch="${esc(x.name)}">تعطيل</button>`:""}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  ` : '<div class="empty">لا توجد فروع</div>';
+}
+
+function branchForm(x={}){
+  return `
+    <h3>${x.name?"تعديل الفرع":"إضافة فرع"}</h3>
+    <div class="form-grid">
+      <div><label>اسم الفرع</label><input id="bfName" class="fc" value="${esc(x.name||"")}"></div>
+      <div><label>النطاق بالمتر</label><input id="bfRadius" type="number" min="10" max="5000" class="fc" value="${x.radius||100}"></div>
+      <div><label>Latitude</label><input id="bfLat" type="number" step="any" class="fc" value="${x.lat??""}"></div>
+      <div><label>Longitude</label><input id="bfLng" type="number" step="any" class="fc" value="${x.lng??""}"></div>
+      <div class="full"><label class="checkline"><input id="bfActive" type="checkbox" ${x.active!==false?"checked":""}> الفرع نشط ويظهر للموظفين</label></div>
+    </div>
+    <div class="acts">
+      <button class="mini g" id="saveBranch">حفظ</button>
+      <button class="mini r" id="cancelBranch">إلغاء</button>
+    </div>
+  `;
+}
+
+function openBranch(x){
+  $("branchForm").innerHTML=branchForm(x);
+  $("branchForm").style.display="block";
+  $("saveBranch").onclick=async()=>{
+    const p={
+      id:x.name||"",
+      name:$("bfName").value.trim(),
+      lat:+$("bfLat").value,
+      lng:+$("bfLng").value,
+      radius:+$("bfRadius").value,
+      active:$("bfActive").checked
+    };
+    try{
+      await api(x.name?"editBranch":"createBranch",p);
+      $("branchForm").style.display="none";
+      loadBranches();
+    }catch(e){alert(errText(e))}
+  };
+  $("cancelBranch").onclick=()=>$("branchForm").style.display="none";
+}
+
+$("newBranch").onclick=()=>openBranch();
+
+$("branchTable").onclick=async e=>{
+  const b=e.target.closest("button");
+  if(!b)return;
+  try{
+    if(b.dataset.editBranch) openBranch((adminCache.branches||[]).find(x=>x.name===b.dataset.editBranch));
+    else if(b.dataset.delBranch && confirm("سيتم تعطيل الفرع مع الاحتفاظ بالسجلات القديمة. متابعة؟")){
+      await api("deleteBranch",{id:b.dataset.delBranch});
+      loadBranches();
+    }
+  }catch(err){alert(errText(err))}
+};
+
+async function fillAttendanceEmployees(){
+  if(!adminCache.employees) {
+    try { adminCache.employees=(await api("employeeList")).employees||[]; }
+    catch(e){}
+  }
+  const s=$("attEmp"), v=s.value;
+  s.innerHTML='<option value="">كل الموظفين</option>'+(adminCache.employees||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.name)} (${esc(x.id)})</option>`).join("");
+  s.value=v;
+}
+
+function setDefaultDates(){
+  const t=iso(new Date());
+  if(!$("attFrom").value) $("attFrom").value=t;
+  if(!$("attTo").value) $("attTo").value=t;
+  if(!$("evalMonth").value) $("evalMonth").value=t.slice(0,7);
+}
+
+async function loadAttendance(){
+  setDefaultDates();
+  try{
+    const r=await api("attendanceList",{from:$("attFrom").value,to:$("attTo").value,emp:$("attEmp").value,action:$("attAction").value,q:$("attQ").value,limit:1000});
+    adminCache.attendance=r.rows||[];
+    $("attendanceTable").innerHTML=adminCache.attendance.length ? `
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>الوقت</th><th>الموظف</th><th>الحركة</th><th>الفرع</th><th>الحالة</th><th>تأخير</th><th>إذن</th></tr>
+          </thead>
+          <tbody>
+            ${adminCache.attendance.map(x=>`
+              <tr>
+                <td>${esc(x.ts)}</td>
+                <td>${esc(x.name)}<br><small>${esc(x.empId)}</small></td>
+                <td>${x.action==="Check-In"?"حضور":"انصراف"}</td>
+                <td>${esc(x.branch)}</td>
+                <td>${esc(x.status)}</td>
+                <td>${x.lateMin?x.lateMin+" د":"-"}</td>
+                <td>${x.excused?"نعم":"-"}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    ` : '<div class="empty">لا توجد سجلات في الفترة المحددة</div>';
+  }catch(e){alert(errText(e))}
+}
+
 $("loadAttendance").onclick=loadAttendance;
-async function loadRequests(){try{const r=await api("requestsList",{status:$("reqStatus").value,kind:$("reqKind").value});adminCache.requests=r.rows||[];$("requestsTable").innerHTML=adminCache.requests.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الموظف</th><th>النوع</th><th>التفاصيل</th><th>الحالة</th><th>الملاحظة</th></tr></thead><tbody>${adminCache.requests.map(x=>`<tr><td>${esc(x.emp)}</td><td>${esc(x.kind)} / ${esc(x.type)}</td><td>${esc(reqText(x))}${x.note?`<br><small>${esc(x.note)}</small>`:""}</td><td><span class="st ${x.status}">${ST[x.status]||x.status}</span></td><td>${esc(x.mgrNote||"-")}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد طلبات</div>'}catch(e){alert(errText(e))}}
+
+async function loadRequests(){
+  try{
+    const r=await api("requestsList",{status:$("reqStatus").value,kind:$("reqKind").value});
+    adminCache.requests=r.rows||[];
+    $("requestsTable").innerHTML=adminCache.requests.length ? `
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>الموظف</th><th>النوع</th><th>التفاصيل</th><th>الحالة</th><th>الملاحظة</th></tr>
+          </thead>
+          <tbody>
+            ${adminCache.requests.map(x=>`
+              <tr>
+                <td>${esc(x.emp)}</td>
+                <td>${esc(x.kind)} / ${esc(x.type)}</td>
+                <td>${esc(reqText(x))}${x.note?`<br><small>${esc(x.note)}</small>`:""}</td>
+                <td><span class="st ${x.status}">${ST[x.status]||x.status}</span></td>
+                <td>${esc(x.mgrNote||"-")}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    ` : '<div class="empty">لا توجد طلبات</div>';
+  }catch(e){alert(errText(e))}
+}
+
 $("loadRequests").onclick=loadRequests;
-async function loadEvaluation(){setDefaultDates();try{const r=await api("evaluationList",{ym:$("evalMonth").value});adminCache.evaluation=r||[];$("evaluationTable").innerHTML=adminCache.evaluation.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>#</th><th>الموظف</th><th>النتيجة</th><th>حضور</th><th>غياب</th><th>تأخير</th><th>دقائق</th><th>أذونات</th></tr></thead><tbody>${adminCache.evaluation.map(x=>`<tr><td><b>${x.rank}</b></td><td>${esc(x.name)}<br><small>${esc(x.id)}</small></td><td><span class="score" style="${scoreCls(x.score)}">${x.score} · ${esc(x.grade)}</span></td><td>${x.present}</td><td>${x.absent}</td><td>${x.lateCount}</td><td>${x.lateMin}</td><td>${x.permCount}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد بيانات تقييم</div>'}catch(e){alert(errText(e))}}
+
+async function loadEvaluation(){
+  setDefaultDates();
+  try{
+    const r=await api("evaluationList",{ym:$("evalMonth").value});
+    adminCache.evaluation=r||[];
+    $("evaluationTable").innerHTML=adminCache.evaluation.length ? `
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>#</th><th>الموظف</th><th>النتيجة</th><th>حضور</th><th>غياب</th><th>تأخير</th><th>دقائق</th><th>أذونات</th></tr>
+          </thead>
+          <tbody>
+            ${adminCache.evaluation.map(x=>`
+              <tr>
+                <td><b>${x.rank}</b></td>
+                <td>${esc(x.name)}<br><small>${esc(x.id)}</small></td>
+                <td><span class="score" style="${scoreCls(x.score)}">${x.score} · ${esc(x.grade)}</span></td>
+                <td>${x.present}</td><td>${x.absent}</td><td>${x.lateCount}</td><td>${x.lateMin}</td><td>${x.permCount}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    ` : '<div class="empty">لا توجد بيانات تقييم</div>';
+  }catch(e){alert(errText(e))}
+}
+
 $("loadEvaluation").onclick=loadEvaluation;
-async function loadAudit(){try{const r=await api("auditList");adminCache.audit=r.rows||[];$("auditTable").innerHTML=adminCache.audit.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الوقت</th><th>المنفذ</th><th>العملية</th><th>الهدف</th><th>التفاصيل</th></tr></thead><tbody>${adminCache.audit.map(x=>`<tr><td>${esc(x.ts)}</td><td>${esc(x.actor)}</td><td>${esc(x.action)}</td><td>${esc(x.target)}</td><td>${esc(x.details)}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد عمليات مسجلة</div>'}catch(e){alert(errText(e))}}
+
+async function loadAudit(){
+  try{
+    const r=await api("auditList");
+    adminCache.audit=r.rows||[];
+    $("auditTable").innerHTML=adminCache.audit.length ? `
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>الوقت</th><th>المنفذ</th><th>العملية</th><th>الهدف</th><th>التفاصيل</th></tr>
+          </thead>
+          <tbody>
+            ${adminCache.audit.map(x=>`
+              <tr>
+                <td>${esc(x.ts)}</td><td>${esc(x.actor)}</td><td>${esc(x.action)}</td><td>${esc(x.target)}</td><td>${esc(x.details)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    ` : '<div class="empty">لا توجد عمليات مسجلة</div>';
+  }catch(e){alert(errText(e))}
+}
+
 $("loadAudit").onclick=loadAudit;
-$("runSetup").onclick=async()=>{const b=$("runSetup"),m=$("setupMsg");b.disabled=true;try{const r=await api("v3Setup");badge(m,"ok","fa-circle-check","تمت تهيئة V3 بنجاح: "+(r.sheets||[]).join("، "));}catch(e){badge(m,"bad","fa-circle-xmark",errText(e));}finally{b.disabled=false}};
-const escCsv=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';function downloadCsv(rows,filename){if(!rows||!rows.length)return alert("لا توجد بيانات للتصدير");const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))],csv="\ufeff"+keys.map(escCsv).join(",")+"\n"+rows.map(r=>keys.map(k=>escCsv(r[k])).join(",")).join("\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-document.querySelectorAll("[data-report]").forEach(b=>b.onclick=async()=>{try{const type=b.dataset.report;let p={type};if(type==="attendance")p={...p,from:$("attFrom").value||iso(new Date()),to:$("attTo").value||iso(new Date()),emp:$("attEmp").value,action:$("attAction").value,q:$("attQ").value};if(type==="evaluation")p.ym=$("evalMonth").value||iso(new Date()).slice(0,7);const r=await api("reportData",p);downloadCsv(r.rows||r,`attendance-${type}-${Date.now()}.csv`)}catch(e){alert(errText(e))}});
-adminNav.forEach(b=>b.onclick=()=>adminGo(b.dataset.admin));
 
-document.addEventListener("click", e => {
-  const b = e.target.closest(".btn"); if (!b || b.disabled) return;
-  const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height), x = document.createElement("span");
-  x.className = "ripple"; x.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`;
-  b.appendChild(x); setTimeout(() => x.remove(), 700);
-});
-
-bioReady.then(() => {
-  if (!S) return;
-  if (bioOn()) {
-    if (bioSupported()) { $("unlockName").textContent = S.name; show("vUnlock"); }
-    else { logout(); show("vLogin"); }
-  } else enterApp();
-});
-</script>
-</body>
-</html>
+$("runSetup").onclick=async()=>{
+  const b=$("runSetup"),m=$("setupMsg");
+  b.disabled=true;
+  try{
+    const r=await api("v3Setup");
+    badge(m,"ok","fa-circle-check","تمت تهيئة V3 بنجاح: "+(r.sheets||[]).join("، "));
+  }catch(e){
+    badge(m,"bad","fa-circle-xmark",
