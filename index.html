@@ -1,745 +1,837 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Attendance System</title>
-<meta name="theme-color" content="#4f46e5">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:radial-gradient(1200px 500px at 50% -10%,#e0e7ff 0,#f1f5f9 60%);color:#1e293b;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:12px}
-.card{background:#fff;width:100%;max-width:1180px;border-radius:28px;box-shadow:0 30px 60px -20px rgba(49,46,129,.28),0 2px 6px rgba(15,23,42,.05);overflow:hidden;animation:cardIn .7s cubic-bezier(.2,.8,.2,1)}
-.header{background:linear-gradient(135deg,#4338ca,#3b82f6);color:#fff;padding:26px 20px;text-align:center}
-.header h1{font-size:1.4rem;font-weight:800;margin-bottom:4px}.header p{font-size:.85rem;opacity:.9}
-.content{padding:20px}
-.view{display:none}.view.active{display:block;animation:viewIn .4s cubic-bezier(.2,.8,.2,1)}
-.hero{text-align:center;padding:10px 0 6px}
-.ico{position:relative;width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:#eef2ff;color:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:2.2rem}
-.ico::before,.ico::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #6366f1;opacity:0;animation:ring 2.8s ease-out infinite}
-.ico::after{animation-delay:1.4s}
-.hero h2{font-size:1.2rem;margin-bottom:6px}.hero p{font-size:.88rem;color:#64748b;margin-bottom:18px}
-.steps{list-style:none;margin:0 0 22px;text-align:right}
-.steps li{display:flex;gap:12px;align-items:center;padding:10px 0;font-size:.88rem;color:#475569;border-bottom:1px solid #f1f5f9}
-.steps li:last-child{border-bottom:0}
-.steps i{color:#4f46e5;width:34px;height:34px;border-radius:50%;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex:none}
-.fg{margin-bottom:16px}.fg label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;color:#475569}
-.iw{position:relative}.iw i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#94a3b8;transition:color .2s}
-.iw:focus-within i{color:#4f46e5}
-.fc{width:100%;padding:13px 42px 13px 14px;border:1.5px solid #e2e8f0;border-radius:14px;font-size:.95rem;outline:none;background:#fff;transition:border-color .2s,box-shadow .2s}
-.fc:focus{border-color:#4f46e5;box-shadow:0 0 0 4px rgba(79,70,229,.14)}
-select.fc{-webkit-appearance:none;appearance:none;background:#fff url('data:image/svg+xml;utf8,<svg fill="%23475569" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat left 12px center/18px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance System</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
-/* ===== الأزرار ===== */
-.btn{position:relative;overflow:hidden;isolation:isolate;width:100%;padding:15px;border:0;border-radius:16px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:10px;color:#fff;letter-spacing:.2px;transition:transform .15s,box-shadow .2s,filter .2s}
-.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 55%)}
-.btn::after{content:"";position:absolute;top:0;bottom:0;left:-70%;width:45%;z-index:-1;background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg)}
-.btn:not(:disabled):hover{transform:translateY(-2px);filter:saturate(1.08)}
-.btn:not(:disabled):hover::after{animation:shine .9s}
-.btn:not(:disabled):active{transform:translateY(1px) scale(.985);transition-duration:.05s}
-.btn:focus-visible{outline:3px solid rgba(79,70,229,.45);outline-offset:3px}
-.b-pri{background:linear-gradient(135deg,#4f46e5,#3b82f6);box-shadow:0 12px 22px -10px rgba(79,70,229,.8),inset 0 -3px 0 rgba(0,0,0,.14)}
-.b-bio{background:linear-gradient(135deg,#0ea5e9,#6366f1);box-shadow:0 12px 22px -10px rgba(14,165,233,.8),inset 0 -3px 0 rgba(0,0,0,.14)}
-.b-in{background:linear-gradient(160deg,#22c55e,#15803d);box-shadow:0 14px 24px -10px rgba(22,163,74,.85),inset 0 -4px 0 rgba(0,0,0,.16)}
-.b-out{background:linear-gradient(160deg,#fb7185,#be123c);box-shadow:0 14px 24px -10px rgba(225,29,72,.8),inset 0 -4px 0 rgba(0,0,0,.16)}
-.btn:not(:disabled):active.b-pri,.btn:not(:disabled):active.b-bio,.btn:not(:disabled):active.b-in,.btn:not(:disabled):active.b-out{box-shadow:0 4px 10px -6px rgba(0,0,0,.4),inset 0 -1px 0 rgba(0,0,0,.14)}
-.btn:disabled{background:#e8ecf3;color:#a3aec0;box-shadow:inset 0 0 0 1.5px #dde3ee;cursor:not-allowed}
-.btn:disabled::before,.btn:disabled::after{display:none}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.row .btn{flex-direction:column;gap:8px;padding:16px 8px 14px;font-size:1.05rem}
-.chip{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:1.05rem;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35);transition:transform .25s}
-.btn:not(:disabled):hover .chip{transform:scale(1.1) rotate(-6deg)}
-.btn:disabled .chip{background:rgba(148,163,184,.18);box-shadow:none}
-.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rip .65s ease-out;pointer-events:none;z-index:-1}
-.link{display:block;text-align:center;margin-top:14px;font-size:.85rem;color:#64748b;text-decoration:none;transition:color .2s}.link:hover{color:#4f46e5}
+  <style>
+    :root{
+      --bg-1:#eef4ff;
+      --bg-2:#f8fafc;
+      --card:#ffffff;
+      --main:#4f46e5;
+      --main-2:#3b82f6;
+      --success:#10b981;
+      --warning:#f59e0b;
+      --danger:#ef4444;
+      --text:#0f172a;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --shadow:0 18px 40px rgba(15,23,42,.12);
+      --soft-shadow:0 12px 26px rgba(79,70,229,.12);
+      --radius:30px;
+      --radius-sm:18px;
+    }
 
-/* ===== الكاميرا ===== */
-.cam{position:relative;width:100%;height:240px;border-radius:20px;overflow:hidden;background:#0b1020;margin-bottom:14px;box-shadow:0 0 0 2px #e2e8f0}
-video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-.cam::after{content:"";position:absolute;inset:12px;pointer-events:none;z-index:2;opacity:.9;background-repeat:no-repeat;background-image:linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff);background-size:24px 3px,3px 24px,24px 3px,3px 24px,24px 3px,3px 24px,24px 3px,3px 24px;background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%}
-.cam.live::before{content:"";position:absolute;left:0;right:0;top:8%;height:2px;z-index:2;background:linear-gradient(90deg,transparent,#60a5fa,transparent);box-shadow:0 0 14px #60a5fa;animation:scan 3s ease-in-out infinite}
-.cam.flash video{animation:vflash .4s ease-out}
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:'Cairo',sans-serif;
+      -webkit-tap-highlight-color:transparent;
+    }
 
-.badge{position:relative;overflow:hidden;padding:11px 14px;border-radius:14px;font-size:.85rem;font-weight:600;text-align:center;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px}
-.badge.pop{animation:pop .4s cubic-bezier(.2,.9,.3,1.3)}
-.info{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}.ok{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
-.bad{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.warn{background:#fffbeb;color:#b45309;border:1px solid #fde68a}
-#cd::after{content:"";position:absolute;bottom:0;right:0;height:3px;width:calc(var(--p,1) * 100%);background:#3b82f6;transition:width 1s linear}
-.tag{font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px}
+    html,body{
+      width:100%;
+      min-height:100%;
+      height:100%;
+    }
 
-.tabs{display:flex;gap:6px;background:#f1f5f9;padding:5px;border-radius:16px;margin-bottom:16px}
-.tabs button{flex:1;border:0;background:transparent;padding:9px 4px;border-radius:12px;font:700 .78rem 'Cairo',sans-serif;color:#64748b;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .2s}
-.tabs button.on{background:#fff;color:#4f46e5;box-shadow:0 4px 10px -4px rgba(79,70,229,.4)}
-.np{padding-right:14px!important}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.sec{font-size:.95rem;margin:18px 0 10px;color:#334155}
-.days{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.days label{margin:0!important;cursor:pointer}.days input{display:none}
-.days span{display:block;padding:8px 12px;border-radius:12px;border:1.5px solid #e2e8f0;font-size:.82rem;font-weight:600;color:#475569;transition:all .15s}
-.days input:checked+span{background:#4f46e5;border-color:#4f46e5;color:#fff}
-.item{border:1px solid #e2e8f0;border-radius:14px;padding:12px;margin-bottom:10px;font-size:.85rem}
-.item .top{display:flex;justify-content:space-between;gap:8px;align-items:center;font-weight:700}.item .sub{color:#64748b;margin-top:4px;font-size:.78rem}
-.st{padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:700;white-space:nowrap}
-.st.pending{background:#fffbeb;color:#b45309}.st.approved,.st.in{background:#f0fdf4;color:#15803d}.st.rejected,.st.late{background:#fef2f2;color:#b91c1c}.st.none{background:#f1f5f9;color:#64748b}
-.mini{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:8px 12px;font:700 .8rem 'Cairo',sans-serif;cursor:pointer}
-.mini.g{background:#16a34a;color:#fff}.mini.r{background:#fee2e2;color:#b91c1c}.mini.b{background:#eef2ff;color:#4f46e5}.mini:disabled{opacity:.5}
-.acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{border-radius:16px;padding:14px;background:#f8fafc;border:1px solid #e2e8f0}.stat b{display:block;font-size:1.5rem;color:#4f46e5}.stat small{color:#64748b;font-size:.78rem}
-.score{font-weight:800;font-size:.85rem;padding:4px 12px;border-radius:12px;white-space:nowrap}
+    body{
+      background:
+        radial-gradient(circle at top right, rgba(79,70,229,.13), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(59,130,246,.10), transparent 25%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      color:var(--text);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      padding:16px;
+      overflow-x:hidden;
+    }
 
-/* ===== V3 Admin Dashboard ===== */
-.view{width:100%;max-width:560px;margin:0 auto}.view#vMgr{max-width:none}
-.admin-shell{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;align-items:start}
-.admin-side{position:sticky;top:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:10px}
-.admin-side button{width:100%;border:0;background:transparent;color:#475569;padding:11px 12px;border-radius:12px;text-align:right;font:700 .82rem 'Cairo',sans-serif;cursor:pointer;display:flex;align-items:center;gap:9px;margin-bottom:4px}
-.admin-side button:hover,.admin-side button.on{background:#eef2ff;color:#4f46e5}.admin-side button i{width:20px;text-align:center}
-.admin-main{min-width:0}.admin-route{display:none}.admin-route.on{display:block;animation:viewIn .25s ease}
-.admin-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}.admin-head h2{font-size:1.05rem}.admin-head .sub{color:#64748b;font-size:.78rem}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.toolbar>*{min-height:40px}.admin-table-wrap{overflow:auto;border-radius:16px}
-.admin-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;font-size:.78rem}.admin-table th,.admin-table td{padding:10px 9px;border-bottom:1px solid #eef2f6;text-align:right;vertical-align:middle}.admin-table th{background:#f8fafc;color:#475569;font-weight:800}.admin-table tr:last-child td{border-bottom:0}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}.kpi{padding:15px;border:1px solid #e2e8f0;border-radius:17px;background:#fff}.kpi b{display:block;font-size:1.45rem;color:#4f46e5;margin-top:3px}.kpi small{color:#64748b}
-.admin-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.panel{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:14px}.panel h3{font-size:.9rem;margin-bottom:10px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.form-grid .full{grid-column:1/-1}.checkline{display:flex;gap:8px;align-items:center;font-size:.82rem}.checkline input{width:18px;height:18px}.empty{padding:25px;text-align:center;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:16px}
-@media(max-width:900px){.admin-shell{grid-template-columns:1fr}.admin-side{position:static;display:flex;overflow:auto;gap:5px}.admin-side button{min-width:max-content;margin:0}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){body{padding:0}.card{min-height:100vh;border-radius:0}.content{padding:14px}.admin-grid2,.form-grid{grid-template-columns:1fr}.admin-table{font-size:.72rem}.admin-table th,.admin-table td{padding:8px 7px}.header{padding:20px 14px}}
-@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
-@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.8);opacity:0}}
-@keyframes shine{to{left:130%}}
-@keyframes rip{to{transform:scale(4);opacity:0}}
-@keyframes scan{0%,100%{top:8%}50%{top:90%}}
-@keyframes vflash{0%{filter:brightness(3.2)}100%{filter:brightness(1)}}
-@keyframes pop{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+    .app-card{
+      width:min(100%, 1280px);
+      min-height:calc(100vh - 32px);
+      background:rgba(255,255,255,.82);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,.5);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      position:relative;
+    }
 
-/* ===== V3 FINAL RESPONSIVE FIX =====
-   Desktop: keep the administration layout stable.
-   Mobile: show ALL admin routes in a visible 2-column menu instead of
-   hiding them inside a horizontal scroller.
-*/
-html,body{width:100%;min-width:0}
-body{overflow-x:hidden}
-.card{width:min(1180px,100%);max-width:1180px}
-.view#vMgr{width:100%;max-width:none}
+    .header{
+      background:linear-gradient(135deg, var(--main), var(--main-2));
+      color:#fff;
+      padding:28px clamp(18px, 4vw, 36px);
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
 
-/* Keep desktop/tablet admin navigation as a real sidebar until small phones */
-@media (min-width:701px){
-  .admin-shell{grid-template-columns:230px minmax(0,1fr)}
-  .admin-side{display:block;overflow:visible}
-  .admin-side button{width:100%;min-width:0}
-}
+    .header::before,
+    .header::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+      filter:blur(8px);
+    }
 
-/* Phones / small screens */
-@media (max-width:700px){
-  body{padding:0;display:block;min-height:100vh}
-  .card{width:100%;max-width:none;min-height:100vh;border-radius:0}
-  .content{padding:12px}
-  .tabs{position:sticky;top:0;z-index:20}
-  .view#vMgr{width:100%;max-width:none}
-  .admin-shell{display:flex;flex-direction:column;gap:12px;width:100%}
-  .admin-side{
-    position:static;
-    width:100%;
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:6px;
-    padding:8px;
-    overflow:visible;
-    border-radius:16px;
-  }
-  .admin-side button{
-    width:100%;
-    min-width:0;
-    margin:0;
-    min-height:46px;
-    padding:8px 6px;
-    justify-content:center;
-    text-align:center;
-    flex-direction:column;
-    gap:3px;
-    font-size:.70rem;
-    line-height:1.25;
-  }
-  .admin-side button i{width:auto;font-size:.95rem}
-  .admin-main{width:100%;min-width:0}
-  .admin-head{align-items:stretch}
-  .admin-head>div{min-width:0}
-  .admin-head .mini{width:auto;align-self:flex-start}
-  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-  .kpi{padding:11px}
-  .kpi b{font-size:1.2rem}
-  .admin-grid2{grid-template-columns:1fr}
-  .form-grid{grid-template-columns:1fr}
-  .form-grid .full{grid-column:auto}
-  .toolbar{display:grid;grid-template-columns:1fr}
-  .toolbar>*{max-width:none!important;width:100%}
-  .admin-table-wrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .admin-table{min-width:680px}
-}
+    .header::before{
+      width:240px;
+      height:240px;
+      top:-90px;
+      right:-50px;
+    }
 
-/* Very narrow phones */
-@media (max-width:380px){
-  .admin-side{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:6px}
-  .admin-side button{min-height:43px;font-size:.64rem}
-  .content{padding:9px}
-  .kpis{gap:6px}
-}
+    .header::after{
+      width:180px;
+      height:180px;
+      bottom:-80px;
+      left:-40px;
+    }
 
-</style>
+    .header h1{
+      position:relative;
+      z-index:1;
+      font-size:clamp(1.45rem, 2vw, 2.2rem);
+      font-weight:800;
+      margin-bottom:6px;
+      letter-spacing:.2px;
+    }
+
+    .header p{
+      position:relative;
+      z-index:1;
+      font-size:clamp(.82rem, 1.5vw, 1rem);
+      opacity:.96;
+      font-weight:600;
+    }
+
+    .content{
+      flex:1;
+      padding:clamp(18px, 3vw, 34px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.93));
+    }
+
+    .view-section{
+      display:none;
+      width:100%;
+      max-width:560px;
+      animation:viewIn .35s ease;
+    }
+
+    .view-section.active{
+      display:block;
+    }
+
+    .login-shell,
+    .attendance-shell{
+      width:100%;
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(226,232,240,.9);
+      border-radius:28px;
+      box-shadow:0 10px 30px rgba(15,23,42,.06);
+      padding:clamp(18px, 2.5vw, 26px);
+    }
+
+    @keyframes viewIn{
+      from{
+        opacity:0;
+        transform:translateY(10px);
+      }
+      to{
+        opacity:1;
+        transform:none;
+      }
+    }
+
+    .status-badge{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border-radius:14px;
+      padding:12px 14px;
+      margin-bottom:18px;
+      font-size:.84rem;
+      font-weight:700;
+      line-height:1.5;
+      border:1px solid transparent;
+      text-align:center;
+    }
+
+    .status-info{
+      background:#eff6ff;
+      color:#1d4ed8;
+      border-color:#bfdbfe;
+    }
+
+    .status-success{
+      background:#f0fdf4;
+      color:#15803d;
+      border-color:#bbf7d0;
+    }
+
+    .status-danger{
+      background:#fef2f2;
+      color:#b91c1c;
+      border-color:#fecaca;
+    }
+
+    .status-warning{
+      background:#fffbeb;
+      color:#b45309;
+      border-color:#fde68a;
+    }
+
+    .form-group{
+      margin-bottom:18px;
+    }
+
+    .form-group label{
+      display:block;
+      font-size:.85rem;
+      font-weight:700;
+      margin-bottom:8px;
+      color:var(--muted);
+    }
+
+    .input-wrapper{
+      position:relative;
+    }
+
+    .input-wrapper i{
+      position:absolute;
+      right:14px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#94a3b8;
+      font-size:1rem;
+      pointer-events:none;
+    }
+
+    .form-control{
+      width:100%;
+      border:1.5px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:14px 46px 14px 16px;
+      outline:none;
+      font-size:1rem;
+      color:var(--text);
+      transition:.22s ease;
+      box-shadow:0 0 0 0 rgba(79,70,229,0);
+    }
+
+    .form-control:focus{
+      border-color:var(--main);
+      box-shadow:0 0 0 4px rgba(79,70,229,.12);
+    }
+
+    select.form-control{
+      appearance:none;
+      -webkit-appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='%2364748b'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:left 14px center;
+      padding-left:16px;
+      padding-right:46px;
+    }
+
+    .btn{
+      position:relative;
+      overflow:hidden;
+      isolation:isolate;
+      width:100%;
+      border:none;
+      border-radius:16px;
+      font-size:1rem;
+      font-weight:800;
+      padding:15px 18px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      letter-spacing:.15px;
+      transition:.2s ease;
+      box-shadow:0 8px 18px rgba(79,70,229,.18);
+    }
+
+    .btn::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 55%);
+    }
+
+    .btn::after{
+      content:"";
+      position:absolute;
+      top:0;
+      bottom:0;
+      left:-80%;
+      width:45%;
+      z-index:-1;
+      background:linear-gradient(100deg,transparent,rgba(255,255,255,.42),transparent);
+      transform:skewX(-20deg);
+    }
+
+    .btn:not(:disabled):hover{
+      transform:translateY(-2px);
+      filter:saturate(1.08);
+    }
+
+    .btn:not(:disabled):hover::after{
+      animation:shine .9s;
+    }
+
+    .btn:not(:disabled):active{
+      transform:translateY(1px) scale(.985);
+    }
+
+    .btn:focus-visible{
+      outline:3px solid rgba(79,70,229,.45);
+      outline-offset:3px;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg, var(--main), var(--main-2));
+      color:#fff;
+    }
+
+    .btn-primary:disabled{
+      background:#cbd5e1;
+      color:#fff;
+      box-shadow:none;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .btn-primary:disabled::before,
+    .btn-primary:disabled::after{
+      display:none;
+    }
+
+    .top-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+      font-size:.86rem;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .top-row span{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--text);
+    }
+
+    .top-row a{
+      color:#ef4444;
+      text-decoration:none;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .webcam-box{
+      width:100%;
+      height:clamp(220px, 34vw, 320px);
+      background:#020817;
+      border:2px solid rgba(226,232,240,.9);
+      border-radius:18px;
+      overflow:hidden;
+      position:relative;
+      margin-bottom:16px;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+
+    .webcam-box::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, rgba(255,255,255,.05), transparent 40%);
+      pointer-events:none;
+      z-index:1;
+    }
+
+    video{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      transform:scaleX(-1);
+      background:#000;
+    }
+
+    .device-tag{
+      text-align:center;
+      margin-top:14px;
+      font-size:.72rem;
+      color:#94a3b8;
+      font-weight:700;
+      letter-spacing:.15px;
+    }
+
+    @keyframes shine{
+      to{
+        left:130%;
+      }
+    }
+
+    @media (max-width: 900px){
+      body{
+        padding:10px;
+      }
+
+      .app-card{
+        min-height:calc(100vh - 20px);
+        border-radius:24px;
+      }
+
+      .header{
+        padding:22px 18px;
+      }
+
+      .content{
+        padding:14px;
+      }
+
+      .login-shell,
+      .attendance-shell{
+        border-radius:20px;
+        padding:14px;
+      }
+
+      .webcam-box{
+        height:240px;
+      }
+    }
+
+    @media (max-width: 600px){
+      body{
+        padding:0;
+        display:block;
+        min-height:100vh;
+      }
+
+      .app-card{
+        width:100%;
+        min-height:100vh;
+        border-radius:0;
+      }
+
+      .header{
+        padding:20px 14px;
+      }
+
+      .content{
+        padding:12px;
+      }
+
+      .form-control{
+        font-size:.96rem;
+      }
+
+      .btn{
+        padding:14px 16px;
+      }
+
+      .webcam-box{
+        height:220px;
+      }
+    }
+
+    @media (max-width: 420px){
+      .app-card{
+        border-radius:0;
+        min-height:100vh;
+      }
+
+      .content{
+        padding:10px;
+      }
+
+      .webcam-box{
+        height:200px;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      *, *::before, *::after{
+        animation:none !important;
+        transition:none !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="card">
-  <div class="header"><h1><i class="fa-solid fa-user-check"></i> Attendance System</h1><p>نظام الحضور والانصراف</p></div>
-  <div class="content">
-    <div id="tabs" class="tabs" style="display:none">
-      <button data-t="punch" class="on"><i class="fa-solid fa-fingerprint"></i> تسجيل</button>
-      <button data-t="req"><i class="fa-solid fa-file-pen"></i> طلباتي</button>
-      <button data-t="dash"><i class="fa-solid fa-chart-pie"></i> لوحتي</button>
-      <button data-t="mgr" id="tabMgr" style="display:none"><i class="fa-solid fa-user-tie"></i> الإدارة</button>
-    </div>
-    <div id="locBanner" class="badge warn" style="display:none;flex-direction:column;gap:10px"></div>
-
-    <!-- Landing -->
-    <div id="vLanding" class="view active">
-      <div class="hero">
-        <div class="ico"><i class="fa-solid fa-fingerprint"></i></div>
-        <h2>أهلاً بك 👋</h2>
-        <p>سجّل حضورك وانصرافك من أي فرع في خطوات بسيطة</p>
-      </div>
-      <ul class="steps">
-        <li><i class="fa-solid fa-right-to-bracket"></i> سجّل الدخول برقم الموبايل وكلمة السر</li>
-        <li><i class="fa-solid fa-location-dot"></i> اختر فرعك وتأكد إنك داخل النطاق</li>
-        <li><i class="fa-solid fa-camera"></i> هتتصور تلقائياً لحظة التسجيل</li>
-      </ul>
-      <button class="btn b-pri" id="startBtn"><i class="fa-solid fa-arrow-left"></i> ابدأ الآن</button>
+  <div class="app-card">
+    <div class="header">
+      <h1><i class="fa-solid fa-user-check"></i> Attendance System</h1>
+      <p>سجل دخولك لبدء تسجيل الحضور</p>
     </div>
 
-    <!-- Login -->
-    <div id="vLogin" class="view">
-      <div id="loginMsg" class="badge bad" style="display:none"></div>
-      <form id="loginForm">
-        <div class="fg"><label>رقم الموبايل</label><div class="iw"><i class="fa-solid fa-phone"></i>
-          <input type="tel" id="phone" class="fc" placeholder="01XXXXXXXXX" required autocomplete="username"></div></div>
-        <div class="fg"><label>كلمة السر</label><div class="iw"><i class="fa-solid fa-lock"></i>
-          <input type="password" id="pass" class="fc" placeholder="••••••••" required autocomplete="current-password"></div></div>
-        <p class="tag" style="margin:0 0 12px">📷 بنفتح الكاميرا لحظياً أثناء الدخول لأسباب أمنية</p>
-        <button type="submit" id="loginBtn" class="btn b-pri"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</button>
-      </form>
-      <a href="#" class="link" id="backLink">رجوع</a>
-    </div>
+    <div class="content">
+      <div id="viewLogin" class="view-section active">
+        <div class="login-shell">
+          <div id="loginMsg" class="status-badge status-danger" style="display:none;"></div>
 
-    <!-- Unlock بالبصمة -->
-    <div id="vUnlock" class="view">
-      <div class="hero"><div class="ico"><i class="fa-solid fa-fingerprint"></i></div>
-        <h2>أهلاً <span id="unlockName"></span></h2><p>افتح التطبيق بالبصمة</p></div>
-      <div id="unlockMsg" class="badge bad" style="display:none"></div>
-      <button class="btn b-pri" id="unlockBtn"><i class="fa-solid fa-fingerprint"></i> فتح بالبصمة</button>
-      <a href="#" class="link" id="unlockPass">تسجيل الدخول بكلمة السر</a>
-    </div>
-
-    <!-- App -->
-    <div id="vApp" class="view">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:.85rem">
-        <span>👤 <b id="empName">-</b></span>
-        <a href="#" id="logoutLink" style="color:#ef4444;text-decoration:none;font-weight:600"><i class="fa-solid fa-power-off"></i> خروج</a>
-      </div>
-      <button class="btn b-bio" id="bioBtn" style="display:none;margin-bottom:12px"><i class="fa-solid fa-fingerprint"></i> تفعيل الدخول بالبصمة</button>
-      <div class="fg"><div class="iw"><i class="fa-solid fa-location-dot"></i>
-        <select id="branch" class="fc"><option value="">جاري تحميل الفروع...</option></select></div></div>
-      <div class="cam"><video id="cam" autoplay playsinline muted></video></div>
-      <div id="geo" class="badge warn"><i class="fa-solid fa-spinner fa-spin"></i><span>جاري تحديد موقعك...</span></div>
-      <div id="state" class="badge info" style="display:none"></div>
-      <div class="row">
-        <button class="btn b-in" id="inBtn" disabled><span class="chip"><i class="fa-solid fa-right-to-bracket"></i></span>حضور</button>
-        <button class="btn b-out" id="outBtn" disabled><span class="chip"><i class="fa-solid fa-right-from-bracket"></i></span>انصراف</button>
-      </div>
-      <div id="cd" class="badge info" style="display:none;margin:14px 0 0"></div>
-      <div id="result" class="badge" style="display:none;margin:14px 0 0"></div>
-    </div>
-
-    <!-- طلباتي -->
-    <div id="vReq" class="view">
-      <div id="myInfo" class="badge info"></div>
-      <div class="fg"><label>نوع الطلب</label><div class="iw"><i class="fa-solid fa-list"></i>
-        <select id="rKind" class="fc"><option value="leave">إجازة</option><option value="permission">إذن</option><option value="weekoff">تغيير الإجازة الأسبوعية</option></select></div></div>
-      <div id="fLeave">
-        <div class="fg"><label>نوع الإجازة</label><select id="lType" class="fc np"></select></div>
-        <div class="two"><div class="fg"><label>من</label><input type="date" id="lFrom" class="fc np"></div><div class="fg"><label>إلى</label><input type="date" id="lTo" class="fc np"></div></div>
-      </div>
-      <div id="fPerm" style="display:none">
-        <div class="fg"><label>نوع الإذن</label><select id="pType" class="fc np"></select></div>
-        <div class="two"><div class="fg"><label>التاريخ</label><input type="date" id="pDate" class="fc np"></div><div class="fg"><label>المدة (دقيقة)</label><input type="number" id="pMins" class="fc np" min="10" max="480" value="60"></div></div>
-      </div>
-      <div id="fOff" style="display:none"><label style="display:block;font-size:.85rem;font-weight:600;margin-bottom:8px;color:#475569">اختر أيام الإجازة الأسبوعية (حتى 3 أيام)</label><div id="dayChips" class="days"></div></div>
-      <div class="fg"><label>ملاحظات (اختياري)</label><input id="rNote" class="fc np" maxlength="200"></div>
-      <button class="btn b-pri" id="rSend"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب للمدير</button>
-      <div id="rMsg" class="badge" style="display:none;margin:14px 0 0"></div>
-      <h3 class="sec">طلباتي</h3><div id="myReqs"></div>
-    </div>
-
-    <!-- لوحتي -->
-    <div id="vDash" class="view"><h3 class="sec" id="dashTitle" style="margin-top:0"></h3><div id="dashBody"></div></div>
-
-    <!-- الإدارة / V3 -->
-    <div id="vMgr" class="view">
-      <div class="admin-shell">
-        <aside class="admin-side" id="adminNav">
-          <button data-admin="overview" class="on"><i class="fa-solid fa-gauge-high"></i> الرئيسية</button>
-          <button data-admin="employees"><i class="fa-solid fa-users"></i> الموظفون</button>
-          <button data-admin="branches"><i class="fa-solid fa-building"></i> الفروع</button>
-          <button data-admin="attendance"><i class="fa-solid fa-calendar-check"></i> الحضور</button>
-          <button data-admin="requests"><i class="fa-solid fa-file-circle-check"></i> الطلبات</button>
-          <button data-admin="evaluation"><i class="fa-solid fa-ranking-star"></i> التقييم</button>
-          <button data-admin="audit"><i class="fa-solid fa-shield-halved"></i> سجل العمليات</button>
-          <button data-admin="reports"><i class="fa-solid fa-file-export"></i> التقارير</button>
-          <button data-admin="setup"><i class="fa-solid fa-gears"></i> تهيئة النظام</button>
-          <button data-admin="superadmin" id="superAdminNav" style="display:none"><i class="fa-solid fa-crown"></i> Superadmin</button>
-        </aside>
-        <main class="admin-main">
-          <section class="admin-route on" data-route="overview"><div class="admin-head"><div><h2>لوحة الإدارة</h2><div class="sub">مؤشرات اليوم والشهر والطلبات المعلقة</div></div><button class="mini b" id="refreshAdmin"><i class="fa-solid fa-rotate"></i> تحديث</button></div><div id="mgrAlert" class="badge warn" style="display:none"></div><div id="adminKpis" class="kpis"></div><div class="admin-grid2"><div class="panel"><h3>طلبات بانتظار الموافقة</h3><div id="pendList"></div></div><div class="panel"><h3>ملخص الفريق</h3><div id="teamList"></div></div></div></section>
-          <section class="admin-route" data-route="employees"><div class="admin-head"><div><h2>إدارة الموظفين</h2><div class="sub">إضافة وتعديل وتفعيل وتعطيل الموظفين وإعادة ربط الجهاز</div></div><button class="mini b" id="newEmployee"><i class="fa-solid fa-user-plus"></i> موظف جديد</button></div><div class="toolbar"><input id="empSearch" class="fc" placeholder="بحث بالاسم أو الرقم أو الهاتف"><select id="empRole" class="fc" style="max-width:180px"><option value="">كل الصلاحيات</option><option value="employee">موظف</option><option value="manager">مدير</option></select></div><div id="employeeForm" class="panel" style="display:none;margin-bottom:12px"></div><div id="employeeTable"></div></section>
-          <section class="admin-route" data-route="branches"><div class="admin-head"><div><h2>إدارة الفروع</h2><div class="sub">الموقع الجغرافي ونطاق التسجيل وحالة الفرع</div></div><button class="mini b" id="newBranch"><i class="fa-solid fa-plus"></i> فرع جديد</button></div><div id="branchForm" class="panel" style="display:none;margin-bottom:12px"></div><div id="branchTable"></div></section>
-          <section class="admin-route" data-route="attendance"><div class="admin-head"><div><h2>سجل الحضور والانصراف</h2><div class="sub">بحث وتصفية حسب التاريخ والموظف والفرع والحركة</div></div></div><div class="toolbar"><input type="date" id="attFrom" class="fc"><input type="date" id="attTo" class="fc"><select id="attEmp" class="fc"><option value="">كل الموظفين</option></select><select id="attAction" class="fc"><option value="">كل الحركات</option><option value="Check-In">حضور</option><option value="Check-Out">انصراف</option></select><input id="attQ" class="fc" placeholder="بحث"><button class="mini b" id="loadAttendance"><i class="fa-solid fa-filter"></i> تطبيق</button></div><div id="attendanceTable"></div></section>
-          <section class="admin-route" data-route="requests"><div class="admin-head"><div><h2>إدارة الطلبات</h2><div class="sub">كل الإجازات والأذونات وأيام الإجازة الأسبوعية</div></div></div><div class="toolbar"><select id="reqStatus" class="fc"><option value="">كل الحالات</option><option value="pending">معلقة</option><option value="approved">مقبولة</option><option value="rejected">مرفوضة</option></select><select id="reqKind" class="fc"><option value="">كل الأنواع</option><option value="leave">إجازة</option><option value="permission">إذن</option><option value="weekoff">إجازة أسبوعية</option></select><button class="mini b" id="loadRequests"><i class="fa-solid fa-filter"></i> تطبيق</button></div><div id="requestsTable"></div></section>
-          <section class="admin-route" data-route="evaluation"><div class="admin-head"><div><h2>التقييم والترتيب</h2><div class="sub">النتيجة الشهرية حسب الحضور والتأخير والغياب والأذونات</div></div></div><div class="toolbar"><input type="month" id="evalMonth" class="fc"><button class="mini b" id="loadEvaluation"><i class="fa-solid fa-ranking-star"></i> تحديث التقييم</button></div><div id="evaluationTable"></div></section>
-          <section class="admin-route" data-route="audit"><div class="admin-head"><div><h2>سجل العمليات والأمان</h2><div class="sub">تسجيل تغييرات الموظفين والفروع والجهاز والقرارات الإدارية</div></div><button class="mini b" id="loadAudit"><i class="fa-solid fa-rotate"></i> تحديث</button></div><div id="auditTable"></div></section>
-          <section class="admin-route" data-route="reports"><div class="admin-head"><div><h2>التقارير والتصدير</h2><div class="sub">تحميل بيانات النظام بصيغة CSV لفتحها في Excel</div></div></div><div class="admin-grid2"><div class="panel"><h3>تقرير الحضور</h3><p class="sub">الفترة المحددة في شاشة الحضور.</p><button class="mini b" data-report="attendance">تصدير CSV</button></div><div class="panel"><h3>تقرير الطلبات</h3><p class="sub">كل الطلبات الحالية.</p><button class="mini b" data-report="requests">تصدير CSV</button></div><div class="panel"><h3>تقرير التقييم</h3><p class="sub">تقييم الشهر المحدد.</p><button class="mini b" data-report="evaluation">تصدير CSV</button></div><div class="panel"><h3>تقرير العمليات</h3><p class="sub">آخر عمليات الإدارة والأمان.</p><button class="mini b" data-report="audit">تصدير CSV</button></div></div></section>
-          <section class="admin-route" data-route="superadmin">
-            <div class="admin-head"><div><h2><i class="fa-solid fa-crown"></i> Superadmin Control Center</h2><div class="sub">صلاحية عليا لإدارة الأدوار والإعدادات الجوهرية وبيانات النظام. كل تعديل يسجل في Audit.</div></div><button class="mini b" id="refreshSuperadmin"><i class="fa-solid fa-rotate"></i> تحديث</button></div>
-            <div class="kpis" id="superKpis"></div>
-            <div class="admin-grid2">
-              <div class="panel"><h3>المستخدمون والصلاحيات</h3><div id="superUsers"></div></div>
-              <div class="panel"><h3>إعدادات Backend الجوهرية</h3><div id="superSettings"></div></div>
-              <div class="panel"><h3>إعدادات Frontend التشغيلية</h3><div id="superFrontend"></div></div>
-              <div class="panel"><h3>سلامة البيانات والجلسات</h3><div id="superSheets"></div><div class="acts" style="margin-top:12px"><button class="mini r" id="clearSessions">إنهاء كل الجلسات</button><button class="mini b" id="refreshSheets">فحص الـ Sheets</button></div></div>
+          <form id="loginForm">
+            <div class="form-group">
+              <label>رقم الموبايل</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-phone"></i>
+                <input type="tel" id="loginPhone" class="form-control" placeholder="01XXXXXXXXX" required>
+              </div>
             </div>
-          </section>
-          <section class="admin-route" data-route="setup"><div class="admin-head"><div><h2>تهيئة النظام</h2><div class="sub">إنشاء/تحديث تبويبات V3 والعناوين المطلوبة دون حذف البيانات</div></div></div><div class="panel"><p class="sub" style="margin-bottom:12px">نفّذ التهيئة مرة واحدة بعد نشر نسخة Apps Script الجديدة.</p><button class="mini b" id="runSetup"><i class="fa-solid fa-wand-magic-sparkles"></i> تشغيل V3 Setup</button><div id="setupMsg" class="badge" style="display:none;margin-top:12px"></div></div></section>
-        </main>
+
+            <div class="form-group">
+              <label>كلمة السر</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
+              </div>
+            </div>
+
+            <button type="submit" id="loginBtn" class="btn btn-primary">
+              <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div id="viewAttendance" class="view-section">
+        <div class="attendance-shell">
+          <div class="top-row">
+            <span>👤 الموظف: <b id="activeEmpName">-</b></span>
+            <a href="#" id="logoutLink"><i class="fa-solid fa-power-off"></i> خروج</a>
+          </div>
+
+          <div class="form-group">
+            <label>الفرع</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-location-dot"></i>
+              <select id="branchSelect" class="form-control">
+                <option value="El Thawra">فرع الثورة (El Thawra)</option>
+                <option value="Sheraton">فرع شيراتون (Sheraton)</option>
+                <option value="Nasr City">فرع مدينة نصر (Nasr City)</option>
+                <option value="Mall El Arab">فرع مول العرب (Mall El Arab)</option>
+                <option value="Maxim Mall">فرع مكسيم مول (Maxim Mall)</option>
+                <option value="Alex">فرع الإسكندرية (Alex)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>نوع الحركة</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-arrow-right-to-city"></i>
+              <select id="actionType" class="form-control">
+                <option value="Check-In">🟢 تسجيل حضور (Check-In)</option>
+                <option value="Check-Out">🔴 تسجيل انصراف (Check-Out)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="webcam-box">
+            <video id="webcam" autoplay playsinline muted></video>
+          </div>
+
+          <div id="faceStatus" class="status-badge status-warning">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <span>جاري التحميل...</span>
+          </div>
+
+          <button id="actionBtn" class="btn btn-primary" disabled>
+            <i class="fa-solid fa-camera"></i> تأكيد
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="tag">Device: <span id="devTag"></span></div>
+    <div class="device-tag">Device ID: <span id="displayUUID"></span></div>
   </div>
-</div>
 
-<script>
-// ===== الإعداد: رابط الـ Web App من Apps Script (Deploy > Web app) =====
-const API = "https://script.google.com/macros/s/AKfycbxQgEK038fv1OwYBaLNkCsFbN_IVRW0jfM-Cc6PP2i8Pt-CDQ08jBRBTuG8GPab8-0/exec";
+  <script>
+    // ===== الإعدادات الأساسية وروابط Webhook =====
+    const SB_URL = "https://lmjnyzkmkvknvgfvrxmb.supabase.co";
+    const SB_KEY = "sb_publishable_qTwkfRTdkrG9wGbqDhgT0w_EjbkQrlS";
+    const MODELS = "https://mmohamedsaeed.github.io/attendance-app";
 
-const $ = id => document.getElementById(id);
-const ERR = {
-  BAD_LOGIN: "رقم الموبايل أو كلمة السر غير صحيحة",
-  LOCKED: "تم إيقاف المحاولات مؤقتاً، حاول بعد 15 دقيقة",
-  DEVICE: "🛑 هذا الحساب مرتبط بجهاز آخر. تم تصويرك وإبلاغ الإدارة بالمحاولة.",
-  CAM: "الكاميرا مطلوبة لتسجيل الدخول، فعّل صلاحية الكاميرا وحاول مرة أخرى",
-  SESSION: "انتهت الجلسة، سجّل دخولك مرة أخرى",
-  FAR: "أنت خارج نطاق الفرع المختار",
-  GPS: "تعذر تحديد موقعك، فعّل الـ GPS وأعد المحاولة",
-  GPS_WEAK: "إشارة الـ GPS ضعيفة، اخرج لمكان مفتوح وحاول تاني",
-  NO_PHOTO: "تعذر التقاط الصورة، حاول مرة أخرى",
-  COOLDOWN: "تم تسجيل حركة منذ قليل، انتظر انتهاء العد التنازلي",
-  WRONG_ACTION: "هذه الحركة غير متاحة حالياً",
-  BRANCH: "الفرع غير معروف",
-  MAKE: "تعذر إرسال البيانات للنظام، حاول مرة أخرى",
-  NETWORK: "تعذر الاتصال بالخادم، تأكد من الإنترنت وأعد المحاولة",
-  MAINTENANCE: "النظام في وضع الصيانة حالياً، حاول لاحقاً",
-  FORBIDDEN_SUPERADMIN: "هذه المنطقة مخصصة للـ Superadmin فقط"
-};
+    const MAKE_ATTENDANCE_WEBHOOK = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
+    const MAKE_SECURITY_WEBHOOK   = "https://hook.us2.make.com/ejz1nugtaq8llq2nfi572vrl59omto8j";
 
-const dev = localStorage.getItem("dev") || (() => { const v = crypto.randomUUID(); localStorage.setItem("dev", v); return v; })();
-$("devTag").textContent = dev.slice(0, 8) + "...";
-let S = JSON.parse(localStorage.getItem("sess") || "null"); // {token,name}
-let stream = null, watchId = null, pos = null, branches = [], busy = false, cdEnd = 0, cdTimer = null, allowed = "both";
+    const $ = id => document.getElementById(id);
 
-// بنبعت بدون Content-Type عشان نتفادى مشاكل CORS مع Apps Script
-async function api(fn, data) {
-  const r = await fetch(API, { method: "POST", body: JSON.stringify({ fn, device: dev, token: S && S.token, ...data }) });
-  if (!r.ok) throw new Error("NETWORK");
-  const j = await r.json();
-  if (j.error) { const e = new Error(j.error); e.data = j; throw e; }
-  return j;
-}
-function show(id) {
-  document.querySelectorAll(".view").forEach(v => v.classList.remove("active")); $(id).classList.add("active");
-  const main = Object.values(TABS).includes(id);
-  $("tabs").style.display = main ? "flex" : "none"; if (!main) $("locBanner").style.display = "none";
-}
-function badge(el, cls, icon, msg) {
-  el.className = "badge " + cls; el.style.display = "flex";
-  if (["result", "loginMsg", "unlockMsg", "state"].includes(el.id)) { void el.offsetWidth; el.classList.add("pop"); }
-  el.innerHTML = `<i class="fa-solid ${icon}"></i><span></span>`; el.lastChild.textContent = msg;
-}
-function hav(a, b, c, d) {
-  const R = 6371000, r = x => x * Math.PI / 180;
-  const h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(h));
-}
+    const ERR = {
+      BAD_LOGIN: "رقم الموبايل أو كلمة السر غير صحيحة",
+      LOCKED: "تم إيقاف المحاولات مؤقتاً، حاول بعد 15 دقيقة",
+      DEVICE: "🛑 هذا الحساب مرتبط بجهاز آخر. تم تسجيل المحاولة وإبلاغ الإدارة.",
+      SESSION: "انتهت الجلسة، سجل دخولك مرة أخرى",
+      FACE_MISMATCH: "الوجه غير مطابق لبيانات الموظف ❌",
+      NO_FACE: "لم يتم تسجيل بصمة الوجه بعد",
+      DUP: "تم تسجيل نفس الحركة منذ لحظات",
+      NETWORK: "تعذر الاتصال بالخادم، تأكد من الاتصال بالشبكة",
+      GPS: "تعذر تحديد موقعك، يرجى تفعيل الـ GPS والتأكد من الصلاحيات"
+    };
 
-// المسافة: أكتر من 999 متر تتعرض بالكيلو متر
-const fmt = m => m > 999 ? +(m / 1000).toFixed(2) + " كم" : m + " متر";
+    const deviceId = localStorage.getItem("dev") || (() => {
+      const v = crypto.randomUUID();
+      localStorage.setItem("dev", v);
+      return v;
+    })();
 
-// ===== الدخول بالبصمة (WebAuthn): بعد أول تسجيل دخول، البصمة بتفتح الجلسة المحفوظة على نفس الجهاز =====
-const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
-const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-const empId = () => S.token.split(".")[0];
-// زرار البصمة بيظهر بس لو الجهاز فيه بصمة/وجه/قفل شاشة فعلاً (على كمبيوتر من غير Windows Hello مش هيظهر)
-let bioAvail = false;
-const bioReady = (window.PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable && window.isSecureContext
-  ? PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable() : Promise.resolve(false))
-  .then(v => (bioAvail = !!v)).catch(() => false);
-const bioSupported = () => bioAvail;
-const bioOn = () => { try { const b = JSON.parse(localStorage.getItem("bio") || "null"); return !!(b && S && b.emp === empId()); } catch (e) { return false; } };
-$("bioBtn").onclick = async () => {
-  try {
-    const cred = await navigator.credentials.create({ publicKey: {
-      challenge: crypto.getRandomValues(new Uint8Array(32)),
-      rp: { name: "Attendance" },
-      user: { id: new TextEncoder().encode(empId()), name: S.name, displayName: S.name },
-      pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
-      authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "discouraged" },
-      timeout: 60000
-    } });
-    localStorage.setItem("bio", JSON.stringify({ id: b64(cred.rawId), emp: empId() }));
-    $("bioBtn").style.display = "none";
-    badge($("result"), "ok", "fa-fingerprint", "تم تفعيل الدخول بالبصمة ✅");
-  } catch (e) { badge($("result"), "bad", "fa-circle-xmark", "تعذر تفعيل البصمة، تأكد إن بصمة الموبايل أو قفل الشاشة مفعّل"); }
-};
-$("unlockBtn").onclick = async () => {
-  $("unlockMsg").style.display = "none";
-  try {
-    const B = JSON.parse(localStorage.getItem("bio"));
-    await navigator.credentials.get({ publicKey: {
-      challenge: crypto.getRandomValues(new Uint8Array(32)),
-      allowCredentials: [{ type: "public-key", id: unb64(B.id), transports: ["internal"] }],
-      userVerification: "required", timeout: 60000
-    } });
-    enterApp();
-  } catch (e) { badge($("unlockMsg"), "bad", "fa-circle-xmark", "تعذر التحقق بالبصمة، حاول مرة أخرى"); }
-};
-$("unlockPass").onclick = e => { e.preventDefault(); logout(); show("vLogin"); };
+    $("displayUUID").textContent = deviceId.slice(0, 8) + "...";
 
-// لقطة سريعة من الكاميرا الأمامية وقت الدخول (الكاميرا بتتقفل فوراً بعدها)
-async function loginSnap() {
-  let st;
-  try { st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false }); }
-  catch (e) { throw new Error("CAM"); }
-  try {
-    const v = document.createElement("video"); v.muted = true; v.playsInline = true; v.srcObject = st;
-    await v.play();
-    if (!v.videoWidth) await new Promise(r => v.addEventListener("loadeddata", r, { once: true }));
-    await new Promise(r => setTimeout(r, 500)); // وقت قصير عشان الكاميرا تظبط الإضاءة
-    const p = snap(v);
-    if (!p) throw new Error("CAM");
-    return p;
-  } finally { st.getTracks().forEach(t => t.stop()); }
-}
+    let session = JSON.parse(localStorage.getItem("sess") || "null");
+    let stream = null, timer = null, busy = false, lastDescriptor = null;
 
-// ===== Landing / Login =====
-$("startBtn").onclick = () => show("vLogin");
-$("backLink").onclick = e => { e.preventDefault(); show("vLanding"); };
-$("loginForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  const btn = $("loginBtn"), h = btn.innerHTML; btn.disabled = true; $("loginMsg").style.display = "none";
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
-  try {
-    const photo = await loginSnap(); // صورة لحظية، بتتبعت للإدارة بس لو الدخول من جهاز غير الأساسي
-    const r = await api("login", { phone: $("phone").value.trim(), password: $("pass").value, ua: navigator.userAgent, photo });
-    S = { token: r.token, name: r.name }; localStorage.setItem("sess", JSON.stringify(S));
-    $("pass").value = ""; enterApp();
-  } catch (err) { badge($("loginMsg"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK); }
-  finally { btn.disabled = false; btn.innerHTML = h; }
-});
-$("logoutLink").onclick = e => { e.preventDefault(); logout(); };
-function logout() { localStorage.removeItem("sess"); S = null; stopAll(); show("vLanding"); }
+    const modelsReady = Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri(MODELS),
+      faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),
+      faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)
+    ]);
 
-// ===== شاشة التسجيل =====
-async function enterApp() {
-  $("empName").textContent = S.name; tabName = "punch"; show("vApp"); markTab("punch"); $("result").style.display = "none";
-  $("bioBtn").style.display = (bioSupported() && !bioOn()) ? "flex" : "none";
-  try { const r0 = await api("branches"); branches = r0.branches; if (r0.wait > 0) startCooldown(r0.wait); setAllowed(r0.allowed); }
-  catch (err) {
-    if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
-    return badge($("geo"), "bad", "fa-circle-xmark", ERR[err.message] || ERR.NETWORK);
-  }
-  const sel = $("branch"); sel.innerHTML = "";
-  sel.add(new Option("اختر الفرع", ""));
-  branches.forEach(b => sel.add(new Option(b.name, b.name)));
-  loadMe();
-  startCam();
-}
+    async function rpc(fn, args) {
+      try {
+        const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+          method: "POST",
+          headers: {
+            "apikey": SB_KEY,
+            "Authorization": `Bearer ${SB_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(args)
+        });
 
-let camBusy = false;
-async function startCam() {
-  if (stream || camBusy) return; camBusy = true;
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
-    $("cam").srcObject = stream; $("cam").parentElement.classList.add("live");
-  } catch (err) { camBusy = false; return badge($("geo"), "bad", "fa-video-slash", "الكاميرا مطلوبة للتسجيل، فعّل الصلاحية وأعد تحميل الصفحة"); }
-  camBusy = false;
-  if (!navigator.geolocation) return badge($("geo"), "bad", "fa-location-crosshairs", ERR.GPS);
-  watchId = navigator.geolocation.watchPosition(
-    p => { pos = p.coords; refresh(); },
-    () => { pos = null; badge($("geo"), "bad", "fa-location-crosshairs", "فعّل الـ GPS وصلاحية الموقع"); },
-    { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
-  );
-}
-function stopCam() { // لما الموظف يروح لتبويب تاني الكاميرا والـ GPS بيقفلوا
-  if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
-  if (watchId !== null) navigator.geolocation.clearWatch(watchId); watchId = null; pos = null;
-  $("cam").parentElement.classList.remove("live"); refresh();
-}
-function stopAll() {
-  $("cam").parentElement.classList.remove("live");
-  if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
-  if (watchId !== null) navigator.geolocation.clearWatch(watchId); watchId = null; pos = null;
-  cdEnd = 0; clearInterval(cdTimer); $("cd").style.display = "none"; allowed = "both"; $("state").style.display = "none";
-}
-$("branch").onchange = refresh;
-function refresh() {
-  const b = branches.find(x => x.name === $("branch").value);
-  let can = false;
-  if (!pos) badge($("geo"), "warn", "fa-spinner fa-spin", "جاري تحديد موقعك...");
-  else if (!b) badge($("geo"), "info", "fa-location-dot", "اختر الفرع لحساب المسافة");
-  else {
-    const m = Math.round(hav(pos.latitude, pos.longitude, b.lat, b.lng));
-    can = true; // التسجيل مسموح حتى خارج النطاق، لكن بيظهر تحذير بعد الإرسال
-    if (m <= b.radius) badge($("geo"), "ok", "fa-circle-check", `داخل نطاق الفرع (${fmt(m)}) ✅`);
-    else badge($("geo"), "warn", "fa-triangle-exclamation", `خارج نطاق الفرع، تبعد ${fmt(m)} — يمكنك التسجيل وسيظهر تحذير ⚠️`);
-  }
-  const base = can && stream && !busy && !cdActive();
-  $("inBtn").disabled = !(base && allowed !== "Check-Out");
-  $("outBtn").disabled = !(base && allowed !== "Check-In");
-}
-
-// ===== العد التنازلي بين عمليات التسجيل (5 دقائق، والسيرفر بيفرضه كمان) =====
-const cdActive = () => Date.now() < cdEnd;
-function startCooldown(sec) {
-  cdEnd = Date.now() + sec * 1000; const total = sec;
-  clearInterval(cdTimer);
-  const tick = () => {
-    const left = Math.ceil((cdEnd - Date.now()) / 1000);
-    if (left <= 0) { clearInterval(cdTimer); $("cd").style.display = "none"; refresh(); return; }
-    const t = String(Math.floor(left / 60)).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0");
-    badge($("cd"), "info", "fa-hourglass-half", `يمكنك التسجيل مرة أخرى بعد ${t}`);
-    $("cd").style.setProperty("--p", Math.max(0, left / total));
-    $("inBtn").disabled = $("outBtn").disabled = true;
-  };
-  tick(); cdTimer = setInterval(tick, 1000);
-}
-
-// ===== الحالة: بعد الحضور الانصراف بس (8 ساعات) والعكس =====
-function setAllowed(a) {
-  allowed = a || "both";
-  const el = $("state");
-  if (allowed === "Check-Out") badge(el, "ok", "fa-briefcase", "أنت مسجّل حضور ✅ — المتاح الآن: تسجيل الانصراف فقط");
-  else if (allowed === "Check-In") badge(el, "info", "fa-flag-checkered", "تم تسجيل انصرافك — المتاح الآن: تسجيل الحضور فقط");
-  else el.style.display = "none";
-  refresh();
-}
-
-// ===== التصوير + الإرسال =====
-// الصورة بتتخزن في خلية شيت (حد الخلية 50,000 حرف) فبنصغّرها لحد ما تبقى أقل من 45,000
-function snap(v = $("cam")) {
-  if (!v.videoWidth) return null;
-  for (const w of [360, 280, 220]) {
-    const c = document.createElement("canvas");
-    c.width = w; c.height = Math.round(w * v.videoHeight / v.videoWidth);
-    c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
-    for (const q of [0.6, 0.45, 0.3]) {
-      const s = c.toDataURL("image/jpeg", q);
-      if (s.length <= 45000) return s;
+        const res = await r.json();
+        if (!r.ok) {
+          console.error(`Supabase RPC Error (${fn}):`, res);
+          throw new Error(res.message || res.error || "NETWORK");
+        }
+        return res;
+      } catch (err) {
+        console.error("Network Fetch Failure:", err);
+        throw new Error(err.message || "NETWORK");
+      }
     }
-  }
-  return null;
-}
-async function punch(action) {
-  if (busy) return;
-  busy = true; refresh();
-  const photo = snap();
-  if (!photo) { busy = false; refresh(); return badge($("result"), "bad", "fa-circle-xmark", ERR.NO_PHOTO); }
-  const cam = $("cam").parentElement; cam.classList.remove("flash"); void cam.offsetWidth; cam.classList.add("flash");
-  badge($("result"), "info", "fa-spinner fa-spin", "جاري إرسال البيانات...");
-  try {
-    const p = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }));
-    const r = await api("punch", { branch: $("branch").value, action, lat: p.latitude, lng: p.longitude, acc: p.accuracy, photo });
-    const what = action === "Check-In" ? "الحضور" : "الانصراف";
-    const lateTxt = r.late > 0 ? ` — تأخير ${r.late} دقيقة${r.excused ? " (مبرر بإذن)" : ""}` : "";
-    if (r.far) badge($("result"), "warn", "fa-triangle-exclamation", `⚠️ تحذير: تم تسجيل ${what} خارج نطاق الفرع (تبعد ${fmt(r.dist)}) — ${r.time}${lateTxt}`);
-    else badge($("result"), r.late > 0 && !r.excused ? "warn" : "ok", "fa-circle-check", `✅ تم تسجيل ${what} (${r.time})${lateTxt}`);
-    setAllowed(r.allowed);
-    startCooldown(r.wait || 300);
-  } catch (err) {
-    if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
-    if (err.message === "WRONG_ACTION") setAllowed(err.data.allowed);
-    if (err.message === "COOLDOWN") startCooldown(err.data.wait);
-    const m = ERR[err.message] || (err.code ? ERR.GPS : ERR.NETWORK);
-    badge($("result"), "bad", "fa-circle-xmark", m);
-  } finally { setTimeout(() => { busy = false; refresh(); }, 2500); }
-}
-$("inBtn").onclick = () => punch("Check-In");
-$("outBtn").onclick = () => punch("Check-Out");
 
-// ===== الإصدار 2: التبويبات والطلبات والداشبورد ولوحة المدير =====
-const TABS = { punch: "vApp", req: "vReq", dash: "vDash", mgr: "vMgr" };
-const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-const LEAVE_TYPES = ["سنوية", "مرضية", "عارضة", "بدون مرتب"], PERM_TYPES = ["تأخير", "انصراف مبكر", "خروج أثناء العمل"];
-const POLL_MS = 60000; // كل قد إيه الموظف يسأل عن طلبات المدير (تقليله بيستهلك من حصة Apps Script اليومية)
-const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-let tabName = "punch", me = null, team = null;
-const markTab = t => document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
-document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => go(b.dataset.t));
-function go(t) {
-  tabName = t; show(TABS[t]); markTab(t);
-  if (t === "punch") startCam(); else stopCam();
-  if (t === "mgr") loadTeam(); else if (t !== "punch") loadMe();
-}
-const iso = d => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
-$("lType").innerHTML = LEAVE_TYPES.map(t => `<option>${t}</option>`).join("");
-$("pType").innerHTML = PERM_TYPES.map(t => `<option>${t}</option>`).join("");
-$("dayChips").innerHTML = DAYS.map((d, i) => `<label><input type="checkbox" value="${i}"><span>${d}</span></label>`).join("");
-$("dayChips").onchange = e => { if (document.querySelectorAll("#dayChips input:checked").length > 3) e.target.checked = false; };
-$("lFrom").value = $("lTo").value = $("pDate").value = iso(new Date());
-$("rKind").onchange = () => { const k = $("rKind").value; $("fLeave").style.display = k === "leave" ? "" : "none"; $("fPerm").style.display = k === "permission" ? "" : "none"; $("fOff").style.display = k === "weekoff" ? "" : "none"; };
+    function showView(id) {
+      document.querySelectorAll(".view-section").forEach(e => e.classList.remove("active"));
+      $(id).classList.add("active");
+    }
 
-function applyRuntimeConfig(c){
-  if(!c)return;
-  if(c.appName){document.title=c.appName;document.querySelectorAll('.brand-name').forEach(x=>x.textContent=c.appName);}
-  const old=document.getElementById('runtimeNotice'); if(old) old.remove();
-  if(c.notice){const el=document.createElement('div');el.id='runtimeNotice';el.className='badge '+(c.noticeType||'info');el.style.cssText='margin:10px 0;display:flex';el.textContent=c.notice;const host=document.querySelector('#vApp');if(host)host.insertBefore(el,host.firstChild);}
-}
-async function loadMe() {
-  try { me = await api("me"); }
-  catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); logout(); } return; }
-  $("tabMgr").style.display = ["manager","superadmin"].includes(me.role) ? "" : "none";
-  $("superAdminNav").style.display = me.role === "superadmin" ? "" : "none";
-  renderReq(); renderDash(); showLocs(me.locs);
-  try { const fc = await api("runtimeConfig"); applyRuntimeConfig(fc.config); } catch(e) {}
-}
-const reqText = r => r.kind === "leave" ? `إجازة ${r.type}: ${r.from} ← ${r.to}` : r.kind === "permission" ? `إذن ${r.type}: ${r.from} (${r.mins} دقيقة)` : `أيام الإجازة الأسبوعية: ${r.from.split(",").map(i => DAYS[i]).join("، ")}`;
-const ST = { pending: "قيد المراجعة", approved: "مقبول", rejected: "مرفوض" };
-function renderReq() {
-  $("myInfo").innerHTML = `<i class="fa-solid fa-clock"></i><span>موعد الحضور ${esc(me.shift)} · الإجازة الأسبوعية: ${esc(me.off.map(i => DAYS[i]).join("، "))}</span>`;
-  $("myReqs").innerHTML = me.requests.length ? me.requests.map(r => `<div class="item"><div class="top"><span>${esc(reqText(r))}</span><span class="st ${r.status}">${ST[r.status]}</span></div>${r.mgrNote ? `<div class="sub">ملاحظة المدير: ${esc(r.mgrNote)}</div>` : ""}</div>`).join("") : '<div class="item sub">لا توجد طلبات بعد</div>';
-}
-function renderDash() {
-  const s = me.stats, c = (l, v, i) => `<div class="stat"><i class="fa-solid ${i}" style="color:#94a3b8"></i><b>${esc(v)}</b><small>${l}</small></div>`;
-  $("dashTitle").textContent = "إحصائيات " + new Date().toLocaleDateString("ar-EG", { month: "long", year: "numeric" });
-  $("dashBody").innerHTML = `<div class="grid2">${c("أيام العمل", s.present, "fa-briefcase")}${c("أيام الإجازات", s.leave, "fa-umbrella-beach")}${c("أيام الغياب", s.absent, "fa-user-xmark")}${c("التأخيرات", s.lateCount + " · " + s.lateMin + " د", "fa-clock")}</div><h3 class="sec">الأذونات (${s.permCount})</h3><div class="grid2">${PERM_TYPES.map(t => c(t, s.perms[t] || 0, "fa-hourglass-half")).join("")}</div>`;
-}
-$("rSend").onclick = async () => {
-  const k = $("rKind").value, m = $("rMsg"), btn = $("rSend"), p = { kind: k, note: $("rNote").value.trim() };
-  if (k === "leave") Object.assign(p, { type: $("lType").value, from: $("lFrom").value, to: $("lTo").value });
-  else if (k === "permission") Object.assign(p, { type: $("pType").value, from: $("pDate").value, mins: +$("pMins").value });
-  else { p.days = [...document.querySelectorAll("#dayChips input:checked")].map(i => i.value).join(","); if (!p.days) return badge(m, "bad", "fa-circle-xmark", "اختر يوم واحد على الأقل"); }
-  btn.disabled = true;
-  try { await api("submit", p); badge(m, "ok", "fa-circle-check", "تم إرسال الطلب للمدير ✅"); $("rNote").value = ""; loadMe(); }
-  catch (e) { if (e.message === "SESSION") { alert(ERR.SESSION); return logout(); } badge(m, "bad", "fa-circle-xmark", e.message === "BAD_REQUEST" ? "راجع بيانات الطلب (التواريخ أو المدة)" : ERR.NETWORK); }
-  finally { btn.disabled = false; }
-};
+    function setStatus(cls, icon, msg) {
+      const b = $("faceStatus");
+      b.className = "status-badge " + cls;
+      b.innerHTML = `<i class="fa-solid ${icon}"></i><span></span>`;
+      b.lastChild.textContent = msg;
+    }
 
-// طلب موقع من المدير: الموظف بيوافق أو يرفض في كل مرة
-function showLocs(list) {
-  const el = $("locBanner"), L = list && list[0];
-  if (!L || !S) { el.style.display = "none"; return; }
-  el.className = "badge warn"; el.dataset.id = L.id; el.style.display = "flex";
-  el.innerHTML = `<span><i class="fa-solid fa-location-crosshairs"></i> ${esc(L.mgr)} يطلب موقعك الحالي</span><div class="acts" style="margin:0"><button class="mini g" data-ok="1">موافقة</button><button class="mini r" data-ok="0">رفض</button></div>`;
-}
-$("locBanner").onclick = async e => {
-  const b = e.target.closest("button[data-ok]"); if (!b) return;
-  const id = $("locBanner").dataset.id, ok = b.dataset.ok === "1"; b.disabled = true;
-  try {
-    let c = {};
-    if (ok) { const p = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(x => res(x.coords), rej, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 })); c = { lat: p.latitude, lng: p.longitude, acc: p.accuracy }; }
-    await api("locAnswer", { id, ok, ...c });
-    $("locBanner").style.display = "none";
-  } catch (err) { badge($("locBanner"), "bad", "fa-circle-xmark", "تعذر تحديد موقعك أو إرسال الرد، حاول مرة أخرى"); }
-};
-setInterval(async () => { if (!S || document.hidden) return; try { showLocs((await api("ping")).locs); } catch (e) {} }, POLL_MS);
+    function getPos() {
+      return new Promise((res, rej) => {
+        if (!navigator.geolocation) return rej(new Error("GPS"));
+        navigator.geolocation.getCurrentPosition(
+          p => res(p.coords),
+          err => rej(err),
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      });
+    }
 
-// ===== لوحة المدير + مسارات V3 =====
-async function loadTeam(){try{team=await api("team");renderMgr();}catch(e){if(e.message==="SESSION")logout();}}
-const toM=t=>{const p=String(t).split(":");return(+p[0]||0)*60+(+p[1]||0)};
-const scoreCls=s=>s>=90?"background:#dcfce7;color:#15803d":s>=75?"background:#dbeafe;color:#1d4ed8":s>=60?"background:#fef3c7;color:#b45309":"background:#fee2e2;color:#b91c1c";
-const TODAY={in:"حاضر",late:"متأخر",none:"لم يسجل"};
-const locText=l=>!l?"":l.status==="approved"?`<a href="https://www.google.com/maps?q=${+l.lat},${+l.lng}" target="_blank" rel="noopener">📍 آخر موقع (${esc(l.at)})</a>`:l.status==="declined"?"رفض الموظف":"بانتظار رد الموظف...";
-function renderMgr(){
-  const n=new Date(),nowM=n.getHours()*60+n.getMinutes(),al=$("mgrAlert"), list=(team&&team.team)||[];
-  const late=list.filter(t=>!t.offToday&&(t.today==="late"||(t.today==="none"&&nowM>toM(t.shift)+30)));
-  if(late.length)badge(al,"warn","fa-triangle-exclamation","تنبيه تأخير: "+late.map(t=>t.name).join("، "));else al.style.display="none";
-  $("pendList").innerHTML=(team.pending||[]).length?team.pending.map(r=>`<div class="item"><div class="top"><span>${esc(r.emp)}</span><span class="st pending">قيد المراجعة</span></div><div class="sub">${esc(reqText(r))}${r.note?" — "+esc(r.note):""}</div><div class="acts"><button class="mini g" data-d="approve" data-id="${esc(r.id)}">موافقة</button><button class="mini r" data-d="reject" data-id="${esc(r.id)}">رفض</button></div></div>`).join(""):'<div class="empty">لا توجد طلبات معلقة</div>';
-  $("teamList").innerHTML=list.slice(0,12).map(t=>`<div class="item"><div class="top"><span>${esc(t.name)} <span class="st ${t.today}">${TODAY[t.today]}${t.offToday?" (إجازة)":""}</span></span><span class="score" style="${scoreCls(t.score)}">${t.score} · ${t.grade}</span></div><div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div></div>`).join("")||'<div class="empty">لا يوجد موظفون</div>';
-}
-$("vMgr").onclick=async e=>{const d=e.target.closest("[data-d]"),l=e.target.closest("[data-loc]");try{if(d){const note=d.dataset.d==="reject"?(prompt("سبب الرفض (اختياري)")||""):"";d.disabled=true;await api("decide",{id:d.dataset.id,decision:d.dataset.d,note});loadTeam();}else if(l){l.disabled=true;const out=$("loc_"+l.dataset.loc);out.textContent="تم إرسال الطلب، بانتظار موافقة الموظف...";const r=await api("reqLoc",{emp:l.dataset.loc});pollLoc(r.id,out);setTimeout(()=>l.disabled=false,4000);}}catch(err){if(err.message==="SESSION")logout();else alert(err.message==="SELF"?"لا يمكنك الموافقة على طلبك أنت":err.message==="DONE"?"تم البت في هذا الطلب بالفعل":ERR.NETWORK);}};
-async function pollLoc(id,out){for(let i=0;i<36;i++){await new Promise(r=>setTimeout(r,5000));if(!S)return;try{const r=await api("locPoll",{id});if(r.status!=="pending"){out.innerHTML=locText(r.status==="approved"?{status:"approved",lat:r.lat,lng:r.lng,at:r.at}:{status:"declined"});return;}}catch(e){}}out.textContent="لم يرد الموظف بعد"}
+    // ===== تسجيل الدخول =====
+    $("loginForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const btn = $("loginBtn"), msg = $("loginMsg");
+      btn.disabled = true; msg.style.display = "none";
+      try {
+        const r = await rpc("app_login", {
+          p_phone: $("loginPhone").value.trim(),
+          p_pass: $("loginPassword").value,
+          p_device: deviceId,
+          p_ua: navigator.userAgent
+        });
+        if (r.error) throw new Error(r.error);
+        session = { token: r.token, name: r.name, has_face: r.has_face };
+        localStorage.setItem("sess", JSON.stringify(session));
+        $("loginPassword").value = "";
+        enter();
+      } catch (err) {
+        msg.textContent = ERR[err.message] || err.message || ERR.NETWORK;
+        msg.style.display = "flex";
+      } finally {
+        btn.disabled = false;
+      }
+    });
 
-const adminRoutes=[...document.querySelectorAll(".admin-route")],adminNav=document.querySelectorAll("#adminNav [data-admin]"),adminCache={};
-function adminGo(route){if(!me||!["manager","superadmin"].includes(me.role))return;adminNav.forEach(b=>b.classList.toggle("on",b.dataset.admin===route));adminRoutes.forEach(v=>v.classList.toggle("on",v.dataset.route===route));if(route==="overview")loadAdminOverview();if(route==="employees")loadEmployees();if(route==="branches")loadBranches();if(route==="attendance"){fillAttendanceEmployees();loadAttendance()}if(route==="requests")loadRequests();if(route==="evaluation"){setDefaultDates();loadEvaluation()}if(route==="audit")loadAudit();if(route==="reports"){setDefaultDates();fillAttendanceEmployees()}if(route==="setup"){$("setupMsg").style.display="none";}if(route==="superadmin"&&me.role==="superadmin")loadSuperadmin();}
-async function loadSuperadmin(){
-  if(!me||me.role!=="superadmin")return;
-  try{
-    const [o,u,s,f,sh]=await Promise.all([api("superadminOverview"),api("superadminUsers"),api("superadminSettings"),api("superadminFrontend"),api("superadminSheets")]);
-    const c=o.counts||{};
-    $("superKpis").innerHTML=[['المستخدمون',c.users,'fa-users'],['المديرون',c.managers,'fa-user-tie'],['Superadmin',c.superadmins,'fa-crown'],['الفروع',c.branches,'fa-building']].map(x=>`<div class="kpi"><i class="fa-solid ${x[2]}"></i><b>${esc(x[1])}</b><small>${x[0]}</small></div>`).join("");
-    $("superUsers").innerHTML=(u.users||[]).map(x=>`<div class="item"><div class="top"><span><b>${esc(x.name)}</b> · ${esc(x.id)}</span><span class="st ${x.active?'approved':'rejected'}">${x.active?'نشط':'متوقف'}</span></div><div class="sub">${esc(x.phone)} · ${esc(x.email||'بدون بريد')} · ${x.device?'جهاز مرتبط':'بدون جهاز'}</div><div class="acts" style="margin-top:8px"><select class="fc sa-role" data-id="${esc(x.id)}"><option value="employee" ${x.role==='employee'?'selected':''}>موظف</option><option value="manager" ${x.role==='manager'?'selected':''}>مدير</option><option value="superadmin" ${x.role==='superadmin'?'selected':''}>Superadmin</option></select><button class="mini b sa-save-role" data-id="${esc(x.id)}">حفظ الصلاحية</button><button class="mini ${x.active?'r':'g'} sa-active" data-id="${esc(x.id)}" data-active="${x.active?'0':'1'}">${x.active?'تعطيل':'تفعيل'}</button></div></div>`).join('')||'<div class="empty">لا يوجد مستخدمون</div>';
-    const ss=s.settings||{};
-    $("superSettings").innerHTML=`<div class="form-grid">${['ADMIN_EMAIL','MAKE_URL','PHOTOS_FOLDER','WINDOW_S','SESSION_DAYS','COOLDOWN_S','GRACE','NOSHOW_AFTER','GPS_MAX_ACCURACY','SUPERADMIN_IDS'].map(k=>`<div class="${k==='MAKE_URL'||k==='SUPERADMIN_IDS'?'full':''}"><label>${esc(k)}</label><input class="fc sa-setting" data-key="${esc(k)}" value="${esc(ss[k]||'')}"></div>`).join('')}</div><div class="acts" style="margin-top:12px"><button class="mini g" id="saveSuperSettings">حفظ إعدادات Backend</button></div>`;
-    const fc=f.config||{};
-    $("superFrontend").innerHTML=`<div class="form-grid"><div><label>اسم التطبيق</label><input id="saAppName" class="fc" value="${esc(fc.appName)}"></div><div><label>بريد الدعم</label><input id="saSupport" class="fc" value="${esc(fc.supportEmail)}"></div><div class="full"><label>رسالة النظام</label><textarea id="saNotice" class="fc" style="min-height:90px">${esc(fc.notice)}</textarea></div><div><label>نوع الرسالة</label><select id="saNoticeType" class="fc"><option value="info" ${fc.noticeType==='info'?'selected':''}>معلومة</option><option value="warn" ${fc.noticeType==='warn'?'selected':''}>تحذير</option><option value="ok" ${fc.noticeType==='ok'?'selected':''}>نجاح</option><option value="bad" ${fc.noticeType==='bad'?'selected':''}>تنبيه</option></select></div><div><label class="checkline"><input id="saMaintenance" type="checkbox" ${fc.maintenance?'checked':''}> وضع الصيانة</label></div></div><div class="acts" style="margin-top:12px"><button class="mini g" id="saveSuperFrontend">حفظ إعدادات Frontend</button></div>`;
-    $("superSheets").innerHTML=(sh.sheets||[]).map(x=>`<div class="item"><b>${esc(x.name)}</b><span class="sub">${x.rows} صف · ${x.cols} عمود</span></div>`).join('');
-    $("saveSuperSettings").onclick=async()=>{const settings={};document.querySelectorAll('.sa-setting').forEach(i=>settings[i.dataset.key]=i.value);try{await api('superadminSaveSettings',{settings});alert('تم حفظ إعدادات Backend');loadSuperadmin()}catch(e){alert(errText(e))}};
-    $("saveSuperFrontend").onclick=async()=>{try{await api('superadminSaveFrontend',{config:{appName:$("saAppName").value,notice:$("saNotice").value,noticeType:$("saNoticeType").value,maintenance:$("saMaintenance").checked,supportEmail:$("saSupport").value}});alert('تم حفظ إعدادات Frontend');}catch(e){alert(errText(e))}};
-    document.querySelectorAll('.sa-save-role').forEach(b=>b.onclick=async()=>{const sel=document.querySelector(`.sa-role[data-id="${CSS.escape(b.dataset.id)}"]`);try{await api('superadminSetRole',{id:b.dataset.id,role:sel.value});alert('تم تحديث الصلاحية');loadSuperadmin()}catch(e){alert(errText(e))}});
-    document.querySelectorAll('.sa-active').forEach(b=>b.onclick=async()=>{try{await api('superadminSetActive',{id:b.dataset.id,active:b.dataset.active==='1'});loadSuperadmin()}catch(e){alert(errText(e))}});
-  }catch(e){alert(errText(e))}
-}
-$("refreshSuperadmin").onclick=loadSuperadmin;
-$("refreshSheets").onclick=loadSuperadmin;
-$("clearSessions").onclick=async()=>{if(!confirm('سيتم إنهاء جميع الجلسات الحالية. متابعة؟'))return;try{const r=await api('superadminClearSessions');alert('تم إنهاء '+r.count+' جلسة');}catch(e){alert(errText(e))}};
-adminNav.forEach(b=>b.onclick=()=>adminGo(b.dataset.admin));
-const errText=e=>({FORBIDDEN:"غير مصرح لك",NOT_FOUND:"العنصر غير موجود",BAD_EMPLOYEE:"بيانات الموظف غير صحيحة",PHONE_EXISTS:"رقم الهاتف مستخدم بالفعل",EMP_ID_EXISTS:"رقم الموظف مستخدم بالفعل",BAD_SHIFT:"مواعيد الشيفت غير صحيحة",BAD_OFF:"أيام الإجازة غير صحيحة",BAD_EMAIL:"البريد الإلكتروني غير صحيح",BRANCH_EXISTS:"اسم الفرع مستخدم بالفعل",BAD_BRANCH:"بيانات الفرع غير صحيحة",NO_CHANGES:"لا توجد تغييرات",DONE:"تم اتخاذ القرار بالفعل"}[e.message]||ERR[e.message]||"تعذر تنفيذ العملية");
-const kpi=(label,value,icon)=>`<div class="kpi"><i class="fa-solid ${icon}" style="color:#94a3b8"></i><b>${esc(value)}</b><small>${label}</small></div>`;
-async function loadAdminOverview(){try{const r=await api("adminDashboard",{date:iso(new Date())});$("adminKpis").innerHTML=[kpi("إجمالي الموظفين",r.totalEmployees,"fa-users"),kpi("حاضر اليوم",r.present,"fa-user-check"),kpi("غياب",r.absent,"fa-user-xmark"),kpi("تأخير",r.late,"fa-clock"),kpi("طلبات معلقة",r.pending,"fa-file-circle-exclamation"),kpi("نسبة الحضور",r.attendanceRate+"%","fa-chart-pie"),kpi("متوسط التقييم",r.monthly.averageScore,"fa-star"),kpi("دقائق التأخير",r.monthly.lateMin,"fa-hourglass-half")].join("");await loadTeam();}catch(e){if(e.message==="SESSION")logout();else alert(errText(e));}}
-$("refreshAdmin").onclick=loadAdminOverview;
-function renderEmployees(){const q=$("empSearch").value.trim().toLowerCase(),role=$("empRole").value,rows=(adminCache.employees||[]).filter(x=>(!role||x.role===role)&&(!q||[x.id,x.name,x.phone].some(v=>String(v).toLowerCase().includes(q))));$("employeeTable").innerHTML=rows.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الموظف</th><th>الهاتف</th><th>الصلاحية</th><th>الشيفت</th><th>الإجازة</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${esc(x.name)}</b><br><small>${esc(x.id)}</small></td><td>${esc(x.phone)}</td><td>${x.role==="manager"?"مدير":"موظف"}</td><td>${esc(x.shift)}${x.shiftEnd?" → "+esc(x.shiftEnd):""}</td><td>${esc((x.off||[]).map(i=>DAYS[i]).join("، "))}</td><td><span class="st ${x.active?"approved":"rejected"}">${x.active?"نشط":"متوقف"}</span></td><td><div class="acts"><button class="mini b" data-edit-emp="${esc(x.id)}">تعديل</button><button class="mini r" data-reset-emp="${esc(x.id)}">إعادة الجهاز</button></div></td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد نتائج</div>'}
-async function loadEmployees(){try{adminCache.employees=(await api("employeeList")).employees||[];renderEmployees()}catch(e){alert(errText(e))}}
-$("empSearch").oninput=renderEmployees;$("empRole").onchange=renderEmployees;
-function employeeForm(x={}){const off=new Set(x.off||[5]);return `<h3>${x.id?"تعديل موظف":"إضافة موظف جديد"}</h3><div class="form-grid"><div><label>رقم الموظف</label><input id="efId" class="fc" value="${esc(x.id||"")}" ${x.id?"readonly":""}></div><div><label>الاسم</label><input id="efName" class="fc" value="${esc(x.name||"")}"></div><div><label>الهاتف</label><input id="efPhone" class="fc" value="${esc(x.phone||"")}"></div><div><label>كلمة السر</label><input id="efPass" type="password" class="fc"></div><div><label>الصلاحية</label><select id="efRole" class="fc"><option value="employee" ${x.role!=="manager"?"selected":""}>موظف</option><option value="manager" ${x.role==="manager"?"selected":""}>مدير</option></select></div><div><label>البريد</label><input id="efEmail" class="fc" value="${esc(x.email||"")}"></div><div><label>بداية الشيفت</label><input id="efShift" type="time" class="fc" value="${esc(x.shift||"09:00")}"></div><div><label>نهاية الشيفت</label><input id="efEnd" type="time" class="fc" value="${esc(x.shiftEnd||"17:00")}"></div><div class="full"><label>الإجازة الأسبوعية</label><div class="days">${DAYS.map((d,i)=>`<label><input type="checkbox" class="efOff" value="${i}" ${off.has(i)?"checked":""}><span>${d}</span></label>`).join("")}</div></div><div class="full"><label class="checkline"><input id="efActive" type="checkbox" ${x.active!==false?"checked":""}> الموظف نشط ويمكنه الدخول</label></div></div><div class="acts"><button class="mini g" id="saveEmployee">حفظ</button><button class="mini r" id="cancelEmployee">إلغاء</button></div>`}
-function openEmployee(x){$("employeeForm").innerHTML=employeeForm(x);$("employeeForm").style.display="block";$("saveEmployee").onclick=async()=>{const p={id:$("efId").value.trim(),name:$("efName").value.trim(),phone:$("efPhone").value.trim(),password:$("efPass").value,role:$("efRole").value,email:$("efEmail").value.trim(),shift:$("efShift").value,shiftEnd:$("efEnd").value,weeklyOff:[...document.querySelectorAll(".efOff:checked")].map(x=>x.value).join(","),active:$("efActive").checked};try{await api(x.id?"editEmployee":"createEmployee",p);$("employeeForm").style.display="none";loadEmployees()}catch(e){alert(errText(e))}};$("cancelEmployee").onclick=()=>$("employeeForm").style.display="none"}
-$("newEmployee").onclick=()=>openEmployee();$("employeeTable").onclick=async e=>{const b=e.target.closest("button");if(!b)return;try{if(b.dataset.editEmp)openEmployee((adminCache.employees||[]).find(v=>v.id===b.dataset.editEmp));else if(b.dataset.resetEmp&&confirm("سيتم إلغاء ربط الجهاز الحالي وإنهاء جلسة الموظف. متابعة؟")){await api("resetEmployeeDevice",{id:b.dataset.resetEmp});alert("تم إعادة ضبط الجهاز");loadEmployees()}}catch(err){alert(errText(err))}};
-async function loadBranches(){try{adminCache.branches=(await api("branchList")).branches||[];renderBranches()}catch(e){alert(errText(e))}}
-function renderBranches(){const rows=adminCache.branches||[];$("branchTable").innerHTML=rows.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الفرع</th><th>الإحداثيات</th><th>النطاق</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${esc(x.name)}</b></td><td>${Number(x.lat).toFixed(6)}, ${Number(x.lng).toFixed(6)}</td><td>${esc(x.radius)} متر</td><td><span class="st ${x.active?"approved":"rejected"}">${x.active?"نشط":"متوقف"}</span></td><td><button class="mini b" data-edit-branch="${esc(x.name)}">تعديل</button> ${x.active?`<button class="mini r" data-del-branch="${esc(x.name)}">تعطيل</button>`:""}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد فروع</div>'}
-function branchForm(x={}){return `<h3>${x.name?"تعديل الفرع":"إضافة فرع"}</h3><div class="form-grid"><div><label>اسم الفرع</label><input id="bfName" class="fc" value="${esc(x.name||"")}"></div><div><label>النطاق بالمتر</label><input id="bfRadius" type="number" min="10" max="5000" class="fc" value="${x.radius||100}"></div><div><label>Latitude</label><input id="bfLat" type="number" step="any" class="fc" value="${x.lat??""}"></div><div><label>Longitude</label><input id="bfLng" type="number" step="any" class="fc" value="${x.lng??""}"></div><div class="full"><label class="checkline"><input id="bfActive" type="checkbox" ${x.active!==false?"checked":""}> الفرع نشط ويظهر للموظفين</label></div></div><div class="acts"><button class="mini g" id="saveBranch">حفظ</button><button class="mini r" id="cancelBranch">إلغاء</button></div>`}
-function openBranch(x){$("branchForm").innerHTML=branchForm(x);$("branchForm").style.display="block";$("saveBranch").onclick=async()=>{const p={id:x.name||"",name:$("bfName").value.trim(),lat:+$("bfLat").value,lng:+$("bfLng").value,radius:+$("bfRadius").value,active:$("bfActive").checked};try{await api(x.name?"editBranch":"createBranch",p);$("branchForm").style.display="none";loadBranches()}catch(e){alert(errText(e))}};$("cancelBranch").onclick=()=>$("branchForm").style.display="none"}
-$("newBranch").onclick=()=>openBranch();$("branchTable").onclick=async e=>{const b=e.target.closest("button");if(!b)return;try{if(b.dataset.editBranch)openBranch((adminCache.branches||[]).find(x=>x.name===b.dataset.editBranch));else if(b.dataset.delBranch&&confirm("سيتم تعطيل الفرع مع الاحتفاظ بالسجلات القديمة. متابعة؟")){await api("deleteBranch",{id:b.dataset.delBranch});loadBranches()}}catch(err){alert(errText(err))}};
-async function fillAttendanceEmployees(){if(!adminCache.employees)try{adminCache.employees=(await api("employeeList")).employees||[]}catch(e){}const s=$("attEmp"),v=s.value;s.innerHTML='<option value="">كل الموظفين</option>'+(adminCache.employees||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.name)} (${esc(x.id)})</option>`).join("");s.value=v}
-function setDefaultDates(){const t=iso(new Date());if(!$("attFrom").value)$("attFrom").value=t;if(!$("attTo").value)$("attTo").value=t;if(!$("evalMonth").value)$("evalMonth").value=t.slice(0,7)}
-async function loadAttendance(){setDefaultDates();try{const r=await api("attendanceList",{from:$("attFrom").value,to:$("attTo").value,emp:$("attEmp").value,action:$("attAction").value,q:$("attQ").value,limit:1000});adminCache.attendance=r.rows||[];$("attendanceTable").innerHTML=adminCache.attendance.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الوقت</th><th>الموظف</th><th>الحركة</th><th>الفرع</th><th>الحالة</th><th>تأخير</th><th>إذن</th></tr></thead><tbody>${adminCache.attendance.map(x=>`<tr><td>${esc(x.ts)}</td><td>${esc(x.name)}<br><small>${esc(x.empId)}</small></td><td>${x.action==="Check-In"?"حضور":"انصراف"}</td><td>${esc(x.branch)}</td><td>${esc(x.status)}</td><td>${x.lateMin?x.lateMin+" د":"-"}</td><td>${x.excused?"نعم":"-"}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد سجلات في الفترة المحددة</div>'}catch(e){alert(errText(e))}}
-$("loadAttendance").onclick=loadAttendance;
-async function loadRequests(){try{const r=await api("requestsList",{status:$("reqStatus").value,kind:$("reqKind").value});adminCache.requests=r.rows||[];$("requestsTable").innerHTML=adminCache.requests.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الموظف</th><th>النوع</th><th>التفاصيل</th><th>الحالة</th><th>الملاحظة</th></tr></thead><tbody>${adminCache.requests.map(x=>`<tr><td>${esc(x.emp)}</td><td>${esc(x.kind)} / ${esc(x.type)}</td><td>${esc(reqText(x))}${x.note?`<br><small>${esc(x.note)}</small>`:""}</td><td><span class="st ${x.status}">${ST[x.status]||x.status}</span></td><td>${esc(x.mgrNote||"-")}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد طلبات</div>'}catch(e){alert(errText(e))}}
-$("loadRequests").onclick=loadRequests;
-async function loadEvaluation(){setDefaultDates();try{const r=await api("evaluationList",{ym:$("evalMonth").value});adminCache.evaluation=r||[];$("evaluationTable").innerHTML=adminCache.evaluation.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>#</th><th>الموظف</th><th>النتيجة</th><th>حضور</th><th>غياب</th><th>تأخير</th><th>دقائق</th><th>أذونات</th></tr></thead><tbody>${adminCache.evaluation.map(x=>`<tr><td><b>${x.rank}</b></td><td>${esc(x.name)}<br><small>${esc(x.id)}</small></td><td><span class="score" style="${scoreCls(x.score)}">${x.score} · ${esc(x.grade)}</span></td><td>${x.present}</td><td>${x.absent}</td><td>${x.lateCount}</td><td>${x.lateMin}</td><td>${x.permCount}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد بيانات تقييم</div>'}catch(e){alert(errText(e))}}
-$("loadEvaluation").onclick=loadEvaluation;
-async function loadAudit(){try{const r=await api("auditList");adminCache.audit=r.rows||[];$("auditTable").innerHTML=adminCache.audit.length?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>الوقت</th><th>المنفذ</th><th>العملية</th><th>الهدف</th><th>التفاصيل</th></tr></thead><tbody>${adminCache.audit.map(x=>`<tr><td>${esc(x.ts)}</td><td>${esc(x.actor)}</td><td>${esc(x.action)}</td><td>${esc(x.target)}</td><td>${esc(x.details)}</td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">لا توجد عمليات مسجلة</div>'}catch(e){alert(errText(e))}}
-$("loadAudit").onclick=loadAudit;
-$("runSetup").onclick=async()=>{const b=$("runSetup"),m=$("setupMsg");b.disabled=true;try{const r=await api("v3Setup");badge(m,"ok","fa-circle-check","تمت تهيئة V3 بنجاح: "+(r.sheets||[]).join("، "));}catch(e){badge(m,"bad","fa-circle-xmark",errText(e));}finally{b.disabled=false}};
-const escCsv=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';function downloadCsv(rows,filename){if(!rows||!rows.length)return alert("لا توجد بيانات للتصدير");const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))],csv="\ufeff"+keys.map(escCsv).join(",")+"\n"+rows.map(r=>keys.map(k=>escCsv(r[k])).join(",")).join("\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-document.querySelectorAll("[data-report]").forEach(b=>b.onclick=async()=>{try{const type=b.dataset.report;let p={type};if(type==="attendance")p={...p,from:$("attFrom").value||iso(new Date()),to:$("attTo").value||iso(new Date()),emp:$("attEmp").value,action:$("attAction").value,q:$("attQ").value};if(type==="evaluation")p.ym=$("evalMonth").value||iso(new Date()).slice(0,7);const r=await api("reportData",p);downloadCsv(r.rows||r,`attendance-${type}-${Date.now()}.csv`)}catch(e){alert(errText(e))}});
-adminNav.forEach(b=>b.onclick=()=>adminGo(b.dataset.admin));
-// تأثير موجة عند الضغط على أي زرار
-document.addEventListener("click", e => {
-  const b = e.target.closest(".btn"); if (!b || b.disabled) return;
-  const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height), x = document.createElement("span");
-  x.className = "ripple"; x.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`;
-  b.appendChild(x); setTimeout(() => x.remove(), 700);
-});
+    $("logoutLink").addEventListener("click", e => { e.preventDefault(); logout(); });
+    function logout() {
+      localStorage.removeItem("sess"); session = null;
+      stopCamera(); showView("viewLogin");
+    }
 
-bioReady.then(() => {
-  if (!S) return;
-  if (bioOn()) { // البصمة كانت مفعّلة على الجهاز: لازم تتطلب، ولو مبقتش متاحة نرجع لكلمة السر
-    if (bioSupported()) { $("unlockName").textContent = S.name; show("vUnlock"); }
-    else { logout(); show("vLogin"); }
-  } else enterApp();
-});
-</script>
+    // ===== الكاميرا وكشف الوجه =====
+    async function enter() {
+      $("activeEmpName").textContent = session.name;
+      showView("viewAttendance");
+      refreshButton();
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "user",
+            width: { ideal: 640 },
+            height: { ideal: 480 }
+          }
+        });
+        $("webcam").srcObject = stream;
+      } catch (err) {
+        return setStatus("status-danger", "fa-triangle-exclamation", "تعذر فتح الكاميرا، تأكد من إعطاء الصلاحيات.");
+      }
+
+      try {
+        setStatus("status-info", "fa-spinner fa-spin", "جاري تحميل نماذج بصمة الوجه...");
+        await modelsReady;
+      } catch (err) {
+        console.error("Model Load Error:", err);
+        return setStatus("status-danger", "fa-wifi", "تعذر تحميل ملفات بصمة الوجه، تأكد من جودة اتصال الشبكة.");
+      }
+
+      clearInterval(timer);
+      timer = setInterval(detect, 1200);
+    }
+
+    function stopCamera() {
+      clearInterval(timer); timer = null; lastDescriptor = null;
+      if (stream) stream.getTracks().forEach(t => t.stop());
+      stream = null;
+    }
+
+    function refreshButton() {
+      $("actionBtn").innerHTML = session.has_face
+        ? '<i class="fa-solid fa-camera"></i> تأكيد'
+        : '<i class="fa-solid fa-face-smile"></i> تسجيل بصمة الوجه (مرة واحدة)';
+    }
+
+    async function detect() {
+      if (busy || !session) return;
+      try {
+        const d = await faceapi.detectSingleFace($("webcam"), new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+        lastDescriptor = d ? d.descriptor : null;
+        $("actionBtn").disabled = !d;
+        if (d) setStatus("status-success", "fa-user-check", session.has_face ? "تم اكتشاف الوجه ✅" : "الوجه واضح، اضغط لتسجيل بصمتك ✅");
+        else setStatus("status-warning", "fa-user-slash", "يرجى التواجد بوضوح أمام الكاميرا");
+      } catch (e) {
+        console.error("Detect Loop Error", e);
+      }
+    }
+
+    // ===== تسجيل الحركة والتزامن مع Google Sheets وتنبيه المدير =====
+    $("actionBtn").addEventListener("click", async () => {
+      if (busy || !lastDescriptor) return;
+      busy = true; $("actionBtn").disabled = true;
+      const face = Array.from(lastDescriptor);
+      try {
+        let r;
+        if (!session.has_face) {
+          r = await rpc("app_enroll", { p_token: session.token, p_device: deviceId, p_face: face });
+          if (r.error) throw new Error(r.error);
+          session.has_face = true; localStorage.setItem("sess", JSON.stringify(session)); refreshButton();
+          setStatus("status-success", "fa-circle-check", "تم تسجيل بصمة الوجه، يمكنك الآن تسجيل الحضور");
+        } else {
+          setStatus("status-info", "fa-spinner fa-spin", "جاري تحديد الموقع وإرسال البيانات...");
+
+          let pos;
+          try {
+            pos = await getPos();
+          } catch (gpsErr) {
+            throw new Error("GPS");
+          }
+
+          r = await rpc("app_punch", {
+            p_token: session.token,
+            p_device: deviceId,
+            p_branch: $("branchSelect").value,
+            p_action: $("actionType").value,
+            p_lat: pos.latitude,
+            p_lng: pos.longitude,
+            p_face: face
+          });
+          if (r.error) throw new Error(r.error);
+
+          const sheetPayload = {
+            employee_name: session.name,
+            action: $("actionType").value,
+            branch_name: $("branchSelect").value,
+            distance_m: r.dist_m,
+            status: r.status,
+            timestamp: new Date().toLocaleString('sv-SE')
+          };
+
+          fetch(MAKE_ATTENDANCE_WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(sheetPayload)
+          }).catch(e => console.error("Sheet Sync Error", e));
+
+          if (r.is_far) {
+            const alertPayload = {
+              event: "OUT_OF_RANGE_ATTEMPT",
+              employee_name: session.name,
+              branch_name: $("branchSelect").value,
+              action: $("actionType").value,
+              distance_m: r.dist_m,
+              attempt_time: new Date().toLocaleString('ar-EG')
+            };
+
+            fetch(MAKE_SECURITY_WEBHOOK, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(alertPayload)
+            }).catch(e => console.error("Security Alert Error", e));
+
+            setStatus("status-danger", "fa-triangle-exclamation", `⚠️ تحذير: أنت بعيد عن الفرع بـ (${r.dist_m} متر). تم تسجيل الحركة كـ (مرفوض - خارج النطاق) وإرسال تنبيه للإدارة.`);
+          } else {
+            setStatus("status-success", "fa-circle-check", `✅ تم تسجيل ${$("actionType").value} بنجاح (المسافة: ${r.dist_m} متر)`);
+          }
+        }
+      } catch (err) {
+        if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
+        setStatus("status-danger", "fa-circle-xmark", ERR[err.message] || err.message || "حدث خطأ، حاول مرة أخرى");
+      } finally {
+        setTimeout(() => { busy = false; }, 3000);
+      }
+    });
+
+    if (session) {
+      enter();
+    } else {
+      showView("viewLogin");
+    }
+  </script>
 </body>
 </html>
