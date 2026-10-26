@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Attendance System</title>
-  <meta name="theme-color" content="#3f46d9">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#3f46d9" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
   <style>
@@ -31,9 +31,6 @@
       --radius-md:18px;
       --radius-sm:12px;
       --gradient:linear-gradient(135deg, #3f46d9 0%, #4f8cff 100%);
-      --gradient-soft:linear-gradient(135deg, rgba(63,70,217,.12), rgba(79,140,255,.08));
-      --success-gradient:linear-gradient(135deg, #22c55e 0%, #15803d 100%);
-      --danger-gradient:linear-gradient(135deg, #ef4b5b 0%, #be123c 100%);
       --glass:rgba(255,255,255,.74);
     }
 
@@ -521,7 +518,7 @@
               <label>رقم الموبايل</label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-phone"></i>
-                <input type="tel" id="loginPhone" class="form-control" placeholder="01XXXXXXXXX" required>
+                <input type="tel" id="loginPhone" class="form-control" placeholder="01XXXXXXXXX" required />
               </div>
             </div>
 
@@ -529,7 +526,7 @@
               <label>كلمة السر</label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
+                <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required />
               </div>
             </div>
 
@@ -593,14 +590,11 @@
   </div>
 
   <script>
-    const SB_URL = "https://lmjnyzkmkvknvgfvrxmb.supabase.co";
-    const SB_KEY = "sb_publishable_qTwkfRTdkrG9wGbqDhgT0w_EjbkQrlS";
-    const MODELS = "https://mmohamedsaeed.github.io/attendance-app";
+    // ===== 1) فقط URL Apps Script =====
+    // استبدل هذا الرابط بالرابط الفعلي من Apps Script Web App
+    const API = "https://script.google.com/macros/s/AKfycbxQgEK038fv1OwYBaLNkCsFbN_IVRW0jfM-Cc6PP2i8Pt-CDQ08jBRBTuG8GPab8-0/exec";
 
-    const MAKE_ATTENDANCE_WEBHOOK = "https://hook.us2.make.com/gm42xc9myvf6tluk16wpmufd8csxnh1a";
-    const MAKE_SECURITY_WEBHOOK = "https://hook.us2.make.com/ejz1nugtaq8llq2nfi572vrl59omto8j";
-
-    const $ = id => document.getElementById(id);
+    const $ = (id) => document.getElementById(id);
 
     const ERR = {
       BAD_LOGIN: "رقم الموبايل أو كلمة السر غير صحيحة",
@@ -619,43 +613,54 @@
       localStorage.setItem("dev", v);
       return v;
     })();
+
     $("displayUUID").textContent = deviceId.slice(0, 8) + "...";
 
     let session = JSON.parse(localStorage.getItem("sess") || "null");
-    let stream = null, timer = null, busy = false, lastDescriptor = null;
+    let stream = null;
+    let timer = null;
+    let busy = false;
+    let lastDescriptor = null;
 
-    const modelsReady = Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri(MODELS),
-      faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),
-      faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)
-    ]);
+    // ===== 2) وهذا هو المسار الصحيح مع Apps Script =====
+    async function api(fn, payload = {}) {
+      const body = {
+        fn,
+        device: deviceId,
+        token: session ? session.token : null,
+        ...payload
+      };
 
-    async function rpc(fn, args) {
-      try {
-        const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
-          method: "POST",
-          headers: {
-            "apikey": SB_KEY,
-            "Authorization": `Bearer ${SB_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(args)
-        });
+      const res = await fetch(API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
 
-        const res = await r.json();
-        if (!r.ok) {
-          console.error(`Supabase RPC Error (${fn}):`, res);
-          throw new Error(res.message || res.error || "NETWORK");
-        }
-        return res;
-      } catch (err) {
-        console.error("Network Fetch Failure:", err);
-        throw new Error(err.message || "NETWORK");
+      if (!res.ok) {
+        throw new Error("NETWORK");
       }
+
+      const data = await res.json();
+      if (data && data.error) {
+        const e = new Error(data.error);
+        e.data = data;
+        throw e;
+      }
+
+      return data;
     }
 
+    const modelsReady = Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri("https://mmohamedsaeed.github.io/attendance-app"),
+      faceapi.nets.faceLandmark68Net.loadFromUri("https://mmohamedsaeed.github.io/attendance-app"),
+      faceapi.nets.faceRecognitionNet.loadFromUri("https://mmohamedsaeed.github.io/attendance-app")
+    ]);
+
     function showView(id) {
-      document.querySelectorAll(".view-section").forEach(e => e.classList.remove("active"));
+      document.querySelectorAll(".view-section").forEach(v => v.classList.remove("active"));
       $(id).classList.add("active");
     }
 
@@ -666,42 +671,11 @@
       b.lastChild.textContent = msg;
     }
 
-    function getPos() {
-      return new Promise((res, rej) => {
-        if (!navigator.geolocation) return rej(new Error("GPS"));
-        navigator.geolocation.getCurrentPosition(
-          p => res(p.coords),
-          err => rej(err),
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
-      });
+    function refreshButton() {
+      $("actionBtn").innerHTML = session && session.has_face
+        ? '<i class="fa-solid fa-camera"></i> تأكيد'
+        : '<i class="fa-solid fa-face-smile"></i> تسجيل بصمة الوجه (مرة واحدة)';
     }
-
-    $("loginForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const btn = $("loginBtn"), msg = $("loginMsg");
-      btn.disabled = true; msg.style.display = "none";
-      try {
-        const r = await rpc("app_login", {
-          p_phone: $("loginPhone").value.trim(),
-          p_pass: $("loginPassword").value,
-          p_device: deviceId,
-          p_ua: navigator.userAgent
-        });
-        if (r.error) throw new Error(r.error);
-        session = { token: r.token, name: r.name, has_face: r.has_face };
-        localStorage.setItem("sess", JSON.stringify(session));
-        $("loginPassword").value = "";
-        enter();
-      } catch (err) {
-        msg.textContent = ERR[err.message] || err.message || ERR.NETWORK;
-        msg.style.display = "flex";
-      } finally {
-        btn.disabled = false;
-      }
-    });
-
-    $("logoutLink").addEventListener("click", e => { e.preventDefault(); logout(); });
 
     function logout() {
       localStorage.removeItem("sess");
@@ -710,7 +684,50 @@
       showView("viewLogin");
     }
 
-    async function enter() {
+    $("logoutLink").addEventListener("click", e => {
+      e.preventDefault();
+      logout();
+    });
+
+    $("loginForm").addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const btn = $("loginBtn");
+      const msg = $("loginMsg");
+      btn.disabled = true;
+      msg.style.display = "none";
+
+      try {
+        const r = await api("login", {
+          phone: $("loginPhone").value.trim(),
+          password: $("loginPassword").value,
+          ua: navigator.userAgent
+        });
+
+        if (!r || !r.token) {
+          throw new Error("BAD_LOGIN");
+        }
+
+        session = {
+          token: r.token,
+          name: r.name,
+          has_face: !!r.has_face
+        };
+
+        localStorage.setItem("sess", JSON.stringify(session));
+        $("loginPassword").value = "";
+
+        enterAttendance();
+
+      } catch (err) {
+        msg.textContent = ERR[err.message] || err.message || ERR.NETWORK;
+        msg.style.display = "flex";
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    async function enterAttendance() {
       $("activeEmpName").textContent = session.name;
       showView("viewAttendance");
       refreshButton();
@@ -737,34 +754,32 @@
       }
 
       clearInterval(timer);
-      timer = setInterval(detect, 1200);
+      timer = setInterval(detect, 1100);
     }
 
     function stopCamera() {
-      clearInterval(timer); timer = null; lastDescriptor = null;
-      if (stream) stream.getTracks().forEach(t => t.stop());
-      stream = null;
-    }
-
-    function refreshButton() {
-      $("actionBtn").innerHTML = session.has_face
-        ? '<i class="fa-solid fa-camera"></i> تأكيد'
-        : '<i class="fa-solid fa-face-smile"></i> تسجيل بصمة الوجه (مرة واحدة)';
+      clearInterval(timer);
+      timer = null;
+      lastDescriptor = null;
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
     }
 
     async function detect() {
       if (busy || !session) return;
 
       try {
-        const d = await faceapi
+        const det = await faceapi
           .detectSingleFace($("webcam"), new faceapi.TinyFaceDetectorOptions())
           .withFaceLandmarks()
           .withFaceDescriptor();
 
-        lastDescriptor = d ? d.descriptor : null;
-        $("actionBtn").disabled = !d;
+        lastDescriptor = det ? det.descriptor : null;
+        $("actionBtn").disabled = !det;
 
-        if (d) {
+        if (det) {
           setStatus("status-success", "fa-user-check", session.has_face ? "تم اكتشاف الوجه ✅" : "الوجه واضح، اضغط لتسجيل بصمتك ✅");
         } else {
           setStatus("status-warning", "fa-user-slash", "يرجى التواجد بوضوح أمام الكاميرا");
@@ -774,92 +789,107 @@
       }
     }
 
+    function getPos() {
+      return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+          reject(new Error("GPS"));
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          p => resolve(p.coords),
+          () => reject(new Error("GPS")),
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+      });
+    }
+
+    function captureImage() {
+      const video = $("webcam");
+      if (!video || !video.videoWidth) return null;
+
+      const canvas = document.createElement("canvas");
+      const w = 360;
+      const h = Math.round((video.videoHeight / video.videoWidth) * w);
+      canvas.width = w;
+      canvas.height = h;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const data = canvas.toDataURL("image/jpeg", 0.6);
+      return data;
+    }
+
     $("actionBtn").addEventListener("click", async () => {
       if (busy || !lastDescriptor) return;
-      busy = true; $("actionBtn").disabled = true;
+
+      busy = true;
+      $("actionBtn").disabled = true;
+
       const face = Array.from(lastDescriptor);
+      const photo = captureImage();
 
       try {
-        let r;
         if (!session.has_face) {
-          r = await rpc("app_enroll", {
-            p_token: session.token,
-            p_device: deviceId,
-            p_face: face
+          const r = await api("enrollFace", {
+            token: session.token,
+            face,
+            photo
           });
-          if (r.error) throw new Error(r.error);
+
+          if (r && r.error) throw new Error(r.error);
 
           session.has_face = true;
           localStorage.setItem("sess", JSON.stringify(session));
           refreshButton();
+
           setStatus("status-success", "fa-circle-check", "تم تسجيل بصمة الوجه، يمكنك الآن تسجيل الحضور");
-        } else {
-          setStatus("status-info", "fa-spinner fa-spin", "جاري تحديد الموقع وإرسال البيانات...");
-
-          let pos;
-          try {
-            pos = await getPos();
-          } catch (gpsErr) {
-            throw new Error("GPS");
-          }
-
-          r = await rpc("app_punch", {
-            p_token: session.token,
-            p_device: deviceId,
-            p_branch: $("branchSelect").value,
-            p_action: $("actionType").value,
-            p_lat: pos.latitude,
-            p_lng: pos.longitude,
-            p_face: face
-          });
-          if (r.error) throw new Error(r.error);
-
-          const sheetPayload = {
-            employee_name: session.name,
-            action: $("actionType").value,
-            branch_name: $("branchSelect").value,
-            distance_m: r.dist_m,
-            status: r.status,
-            timestamp: new Date().toLocaleString('sv-SE')
-          };
-
-          fetch(MAKE_ATTENDANCE_WEBHOOK, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(sheetPayload)
-          }).catch(e => console.error("Sheet Sync Error", e));
-
-          if (r.is_far) {
-            const alertPayload = {
-              event: "OUT_OF_RANGE_ATTEMPT",
-              employee_name: session.name,
-              branch_name: $("branchSelect").value,
-              action: $("actionType").value,
-              distance_m: r.dist_m,
-              attempt_time: new Date().toLocaleString('ar-EG')
-            };
-
-            fetch(MAKE_SECURITY_WEBHOOK, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(alertPayload)
-            }).catch(e => console.error("Security Alert Error", e));
-
-            setStatus("status-danger", "fa-triangle-exclamation", `⚠️ تحذير: أنت بعيد عن الفرع بـ (${r.dist_m} متر). تم تسجيل الحركة كـ (مرفوض - خارج النطاق) وإرسال تنبيه للإدارة.`);
-          } else {
-            setStatus("status-success", "fa-circle-check", `✅ تم تسجيل ${$("actionType").value} بنجاح (المسافة: ${r.dist_m} متر)`);
-          }
+          busy = false;
+          return;
         }
+
+        setStatus("status-info", "fa-spinner fa-spin", "جاري تحديد الموقع وإرسال البيانات...");
+
+        const pos = await getPos();
+        const payload = {
+          token: session.token,
+          branch: $("branchSelect").value,
+          action: $("actionType").value,
+          lat: pos.latitude,
+          lng: pos.longitude,
+          face,
+          photo
+        };
+
+        const r = await api("punch", payload);
+
+        if (r && r.error) {
+          throw new Error(r.error);
+        }
+
+        const result = r && r.result ? r.result : r;
+        const actionName = $("actionType").value;
+
+        if (result && result.far) {
+          setStatus("status-danger", "fa-triangle-exclamation", `⚠️ أنت خارج النطاق (${result.distance || 0} متر). تم تسجيل المحاولة وإرسال تنبيه للإدارة.`);
+        } else {
+          setStatus("status-success", "fa-circle-check", `✅ تم تسجيل ${actionName} بنجاح`);
+        }
+
       } catch (err) {
-        if (err.message === "SESSION") { alert(ERR.SESSION); return logout(); }
-        setStatus("status-danger", "fa-circle-xmark", ERR[err.message] || err.message || "حدث خطأ، حاول مرة أخرى");
+        const msg = ERR[err.message] || err.message || ERR.NETWORK;
+        setStatus("status-danger", "fa-circle-xmark", msg);
       } finally {
-        setTimeout(() => { busy = false; }, 3000);
+        setTimeout(() => {
+          busy = false;
+          $("actionBtn").disabled = false;
+        }, 2500);
       }
     });
 
     if (session) {
-      enter();
+      enterAttendance();
     } else {
       showView("viewLogin");
     }
