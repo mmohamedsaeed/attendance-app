@@ -9,32 +9,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#edf4ff;
-  --bg-soft:#eef4ff;
-  --panel:#f8fafd;
-  --card:#ffffff;
-  --card-2:#f4f7ff;
-  --primary:#3f5efb;
-  --primary-2:#5b7cff;
-  --primary-3:#273dd7;
-  --primary-soft:rgba(63,94,251,0.12);
-  --primary-soft-2:rgba(63,94,251,0.08);
-  --text:#1d2433;
+  --bg:#edf3fb;
+  --bg-2:#dfe9ff;
+  --topbar:#2a3ec4;
+  --primary:#4d5df5;
+  --primary-2:#2f7df6;
+  --surface:#f5f7fb;
+  --card:#f4f6fa;
+  --white:#ffffff;
+  --text:#1f2937;
   --muted:#64748b;
-  --muted-2:#8aa0bd;
-  --line:#e5ebf7;
-  --success:#27c06d;
-  --success-soft:#eafaf2;
-  --warning:#ffb534;
-  --warning-soft:#fff3d7;
-  --danger:#ef476f;
-  --danger-soft:#ffe9ef;
-  --shadow:0 22px 44px rgba(44,62,112,0.12);
-  --shadow-soft:0 10px 30px rgba(31,55,123,0.09);
-  --radius-xl:28px;
-  --radius-lg:20px;
-  --radius-md:16px;
-  --radius-sm:12px;
+  --border:rgba(148,163,184,0.22);
+  --success:#22c55e;
+  --warning:#f59e0b;
+  --danger:#ef4444;
+  --shadow:0 28px 60px rgba(34,51,94,0.12);
 }
 
 *{
@@ -52,32 +41,29 @@ html,body{
 }
 
 body{
-  background:linear-gradient(180deg,#edf4ff 0%, #e9f1ff 100%);
+  background:linear-gradient(180deg,#edf4ff 0%, #e8eefb 100%);
   color:var(--text);
   min-height:100vh;
+  display:block;
   overflow-x:hidden;
   padding:0;
-}
-
-button,input,select{
-  font-family:'Cairo',sans-serif;
 }
 
 .app-shell{
   width:100%;
   min-height:100vh;
-  background:linear-gradient(180deg,#edf4ff 0%, #eef4ff 100%);
+  background:linear-gradient(180deg,#edf4ff 0%, #eaf1ff 100%);
 }
 
 .topbar{
-  height:56px;
-  background:linear-gradient(90deg,#2d3eb4 0%, #2b5fe9 100%);
+  height:54px;
+  background:linear-gradient(90deg, #2a3ec4 0%, #2d5ff0 100%);
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:0 22px;
   color:#fff;
-  box-shadow:0 14px 28px rgba(51,71,180,0.2);
+  box-shadow:0 12px 24px rgba(42,62,196,0.14);
 }
 
 .brand{
@@ -86,19 +72,17 @@ button,input,select{
   gap:10px;
   font-size:1.04rem;
   font-weight:800;
-  letter-spacing:.2px;
 }
 
 .brand-mark{
-  width:28px;
-  height:28px;
+  width:24px;
+  height:24px;
   border-radius:8px;
   background:rgba(255,255,255,0.12);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:.8rem;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.15);
+  font-size:.74rem;
 }
 
 .top-actions{
@@ -108,31 +92,31 @@ button,input,select{
 }
 
 .top-icon{
-  width:32px;
-  height:32px;
+  width:30px;
+  height:30px;
   border:0;
-  border-radius:10px;
+  border-radius:9px;
   background:rgba(255,255,255,0.09);
   color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  transition:all .18s ease;
+  transition:all .2s ease;
 }
 
 .top-icon:hover{
   background:rgba(255,255,255,0.18);
-  transform:translateY(-1px);
 }
 
 .page-wrap{
   width:100%;
-  min-height:calc(100vh - 56px);
+  min-height:calc(100vh - 54px);
   padding:10px 8px;
   display:flex;
   align-items:flex-start;
   justify-content:center;
+  box-sizing:border-box;
 }
 
 .card{
@@ -141,26 +125,26 @@ button,input,select{
   min-height:auto;
   height:auto;
   margin:0 auto;
-  background:rgba(248,250,253,0.96);
-  border-radius:22px;
+  background:rgba(247,249,252,0.98);
+  border-radius:20px;
   border:1px solid rgba(255,255,255,0.5);
   box-shadow:var(--shadow);
   overflow:hidden;
 }
 
 .header{
-  background:linear-gradient(135deg,#3b48d6 0%, #3f80f3 100%);
-  padding:20px 24px;
+  background:linear-gradient(135deg,#3c4ddb 0%, #3b7df5 100%);
+  padding:18px 20px;
   text-align:center;
   position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-  min-height:88px;
+  min-height:82px;
 }
 
 .header h1{
-  font-size:clamp(1.45rem, 2.1vw, 2.1rem);
+  font-size:clamp(1.45rem, 2vw, 2rem);
   font-weight:800;
   color:#fff;
 }
@@ -170,30 +154,28 @@ button,input,select{
   left:18px;
   top:50%;
   transform:translateY(-50%);
-  width:36px;
-  height:36px;
+  width:34px;
+  height:34px;
   border-radius:50%;
   background:rgba(255,255,255,0.12);
   display:flex;
   align-items:center;
   justify-content:center;
   color:#fff;
-  font-size:1rem;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.12);
+  font-size:.95rem;
 }
 
 .content{
-  background:linear-gradient(180deg,#f7faff 0%, #f3f7ff 100%);
-  padding:20px 18px 18px;
+  background:var(--surface);
+  padding:20px;
 }
 
 .view{
   display:none;
 }
-
 .view.active{
   display:block;
-  animation:viewIn .32s ease;
+  animation:viewIn .35s ease;
 }
 
 @keyframes viewIn{
@@ -201,6 +183,7 @@ button,input,select{
   to{opacity:1; transform:translateY(0);}
 }
 
+/* Landing */
 .hero{
   text-align:center;
   padding-top:8px;
@@ -209,25 +192,25 @@ button,input,select{
 
 .hero-badge{
   position:relative;
-  width:110px;
-  height:110px;
+  width:108px;
+  height:108px;
   margin:0 auto 18px;
   border-radius:50%;
-  background:linear-gradient(135deg,#f3f5ff 0%, #eef3ff 100%);
+  background:linear-gradient(135deg,#f3f4ff 0%, #eef1ff 100%);
   display:flex;
   align-items:center;
   justify-content:center;
   color:var(--primary);
-  font-size:2.5rem;
-  box-shadow:inset 0 0 0 1px rgba(79,93,245,0.08), 0 15px 28px rgba(79,93,245,0.08);
+  font-size:2.4rem;
+  box-shadow:inset 0 0 0 1px rgba(77,93,245,0.08);
 }
 
 .hero-badge::before{
   content:"";
   position:absolute;
-  inset:11px;
+  inset:10px;
   border-radius:50%;
-  background:rgba(79,93,245,0.06);
+  background:rgba(77,93,245,0.05);
 }
 
 .hero-badge i{
@@ -251,7 +234,7 @@ button,input,select{
 
 .steps{
   list-style:none;
-  max-width:640px;
+  max-width:620px;
   margin:0 auto 24px;
 }
 
@@ -261,19 +244,18 @@ button,input,select{
   gap:14px;
   padding:12px 14px;
   border-radius:14px;
-  background:rgba(255,255,255,0.35);
-  border:1px solid var(--line);
+  background:rgba(255,255,255,0.12);
+  border:1px solid var(--border);
   color:#49576c;
-  font-size:.97rem;
+  font-size:.98rem;
   margin-bottom:8px;
-  box-shadow:var(--shadow-soft);
 }
 
 .step-icon{
-  width:38px;
-  height:38px;
+  width:36px;
+  height:36px;
   border-radius:50%;
-  background:linear-gradient(135deg,#eef2ff 0%, #e7edff 100%);
+  background:rgba(77,93,245,0.08);
   color:var(--primary);
   display:flex;
   align-items:center;
@@ -314,23 +296,23 @@ button,input,select{
 }
 
 .b-pri{
-  background:linear-gradient(135deg,#4d5ef7 0%, #3e7efb 100%);
-  box-shadow:0 16px 26px rgba(77,94,247,.26), inset 0 -3px 0 rgba(0,0,0,.12);
+  background:linear-gradient(135deg,#4b5eef 0%, #3a7ef7 100%);
+  box-shadow:0 18px 26px rgba(75,94,239,.24), inset 0 -3px 0 rgba(0,0,0,.12);
 }
 
 .b-bio{
-  background:linear-gradient(135deg,#00b4ff 0%, #6277ff 100%);
-  box-shadow:0 16px 24px rgba(0,180,255,.22), inset 0 -3px 0 rgba(0,0,0,.12);
+  background:linear-gradient(135deg,#1da8ff 0%, #5876ff 100%);
+  box-shadow:0 16px 24px rgba(29,168,255,.20), inset 0 -3px 0 rgba(0,0,0,.12);
 }
 
 .b-in{
-  background:linear-gradient(135deg,#27c06d 0%, #1d9a57 100%);
-  box-shadow:0 16px 24px rgba(39,192,109,.25), inset 0 -3px 0 rgba(0,0,0,.12);
+  background:linear-gradient(135deg,#18b26f 0%, #17a267 100%);
+  box-shadow:0 16px 24px rgba(24,178,111,.22), inset 0 -3px 0 rgba(0,0,0,.12);
 }
 
 .b-out{
-  background:linear-gradient(135deg,#ff6b7d 0%, #d93c5a 100%);
-  box-shadow:0 16px 24px rgba(217,60,90,.24), inset 0 -3px 0 rgba(0,0,0,.12);
+  background:linear-gradient(135deg,#ff6579 0%, #e64766 100%);
+  box-shadow:0 16px 24px rgba(230,71,102,.22), inset 0 -3px 0 rgba(0,0,0,.12);
 }
 
 .btn:disabled{
@@ -341,7 +323,8 @@ button,input,select{
   transform:none;
 }
 
-.btn:disabled::before,.btn:disabled::after{
+.btn:disabled::before,
+.btn:disabled::after{
   display:none;
 }
 
@@ -359,28 +342,27 @@ button,input,select{
   justify-content:center;
   gap:8px;
   border:1px solid transparent;
-  box-shadow:var(--shadow-soft);
 }
 
 .badge.info{
-  background:#edf5ff;
+  background:#eff6ff;
   color:#1d4ed8;
   border-color:#bfdbfe;
 }
 .badge.ok{
-  background:#edfdf5;
-  color:#18794e;
+  background:#f0fdf4;
+  color:#15803d;
   border-color:#bbf7d0;
 }
 .badge.warn{
-  background:#fff9ea;
-  color:#b76d00;
-  border-color:#f9db8b;
+  background:#fffbeb;
+  color:#b45309;
+  border-color:#fde68a;
 }
 .badge.bad{
-  background:#fff0f4;
-  color:#b02048;
-  border-color:#f6c2d3;
+  background:#fef2f2;
+  color:#b91c1c;
+  border-color:#fecaca;
 }
 
 .fg{
@@ -404,7 +386,7 @@ button,input,select{
   right:14px;
   top:50%;
   transform:translateY(-50%);
-  color:#98a7bf;
+  color:#94a3b8;
   transition:color .2s ease;
 }
 
@@ -416,19 +398,18 @@ button,input,select{
   width:100%;
   min-height:46px;
   padding:12px 42px 12px 14px;
-  border:1.5px solid var(--line);
+  border:1.5px solid #e2e8f0;
   border-radius:14px;
   font-size:0.95rem;
   outline:none;
   background:#fff;
   transition:border-color .2s ease, box-shadow .2s ease;
-  color:var(--text);
-  box-shadow:0 2px 10px rgba(15,23,42,0.02);
+  color:#1e293b;
 }
 
 .fc:focus{
   border-color:var(--primary);
-  box-shadow:0 0 0 4px rgba(63,94,251,0.12);
+  box-shadow:0 0 0 4px rgba(77,93,245,0.12);
 }
 
 select.fc{
@@ -439,7 +420,7 @@ select.fc{
 
 .tag{
   font-size:0.72rem;
-  color:var(--muted);
+  color:#94a3b8;
   text-align:center;
   margin-top:14px;
 }
@@ -453,7 +434,6 @@ select.fc{
   text-decoration:none;
   transition:color .2s ease;
 }
-
 .link:hover{
   color:#4f46e5;
 }
@@ -491,7 +471,7 @@ select.fc{
   overflow:hidden;
   background:#0b1020;
   margin-bottom:14px;
-  box-shadow:0 0 0 2px #e2e8f0, 0 12px 24px rgba(15,23,42,0.05);
+  box-shadow:0 0 0 2px #e2e8f0;
 }
 
 video{
@@ -501,27 +481,13 @@ video{
   transform:scaleX(-1);
 }
 
-.cam::after{
-  content:"";
-  position:absolute;
-  inset:12px;
-  pointer-events:none;
-  z-index:2;
-  opacity:.9;
-  background-repeat:no-repeat;
-  background-image:linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#fff,#fff);
-  background-size:24px 3px,3px 24px,24px 3px,3px 24px,24px 3px,3px 24px,24px 3px,3px 24px;
-  background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%;
-}
-
 .tabs{
   display:flex;
   gap:6px;
-  background:#edf2ff;
-  padding:6px;
+  background:#f1f5f9;
+  padding:5px;
   border-radius:16px;
   margin-bottom:16px;
-  border:1px solid rgba(63,94,251,0.08);
 }
 
 .tabs button{
@@ -543,7 +509,7 @@ video{
 .tabs button.on{
   background:#fff;
   color:var(--primary);
-  box-shadow:0 6px 10px -5px rgba(63,94,251,.35);
+  box-shadow:0 4px 10px -4px rgba(79,70,229,.4);
 }
 
 .two{
@@ -570,27 +536,25 @@ video{
   display:block;
   padding:8px 12px;
   border-radius:12px;
-  border:1.5px solid var(--line);
+  border:1.5px solid #e2e8f0;
   font-size:.82rem;
   font-weight:700;
   color:#475569;
   transition:all .15s;
-  background:#fff;
 }
 .days input:checked + span{
-  background:linear-gradient(135deg,#4d5ef7 0%, #3e7efb 100%);
-  border-color:transparent;
+  background:var(--primary);
+  border-color:var(--primary);
   color:#fff;
 }
 
 .item{
-  border:1px solid var(--line);
+  border:1px solid #e2e8f0;
   border-radius:14px;
   padding:12px;
   margin-bottom:10px;
   font-size:0.85rem;
-  background:rgba(255,255,255,0.88);
-  box-shadow:0 3px 12px rgba(15,23,42,0.02);
+  background:#fff;
 }
 .item .top{
   display:flex;
@@ -603,19 +567,18 @@ video{
   color:#64748b;
   margin-top:4px;
   font-size:.78rem;
-  line-height:1.7;
 }
 
 .st{
-  padding:4px 10px;
+  padding:3px 10px;
   border-radius:99px;
   font-size:.72rem;
   font-weight:800;
   white-space:nowrap;
 }
-.st.pending{background:#fff4d8;color:#b56b02;}
-.st.approved,.st.in{background:#eafaf2;color:#18794e;}
-.st.rejected,.st.late{background:#ffeaf0;color:#b02048;}
+.st.pending{background:#fffbeb;color:#b45309;}
+.st.approved,.st.in{background:#f0fdf4;color:#15803d;}
+.st.rejected,.st.late{background:#fef2f2;color:#b91c1c;}
 .st.none{background:#f1f5f9;color:#64748b;}
 
 .mini{
@@ -627,11 +590,9 @@ video{
   padding:8px 12px;
   font:700 .8rem 'Cairo',sans-serif;
   cursor:pointer;
-  transition:all .15s ease;
 }
-.mini:hover{ transform:translateY(-1px); }
-.mini.g{ background:#1bbd66; color:#fff; }
-.mini.r{ background:#ffe6ed; color:#b02048; }
+.mini.g{ background:#16a34a; color:#fff; }
+.mini.r{ background:#fee2e2; color:#b91c1c; }
 .mini.b{ background:#eef2ff; color:#4f46e5; }
 .mini:disabled{ opacity:.5; }
 
@@ -653,13 +614,12 @@ video{
   border-radius:16px;
   padding:14px;
   background:#f8fafc;
-  border:1px solid var(--line);
-  box-shadow:0 3px 12px rgba(15,23,42,0.02);
+  border:1px solid #e2e8f0;
 }
 .stat b{
   display:block;
   font-size:1.5rem;
-  color:var(--primary);
+  color:#4f46e5;
 }
 .stat small{ color:#64748b; font-size:.78rem; }
 
@@ -669,6 +629,243 @@ video{
   padding:4px 12px;
   border-radius:12px;
   white-space:nowrap;
+}
+
+/* ===== Dashboard Premium Redesign ===== */
+#vDash {
+  padding: 6px 0 0;
+}
+
+#vDash .dash-shell{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+#vDash .dash-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px;
+  border-radius:18px;
+  background:linear-gradient(135deg, #eef4ff 0%, #f4f7ff 100%);
+  border:1px solid rgba(97,120,255,0.12);
+  box-shadow:0 10px 24px rgba(93,110,255,0.06);
+}
+
+#vDash .dash-kicker{
+  display:inline-block;
+  font-size:.72rem;
+  font-weight:800;
+  color:#5667e7;
+  background:rgba(86,103,231,0.08);
+  padding:5px 10px;
+  border-radius:999px;
+  margin-bottom:4px;
+}
+
+#vDash .dash-header h3{
+  font-size:1rem;
+  color:#1f2937;
+  font-weight:800;
+}
+
+#vDash .dash-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:7px 12px;
+  border-radius:999px;
+  font-size:.72rem;
+  font-weight:800;
+  color:#0f766e;
+  background:#dcfce7;
+  border:1px solid rgba(16,185,129,0.12);
+}
+
+#vDash .dash-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:12px;
+}
+
+#vDash .mini-stat{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+  border:1px solid rgba(148,163,184,0.18);
+  border-radius:18px;
+  padding:16px 14px;
+  box-shadow:0 12px 24px rgba(15,23,42,0.04);
+}
+
+#vDash .mini-stat::before{
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  width:62px;
+  height:62px;
+  background:radial-gradient(circle at center, rgba(99,102,241,0.15), rgba(99,102,241,0) 70%);
+  pointer-events:none;
+}
+
+#vDash .mini-stat .top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+  position:relative;
+  z-index:1;
+}
+
+#vDash .mini-stat .icon{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:1rem;
+  background:linear-gradient(135deg, #4d5ef7 0%, #5ca4ff 100%);
+  box-shadow:0 12px 24px rgba(77,94,247,0.22);
+}
+
+#vDash .mini-stat .label{
+  font-size:.72rem;
+  font-weight:800;
+  color:#64748b;
+}
+
+#vDash .mini-stat .value{
+  font-size:1.6rem;
+  font-weight:900;
+  color:#1f2937;
+  position:relative;
+  z-index:1;
+}
+
+#vDash .mini-stat .value small{
+  font-size:.76rem;
+  color:#64748b;
+  font-weight:700;
+}
+
+#vDash .report-strip{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:12px;
+}
+
+#vDash .report-card{
+  background:linear-gradient(180deg, #ffffff 0%, #f4f7ff 100%);
+  border:1px solid rgba(148,163,184,0.18);
+  border-radius:18px;
+  padding:14px;
+  box-shadow:0 10px 22px rgba(15,23,42,0.04);
+}
+
+#vDash .report-card .title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+  font-size:.78rem;
+  font-weight:800;
+  color:#475569;
+}
+
+#vDash .report-card .title .bullet{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:linear-gradient(135deg, #4d5ef7 0%, #6ea8ff 100%);
+  box-shadow:0 0 0 6px rgba(77,94,247,0.08);
+}
+
+#vDash .report-card .row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-top:1px solid rgba(148,163,184,0.14);
+  font-size:.82rem;
+  color:#475569;
+}
+
+#vDash .report-card .row:first-of-type{
+  border-top:0;
+  padding-top:0;
+}
+
+#vDash .report-card .tag{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:68px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:.72rem;
+  font-weight:800;
+  background:#eef2ff;
+  color:#3f5efb;
+}
+#vDash .report-card .tag.green{
+  color:#0f766e;
+  background:#dcfce7;
+}
+#vDash .report-card .tag.red{
+  color:#b91c1c;
+  background:#fee2e2;
+}
+#vDash .report-card .tag.orange{
+  color:#b45309;
+  background:#ffedd5;
+}
+#vDash .report-card .tag.blue{
+  color:#2563eb;
+  background:#dbeafe;
+}
+
+#vDash .dash-action{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:4px;
+}
+
+#vDash .dash-action .mini{
+  min-height:42px;
+  border-radius:12px;
+  padding:10px 14px;
+  font-size:.78rem;
+}
+
+#vDash .dash-action .mini.primary{
+  background:linear-gradient(135deg, #4d5ef7 0%, #3a7ef7 100%);
+  color:#fff;
+  box-shadow:0 12px 18px rgba(77,94,247,.2);
+}
+
+#vDash .dash-action .mini.soft{
+  background:#eef4ff;
+  color:#3f5efb;
+}
+
+.btn.b-pri,
+.mini.b,
+.btn.b-bio{
+  background:linear-gradient(135deg, #4d5ef7 0%, #3a7ef7 100%);
+}
+
+.btn.b-in{
+  background:linear-gradient(135deg, #18b26f 0%, #17a267 100%);
+}
+
+.btn.b-out{
+  background:linear-gradient(135deg, #ff6579 0%, #e64766 100%);
 }
 
 .admin-shell{
@@ -681,10 +878,9 @@ video{
   position:sticky;
   top:12px;
   background:#f8fafc;
-  border:1px solid var(--line);
+  border:1px solid #e2e8f0;
   border-radius:20px;
   padding:10px;
-  box-shadow:var(--shadow-soft);
 }
 .admin-side button{
   width:100%;
@@ -700,12 +896,11 @@ video{
   align-items:center;
   gap:9px;
   margin-bottom:4px;
-  transition:all .15s ease;
 }
 .admin-side button:hover,
 .admin-side button.on{
-  background:linear-gradient(135deg,#eef2ff 0%, #edf4ff 100%);
-  color:var(--primary);
+  background:#eef2ff;
+  color:#4f46e5;
 }
 .admin-side button i{
   width:20px;
@@ -725,11 +920,10 @@ video{
   flex-wrap:wrap;
 }
 .admin-head h2{
-  font-size:1.08rem;
-  color:var(--text);
+  font-size:1.05rem;
 }
 .admin-head .sub{
-  color:var(--muted);
+  color:#64748b;
   font-size:.78rem;
 }
 
@@ -747,15 +941,14 @@ video{
   border-collapse:separate;
   border-spacing:0;
   background:#fff;
-  border:1px solid var(--line);
+  border:1px solid #e2e8f0;
   border-radius:16px;
   overflow:hidden;
   font-size:.78rem;
-  box-shadow:var(--shadow-soft);
 }
 .admin-table th,.admin-table td{
   padding:10px 9px;
-  border-bottom:1px solid #edf1f7;
+  border-bottom:1px solid #eef2f6;
   text-align:right;
   vertical-align:middle;
 }
@@ -776,15 +969,14 @@ video{
 }
 .kpi{
   padding:15px;
-  border:1px solid var(--line);
+  border:1px solid #e2e8f0;
   border-radius:17px;
   background:#fff;
-  box-shadow:var(--shadow-soft);
 }
 .kpi b{
   display:block;
   font-size:1.45rem;
-  color:var(--primary);
+  color:#4f46e5;
   margin-top:3px;
 }
 .kpi small{ color:#64748b; }
@@ -796,10 +988,9 @@ video{
 }
 .panel{
   background:#fff;
-  border:1px solid var(--line);
+  border:1px solid #e2e8f0;
   border-radius:18px;
   padding:14px;
-  box-shadow:var(--shadow-soft);
 }
 .panel h3{
   font-size:0.9rem;
@@ -817,7 +1008,10 @@ video{
   align-items:center;
   font-size:.82rem;
 }
-.checkline input{ width:18px; height:18px; }
+.checkline input{
+  width:18px;
+  height:18px;
+}
 .empty{
   padding:25px;
   text-align:center;
@@ -828,7 +1022,10 @@ video{
 }
 
 @media (max-width:700px){
-  body{ display:block; min-height:100vh; }
+  body{
+    display:block;
+    min-height:100vh;
+  }
   .page-wrap{
     padding:8px;
   }
@@ -867,12 +1064,22 @@ video{
     gap:6px;
     padding:8px;
   }
-  .admin-main{ width:100%; }
+  .admin-main{
+    width:100%;
+  }
+  #vDash .dash-grid,
+  #vDash .report-strip{
+    grid-template-columns:1fr;
+  }
 }
 
 @media (max-width:430px){
-  .brand{ font-size:.9rem; }
-  .header-badge{ left:12px; }
+  .brand{
+    font-size:.9rem;
+  }
+  .header-badge{
+    left:12px;
+  }
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1086,13 +1293,17 @@ async function api(fn, data) {
 
 function show(id) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-  $(id).classList.add("active");
-  const main = Object.values(TABS).includes(id);
-  $("tabs").style.display = main ? "flex" : "none";
-  if (!main) $("locBanner").style.display = "none";
+  const target = $(id);
+  if (target) target.classList.add("active");
+  const main = Object.values(TABS || {}).includes(id);
+  const tabs = $("tabs");
+  if (tabs) tabs.style.display = main ? "flex" : "none";
+  const locBanner = $("locBanner");
+  if (locBanner && !main) locBanner.style.display = "none";
 }
 
 function badge(el, cls, icon, msg) {
+  if (!el) return;
   el.className = "badge " + cls;
   el.style.display = "flex";
   if (["result", "loginMsg", "unlockMsg", "state"].includes(el.id)) {
@@ -1113,7 +1324,7 @@ const fmt = m => m > 999 ? +(m / 1000).toFixed(2) + " كم" : m + " متر";
 
 const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
 const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-const empId = () => S.token.split(".")[0];
+const empId = () => S && S.token ? S.token.split(".")[0] : "";
 let bioAvail = false;
 
 const bioReady = (window.PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable && window.isSecureContext
@@ -1133,14 +1344,16 @@ const bioOn = () => {
 
 $("bioBtn").onclick = async () => {
   try {
-    const cred = await navigator.credentials.create({ publicKey: {
-      challenge: crypto.getRandomValues(new Uint8Array(32)),
-      rp: { name: "Attendance" },
-      user: { id: new TextEncoder().encode(empId()), name: S.name, displayName: S.name },
-      pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
-      authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "discouraged" },
-      timeout: 60000
-    } });
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        rp: { name: "Attendance" },
+        user: { id: new TextEncoder().encode(empId()), name: S.name, displayName: S.name },
+        pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
+        authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "discouraged" },
+        timeout: 60000
+      }
+    });
     localStorage.setItem("bio", JSON.stringify({ id: b64(cred.rawId), emp: empId() }));
     $("bioBtn").style.display = "none";
     badge($("result"), "ok", "fa-fingerprint", "تم تفعيل الدخول بالبصمة ✅");
@@ -1153,11 +1366,13 @@ $("unlockBtn").onclick = async () => {
   $("unlockMsg").style.display = "none";
   try {
     const B = JSON.parse(localStorage.getItem("bio"));
-    await navigator.credentials.get({ publicKey: {
-      challenge: crypto.getRandomValues(new Uint8Array(32)),
-      allowCredentials: [{ type: "public-key", id: unb64(B.id), transports: ["internal"] }],
-      userVerification: "required", timeout: 60000
-    } });
+    await navigator.credentials.get({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        allowCredentials: [{ type: "public-key", id: unb64(B.id), transports: ["internal"] }],
+        userVerification: "required", timeout: 60000
+      }
+    });
     enterApp();
   } catch (e) {
     badge($("unlockMsg"), "bad", "fa-circle-xmark", "تعذر التحقق بالبصمة، حاول مرة أخرى");
@@ -1177,7 +1392,6 @@ async function loginSnap() {
   } catch (e) {
     throw new Error("CAM");
   }
-
   try {
     const v = document.createElement("video");
     v.muted = true;
@@ -1193,6 +1407,15 @@ async function loginSnap() {
     st.getTracks().forEach(t => t.stop());
   }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const startBtn = document.getElementById("startBtn");
+  if (startBtn) {
+    startBtn.addEventListener("click", function () {
+      show("vLogin");
+    });
+  }
+});
 
 $("startBtn").onclick = () => show("vLogin");
 $("backLink").onclick = e => { e.preventDefault(); show("vLanding"); };
@@ -1440,11 +1663,9 @@ async function punch(action) {
     const lateTxt = r.late > 0 ? ` — تأخير ${r.late} دقيقة${r.excused ? " (مبرر بإذن)" : ""}` : "";
 
     if (r.far) {
-      badge($("result"), "warn", "fa-triangle-exclamation",
-        `⚠️ تحذير: تم تسجيل ${what} خارج نطاق الفرع (تبعد ${fmt(r.dist)}) — ${r.time}${lateTxt}`);
+      badge($("result"), "warn", "fa-triangle-exclamation", `⚠️ تحذير: تم تسجيل ${what} خارج نطاق الفرع (تبعد ${fmt(r.dist)}) — ${r.time}${lateTxt}`);
     } else {
-      badge($("result"), r.late > 0 && !r.excused ? "warn" : "ok", "fa-circle-check",
-        `✅ تم تسجيل ${what} (${r.time})${lateTxt}`);
+      badge($("result"), r.late > 0 && !r.excused ? "warn" : "ok", "fa-circle-check", `✅ تم تسجيل ${what} (${r.time})${lateTxt}`);
     }
 
     setAllowed(r.allowed);
@@ -1471,7 +1692,6 @@ async function punch(action) {
 $("inBtn").onclick = () => punch("Check-In");
 $("outBtn").onclick = () => punch("Check-Out");
 
-// ===== الإصدار 2: التبويبات والطلبات والداشبورد ولوحة المدير =====
 const TABS = { punch: "vApp", req: "vReq", dash: "vDash", mgr: "vMgr" };
 const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
 const LEAVE_TYPES = ["سنوية", "مرضية", "عارضة", "بدون مرتب"];
@@ -1550,16 +1770,84 @@ const ST = { pending: "قيد المراجعة", approved: "مقبول", rejecte
 
 function renderReq() {
   $("myInfo").innerHTML = `<i class="fa-solid fa-clock"></i><span>موعد الحضور ${esc(me.shift)} · الإجازة الأسبوعية: ${esc(me.off.map(i => DAYS[i]).join("، "))}</span>`;
-  $("myReqs").innerHTML = me.requests.length
-    ? me.requests.map(r => `<div class="item"><div class="top"><span>${esc(reqText(r))}</span><span class="st ${r.status}">${ST[r.status]}</span></div>${r.mgrNote ? `<div class="sub">ملاحظة المدير: ${esc(r.mgrNote)}</div>` : ""}</div>`).join("")
-    : '<div class="item sub">لا توجد طلبات بعد</div>';
+  $("myReqs").innerHTML = me.requests.length ? me.requests.map(r => `<div class="item"><div class="top"><span>${esc(reqText(r))}</span><span class="st ${r.status}">${ST[r.status]}</span></div>${r.mgrNote ? `<div class="sub">ملاحظة المدير: ${esc(r.mgrNote)}</div>` : ""}</div>`).join("") : '<div class="item sub">لا توجد طلبات بعد</div>';
 }
 
 function renderDash() {
   const s = me.stats;
-  const c = (l, v, i) => `<div class="stat"><i class="fa-solid ${i}" style="color:#94a3b8"></i><b>${esc(v)}</b><small>${l}</small></div>`;
-  $("dashTitle").textContent = "إحصائيات " + new Date().toLocaleDateString("ar-EG", { month: "long", year: "numeric" });
-  $("dashBody").innerHTML = `<div class="grid2">${c("أيام العمل", s.present, "fa-briefcase")}${c("أيام الإجازات", s.leave, "fa-umbrella-beach")}${c("أيام الغياب", s.absent, "fa-user-xmark")}${c("التأخيرات", s.lateCount + " · " + s.lateMin + " د", "fa-clock")}</div><h3 class="sec">الأذونات (${s.permCount})</h3><div class="grid2">${PERM_TYPES.map(t => c(t, s.perms[t] || 0, "fa-hourglass-half")).join("")}</div>`;
+  const statCard = (icon, label, value, tone = "blue") => `
+    <div class="mini-stat">
+      <div class="top">
+        <span class="label">${label}</span>
+        <span class="icon" style="background:${tone === 'green' ? 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' : tone === 'red' ? 'linear-gradient(135deg, #f15b7d 0%, #ff8ea1 100%)' : tone === 'orange' ? 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)' : 'linear-gradient(135deg, #4d5ef7 0%, #5ca4ff 100%)'}"><i class="fa-solid ${icon}"></i></span>
+      </div>
+      <div class="value">${value}</div>
+    </div>
+  `;
+
+  $("dashTitle").textContent = "لوحتي — " + new Date().toLocaleDateString("ar-EG", { month: "long", year: "numeric" });
+
+  $("dashBody").innerHTML = `
+    <div class="dash-shell">
+      <div class="dash-header">
+        <div>
+          <span class="dash-kicker">لوحة الأداء</span>
+          <h3>ملخص هذا الشهر</h3>
+        </div>
+        <span class="dash-pill">مؤشرات مباشرة</span>
+      </div>
+
+      <div class="dash-grid">
+        ${statCard("fa-briefcase", "أيام العمل", s.present || 0, "blue")}
+        ${statCard("fa-umbrella-beach", "الإجازات", s.leave || 0, "green")}
+        ${statCard("fa-user-xmark", "الغياب", s.absent || 0, "red")}
+        ${statCard("fa-clock", "التأخير", `${s.lateCount || 0} · ${s.lateMin || 0} د`, "orange")}
+      </div>
+
+      <div class="report-strip">
+        <div class="report-card">
+          <div class="title">
+            <span>الأذونات</span>
+            <span class="bullet"></span>
+          </div>
+          <div class="row">
+            <span>إجمالي الأذونات</span>
+            <span class="tag blue">${s.permCount || 0}</span>
+          </div>
+          ${PERM_TYPES.map((type, idx) => `
+            <div class="row">
+              <span>${type}</span>
+              <span class="tag ${idx === 0 ? 'orange' : idx === 1 ? 'green' : 'red'}">${s.perms?.[type] || 0}</span>
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="report-card">
+          <div class="title">
+            <span>التقارير السريعة</span>
+            <span class="bullet"></span>
+          </div>
+          <div class="row">
+            <span>نسبة الحضور</span>
+            <span class="tag green">${Math.max(0, 100 - (s.absent || 0))}%</span>
+          </div>
+          <div class="row">
+            <span>التأخيرات</span>
+            <span class="tag orange">${s.lateCount || 0}</span>
+          </div>
+          <div class="row">
+            <span>إجازات هذا الشهر</span>
+            <span class="tag blue">${s.leave || 0}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-action">
+        <button class="mini primary"><i class="fa-solid fa-download"></i> تصدير التقرير</button>
+        <button class="mini soft"><i class="fa-solid fa-chart-line"></i> تفاصيل أكثر</button>
+      </div>
+    </div>
+  `;
 }
 
 $("rSend").onclick = async () => {
@@ -1637,8 +1925,11 @@ function renderMgr(){
   const n=new Date(),nowM=n.getHours()*60+n.getMinutes(),al=$("mgrAlert"), list=(team&&team.team)||[];
   const late=list.filter(t=>!t.offToday&&(t.today==="late"||(t.today==="none"&&nowM>toM(t.shift)+30)));
 
-  if(late.length) badge(al,"warn","fa-triangle-exclamation","تنبيه تأخير: "+late.map(t=>t.name).join("، "));
-  else al.style.display="none";
+  if(late.length) {
+    badge(al,"warn","fa-triangle-exclamation","تنبيه تأخير: "+late.map(t=>t.name).join("، "));
+  } else {
+    al.style.display="none";
+  }
 
   $("pendList").innerHTML=(team.pending||[]).length ? team.pending.map(r => `
     <div class="item">
@@ -1659,7 +1950,7 @@ function renderMgr(){
       </div>
       <div class="sub">حضور ${t.present} · إجازات ${t.leave} · غياب ${t.absent} · تأخير ${t.lateCount} (${t.lateMin} د) · أذونات ${t.permCount}</div>
     </div>
-  `).join("") || '<div class="empty">لا يوجد موظفون</div>';
+  `).join("")||'<div class="empty">لا يوجد موظفون</div>';
 }
 
 $("vMgr").onclick=async e=>{
@@ -1699,22 +1990,25 @@ async function pollLoc(id,out){
   out.textContent="لم يرد الموظف بعد";
 }
 
-const adminRoutes=[...document.querySelectorAll(".admin-route")],adminNav=document.querySelectorAll("#adminNav [data-admin]"),adminCache={};
+const adminRoutes=[...document.querySelectorAll(".admin-route")],
+      adminNav=document.querySelectorAll("#adminNav [data-admin]"),
+      adminCache={};
 
 function adminGo(route){
   if(!me||!["manager","superadmin"].includes(me.role))return;
   adminNav.forEach(b=>b.classList.toggle("on",b.dataset.admin===route));
   adminRoutes.forEach(v=>v.classList.toggle("on",v.dataset.route===route));
-  if(route==="overview")loadAdminOverview();
-  if(route==="employees")loadEmployees();
-  if(route==="branches")loadBranches();
-  if(route==="attendance"){fillAttendanceEmployees();loadAttendance();}
-  if(route==="requests")loadRequests();
-  if(route==="evaluation"){setDefaultDates();loadEvaluation();}
-  if(route==="audit")loadAudit();
-  if(route==="reports"){setDefaultDates();fillAttendanceEmployees();}
-  if(route==="setup"){$("setupMsg").style.display="none";}
-  if(route==="superadmin"&&me.role==="superadmin")loadSuperadmin();
+
+  if(route==="overview") loadAdminOverview();
+  if(route==="employees") loadEmployees();
+  if(route==="branches") loadBranches();
+  if(route==="attendance"){ fillAttendanceEmployees(); loadAttendance(); }
+  if(route==="requests") loadRequests();
+  if(route==="evaluation"){ setDefaultDates(); loadEvaluation(); }
+  if(route==="audit") loadAudit();
+  if(route==="reports"){ setDefaultDates(); fillAttendanceEmployees(); }
+  if(route==="setup") { $("setupMsg").style.display="none"; }
+  if(route==="superadmin"&&me.role==="superadmin") loadSuperadmin();
 }
 
 async function loadSuperadmin(){
@@ -1722,32 +2016,120 @@ async function loadSuperadmin(){
   try{
     const [o,u,s,f,sh]=await Promise.all([api("superadminOverview"),api("superadminUsers"),api("superadminSettings"),api("superadminFrontend"),api("superadminSheets")]);
     const c=o.counts||{};
-    $("superKpis").innerHTML=[['المستخدمون',c.users,'fa-users'],['المديرون',c.managers,'fa-user-tie'],['Superadmin',c.superadmins,'fa-crown'],['الفروع',c.branches,'fa-building']].map(x=>`<div class="kpi"><i class="fa-solid ${x[2]}"></i><b>${esc(x[1])}</b><small>${x[0]}</small></div>`).join("");
-    $("superUsers").innerHTML=(u.users||[]).map(x=>`<div class="item"><div class="top"><span><b>${esc(x.name)}</b> · ${esc(x.id)}</span><span class="st ${x.active?'approved':'rejected'}">${x.active?'نشط':'متوقف'}</span></div><div class="sub">${esc(x.phone)} · ${esc(x.email||'بدون بريد')} · ${x.device?'جهاز مرتبط':'بدون جهاز'}</div><div class="acts" style="margin-top:8px"><select class="fc sa-role" data-id="${esc(x.id)}"><option value="employee" ${x.role==='employee'?'selected':''}>موظف</option><option value="manager" ${x.role==='manager'?'selected':''}>مدير</option><option value="superadmin" ${x.role==='superadmin'?'selected':''}>Superadmin</option></select><button class="mini b sa-save-role" data-id="${esc(x.id)}">حفظ الصلاحية</button><button class="mini ${x.active?'r':'g'} sa-active" data-id="${esc(x.id)}" data-active="${x.active?'0':'1'}">${x.active?'تعطيل':'تفعيل'}</button></div></div>`).join('')||'<div class="empty">لا يوجد مستخدمون</div>';
+
+    $("superKpis").innerHTML = [
+      ['المستخدمون', c.users,'fa-users'],
+      ['المديرون', c.managers,'fa-user-tie'],
+      ['Superadmin', c.superadmins,'fa-crown'],
+      ['الفروع', c.branches,'fa-building']
+    ].map(x=>`<div class="kpi"><i class="fa-solid ${x[2]}"></i><b>${esc(x[1])}</b><small>${x[0]}</small></div>`).join("");
+
+    $("superUsers").innerHTML=(u.users||[]).map(x=>`
+      <div class="item">
+        <div class="top"><span><b>${esc(x.name)}</b> · ${esc(x.id)}</span><span class="st ${x.active?'approved':'rejected'}">${x.active?'نشط':'متوقف'}</span></div>
+        <div class="sub">${esc(x.phone)} · ${esc(x.email||'بدون بريد')} · ${x.device?'جهاز مرتبط':'بدون جهاز'}</div>
+        <div class="acts" style="margin-top:8px">
+          <select class="fc sa-role" data-id="${esc(x.id)}">
+            <option value="employee" ${x.role==='employee'?'selected':''}>موظف</option>
+            <option value="manager" ${x.role==='manager'?'selected':''}>مدير</option>
+            <option value="superadmin" ${x.role==='superadmin'?'selected':''}>Superadmin</option>
+          </select>
+          <button class="mini b sa-save-role" data-id="${esc(x.id)}">حفظ الصلاحية</button>
+          <button class="mini ${x.active?'r':'g'} sa-active" data-id="${esc(x.id)}" data-active="${x.active?'0':'1'}">${x.active?'تعطيل':'تفعيل'}</button>
+        </div>
+      </div>
+    `).join('')||'<div class="empty">لا يوجد مستخدمون</div>';
+
     const ss=s.settings||{};
-    $("superSettings").innerHTML=`<div class="form-grid">${['ADMIN_EMAIL','MAKE_URL','PHOTOS_FOLDER','WINDOW_S','SESSION_DAYS','COOLDOWN_S','GRACE','NOSHOW_AFTER','GPS_MAX_ACCURACY','SUPERADMIN_IDS'].map(k=>`<div class="${k==='MAKE_URL'||k==='SUPERADMIN_IDS'?'full':''}"><label>${esc(k)}</label><input class="fc sa-setting" data-key="${esc(k)}" value="${esc(ss[k]||'')}"></div>`).join('')}</div><div class="acts" style="margin-top:12px"><button class="mini g" id="saveSuperSettings">حفظ إعدادات Backend</button></div>`;
+    $("superSettings").innerHTML = `
+      <div class="form-grid">
+        ${['ADMIN_EMAIL','MAKE_URL','PHOTOS_FOLDER','WINDOW_S','SESSION_DAYS','COOLDOWN_S','GRACE','NOSHOW_AFTER','GPS_MAX_ACCURACY','SUPERADMIN_IDS'].map(k => `
+          <div class="${k==='MAKE_URL'||k==='SUPERADMIN_IDS'?'full':''}">
+            <label>${esc(k)}</label>
+            <input class="fc sa-setting" data-key="${esc(k)}" value="${esc(ss[k]||'')}">
+          </div>
+        `).join('')}
+      </div>
+      <div class="acts" style="margin-top:12px">
+        <button class="mini g" id="saveSuperSettings">حفظ إعدادات Backend</button>
+      </div>
+    `;
+
     const fc=f.config||{};
-    $("superFrontend").innerHTML=`<div class="form-grid"><div><label>اسم التطبيق</label><input id="saAppName" class="fc" value="${esc(fc.appName)}"></div><div><label>بريد الدعم</label><input id="saSupport" class="fc" value="${esc(fc.supportEmail)}"></div><div class="full"><label>رسالة النظام</label><textarea id="saNotice" class="fc" style="min-height:90px">${esc(fc.notice)}</textarea></div><div><label>نوع الرسالة</label><select id="saNoticeType" class="fc"><option value="info" ${fc.noticeType==='info'?'selected':''}>معلومة</option><option value="warn" ${fc.noticeType==='warn'?'selected':''}>تحذير</option><option value="ok" ${fc.noticeType==='ok'?'selected':''}>نجاح</option><option value="bad" ${fc.noticeType==='bad'?'selected':''}>تنبيه</option></select></div><div><label class="checkline"><input id="saMaintenance" type="checkbox" ${fc.maintenance?'checked':''}> وضع الصيانة</label></div></div><div class="acts" style="margin-top:12px"><button class="mini g" id="saveSuperFrontend">حفظ إعدادات Frontend</button></div>`;
+    $("superFrontend").innerHTML = `
+      <div class="form-grid">
+        <div><label>اسم التطبيق</label><input id="saAppName" class="fc" value="${esc(fc.appName)}"></div>
+        <div><label>بريد الدعم</label><input id="saSupport" class="fc" value="${esc(fc.supportEmail)}"></div>
+        <div class="full"><label>رسالة النظام</label><textarea id="saNotice" class="fc" style="min-height:90px">${esc(fc.notice)}</textarea></div>
+        <div><label>نوع الرسالة</label>
+          <select id="saNoticeType" class="fc">
+            <option value="info" ${fc.noticeType==='info'?'selected':''}>معلومة</option>
+            <option value="warn" ${fc.noticeType==='warn'?'selected':''}>تحذير</option>
+            <option value="ok" ${fc.noticeType==='ok'?'selected':''}>نجاح</option>
+            <option value="bad" ${fc.noticeType==='bad'?'selected':''}>تنبيه</option>
+          </select>
+        </div>
+        <div><label class="checkline"><input id="saMaintenance" type="checkbox" ${fc.maintenance?'checked':''}> وضع الصيانة</label></div>
+      </div>
+      <div class="acts" style="margin-top:12px">
+        <button class="mini g" id="saveSuperFrontend">حفظ إعدادات Frontend</button>
+      </div>
+    `;
+
     $("superSheets").innerHTML=(sh.sheets||[]).map(x=>`<div class="item"><b>${esc(x.name)}</b><span class="sub">${x.rows} صف · ${x.cols} عمود</span></div>`).join('');
-    $("saveSuperSettings").onclick=async()=>{const settings={};document.querySelectorAll('.sa-setting').forEach(i=>settings[i.dataset.key]=i.value);try{await api('superadminSaveSettings',{settings});alert('تم حفظ إعدادات Backend');loadSuperadmin()}catch(e){alert(errText(e))}};
-    $("saveSuperFrontend").onclick=async()=>{try{await api('superadminSaveFrontend',{config:{appName:$("saAppName").value,notice:$("saNotice").value,noticeType:$("saNoticeType").value,maintenance:$("saMaintenance").checked,supportEmail:$("saSupport").value}});alert('تم حفظ إعدادات Frontend');}catch(e){alert(errText(e))}};
-    document.querySelectorAll('.sa-save-role').forEach(b=>b.onclick=async()=>{const sel=document.querySelector(`.sa-role[data-id="${CSS.escape(b.dataset.id)}"]`);try{await api('superadminSetRole',{id:b.dataset.id,role:sel.value});alert('تم تحديث الصلاحية');loadSuperadmin()}catch(e){alert(errText(e))}});
-    document.querySelectorAll('.sa-active').forEach(b=>b.onclick=async()=>{try{await api('superadminSetActive',{id:b.dataset.id,active:b.dataset.active==='1'});loadSuperadmin()}catch(e){alert(errText(e))}});
-  }catch(e){alert(errText(e))}
+
+    $("saveSuperSettings").onclick=async()=>{
+      const settings={};
+      document.querySelectorAll('.sa-setting').forEach(i=>settings[i.dataset.key]=i.value);
+      try{
+        await api('superadminSaveSettings',{settings});
+        alert('تم حفظ إعدادات Backend');
+        loadSuperadmin();
+      }catch(e){alert(errText(e))}
+    };
+
+    $("saveSuperFrontend").onclick=async()=>{
+      try{
+        await api('superadminSaveFrontend',{config:{
+          appName:$("saAppName").value,
+          notice:$("saNotice").value,
+          noticeType:$("saNoticeType").value,
+          maintenance:$("saMaintenance").checked,
+          supportEmail:$("saSupport").value
+        }});
+        alert('تم حفظ إعدادات Frontend');
+      }catch(e){alert(errText(e))}
+    };
+
+    document.querySelectorAll('.sa-save-role').forEach(b=>{
+      b.onclick = async () => {
+        const sel = document.querySelector(`.sa-role[data-id="${CSS.escape(b.dataset.id)}"]`);
+        try {
+          await api('superadminSetRole',{id:b.dataset.id,role:sel.value});
+          alert('تم تحديث الصلاحية');
+          loadSuperadmin();
+        } catch(e){alert(errText(e))}
+      };
+    });
+
+    document.querySelectorAll('.sa-active').forEach(b=>{
+      b.onclick = async () => {
+        try {
+          await api('superadminSetActive',{id:b.dataset.id,active:b.dataset.active==='1'});
+          loadSuperadmin();
+        } catch(e){alert(errText(e))}
+      };
+    });
+
+  } catch(e){alert(errText(e))}
 }
 
 $("refreshSuperadmin").onclick=loadSuperadmin;
 $("refreshSheets").onclick=loadSuperadmin;
-
-$("clearSessions").onclick=async()=>{
-  if(!confirm('سيتم إنهاء جميع الجلسات الحالية. متابعة؟'))return;
-  try{
-    const r=await api('superadminClearSessions');
-    alert('تم إنهاء '+r.count+' جلسة');
-  }catch(e){alert(errText(e))}
-};
+$("clearSessions").onclick=async()=>{if(!confirm('سيتم إنهاء جميع الجلسات الحالية. متابعة؟'))return;try{const r=await api('superadminClearSessions');alert('تم إنهاء '+r.count+' جلسة');}catch(e){alert(errText(e))}};
 
 adminNav.forEach(b=>b.onclick=()=>adminGo(b.dataset.admin));
+
 const errText=e=>({
   FORBIDDEN:"غير مصرح لك",
   NOT_FOUND:"العنصر غير موجود",
@@ -1788,15 +2170,15 @@ async function loadAdminOverview(){
 $("refreshAdmin").onclick=loadAdminOverview;
 
 function renderEmployees(){
-  const q=$("empSearch").value.trim().toLowerCase(), role=$("empRole").value;
-  const rows=(adminCache.employees||[]).filter(x=>(!role||x.role===role)&&(!q||[x.id,x.name,x.phone].some(v=>String(v).toLowerCase().includes(q))));
-  $("employeeTable").innerHTML=rows.length ? `
+  const q=$("empSearch").value.trim().toLowerCase(),
+        role=$("empRole").value,
+        rows=(adminCache.employees||[]).filter(x=>(!role||x.role===role)&&(!q||[x.id,x.name,x.phone].some(v=>String(v).toLowerCase().includes(q))));
+
+  $("employeeTable").innerHTML = rows.length ? `
     <div class="admin-table-wrap">
       <table class="admin-table">
         <thead>
-          <tr>
-            <th>الموظف</th><th>الهاتف</th><th>الصلاحية</th><th>الشيفت</th><th>الإجازة</th><th>الحالة</th><th>إجراءات</th>
-          </tr>
+          <tr><th>الموظف</th><th>الهاتف</th><th>الصلاحية</th><th>الشيفت</th><th>الإجازة</th><th>الحالة</th><th>إجراءات</th></tr>
         </thead>
         <tbody>
           ${rows.map(x=>`
@@ -1835,11 +2217,21 @@ function employeeForm(x={}){
       <div><label>الاسم</label><input id="efName" class="fc" value="${esc(x.name||"")}"></div>
       <div><label>الهاتف</label><input id="efPhone" class="fc" value="${esc(x.phone||"")}"></div>
       <div><label>كلمة السر</label><input id="efPass" type="password" class="fc"></div>
-      <div><label>الصلاحية</label><select id="efRole" class="fc"><option value="employee" ${x.role!=="manager"?"selected":""}>موظف</option><option value="manager" ${x.role==="manager"?"selected":""}>مدير</option></select></div>
+      <div><label>الصلاحية</label>
+        <select id="efRole" class="fc">
+          <option value="employee" ${x.role!=="manager"?"selected":""}>موظف</option>
+          <option value="manager" ${x.role==="manager"?"selected":""}>مدير</option>
+        </select>
+      </div>
       <div><label>البريد</label><input id="efEmail" class="fc" value="${esc(x.email||"")}"></div>
       <div><label>بداية الشيفت</label><input id="efShift" type="time" class="fc" value="${esc(x.shift||"09:00")}"></div>
       <div><label>نهاية الشيفت</label><input id="efEnd" type="time" class="fc" value="${esc(x.shiftEnd||"17:00")}"></div>
-      <div class="full"><label>الإجازة الأسبوعية</label><div class="days">${DAYS.map((d,i)=>`<label><input type="checkbox" class="efOff" value="${i}" ${off.has(i)?"checked":""}><span>${d}</span></label>`).join("")}</div></div>
+      <div class="full">
+        <label>الإجازة الأسبوعية</label>
+        <div class="days">
+          ${DAYS.map((d,i)=>`<label><input type="checkbox" class="efOff" value="${i}" ${off.has(i)?"checked":""}><span>${d}</span></label>`).join("")}
+        </div>
+      </div>
       <div class="full"><label class="checkline"><input id="efActive" type="checkbox" ${x.active!==false?"checked":""}> الموظف نشط ويمكنه الدخول</label></div>
     </div>
     <div class="acts">
@@ -1852,6 +2244,7 @@ function employeeForm(x={}){
 function openEmployee(x){
   $("employeeForm").innerHTML=employeeForm(x);
   $("employeeForm").style.display="block";
+
   $("saveEmployee").onclick=async()=>{
     const p={
       id:$("efId").value.trim(),
@@ -1865,16 +2258,19 @@ function openEmployee(x){
       weeklyOff:[...document.querySelectorAll(".efOff:checked")].map(x=>x.value).join(","),
       active:$("efActive").checked
     };
+
     try{
       await api(x.id?"editEmployee":"createEmployee",p);
       $("employeeForm").style.display="none";
       loadEmployees();
     }catch(e){alert(errText(e))}
   };
+
   $("cancelEmployee").onclick=()=>$("employeeForm").style.display="none";
 }
 
 $("newEmployee").onclick=()=>openEmployee();
+
 $("employeeTable").onclick=async e=>{
   const b=e.target.closest("button");
   if(!b)return;
@@ -1910,7 +2306,10 @@ function renderBranches(){
               <td>${Number(x.lat).toFixed(6)}, ${Number(x.lng).toFixed(6)}</td>
               <td>${esc(x.radius)} متر</td>
               <td><span class="st ${x.active?"approved":"rejected"}">${x.active?"نشط":"متوقف"}</span></td>
-              <td><button class="mini b" data-edit-branch="${esc(x.name)}">تعديل</button> ${x.active?`<button class="mini r" data-del-branch="${esc(x.name)}">تعطيل</button>`:""}</td>
+              <td>
+                <button class="mini b" data-edit-branch="${esc(x.name)}">تعديل</button>
+                ${x.active?`<button class="mini r" data-del-branch="${esc(x.name)}">تعطيل</button>`:""}
+              </td>
             </tr>
           `).join("")}
         </tbody>
@@ -1939,6 +2338,7 @@ function branchForm(x={}){
 function openBranch(x){
   $("branchForm").innerHTML=branchForm(x);
   $("branchForm").style.display="block";
+
   $("saveBranch").onclick=async()=>{
     const p={
       id:x.name||"",
@@ -1948,12 +2348,14 @@ function openBranch(x){
       radius:+$("bfRadius").value,
       active:$("bfActive").checked
     };
+
     try{
       await api(x.name?"editBranch":"createBranch",p);
       $("branchForm").style.display="none";
       loadBranches();
     }catch(e){alert(errText(e))}
   };
+
   $("cancelBranch").onclick=()=>$("branchForm").style.display="none";
 }
 
@@ -1972,9 +2374,8 @@ $("branchTable").onclick=async e=>{
 };
 
 async function fillAttendanceEmployees(){
-  if(!adminCache.employees) {
-    try { adminCache.employees=(await api("employeeList")).employees||[]; }
-    catch(e){}
+  if(!adminCache.employees){
+    try{adminCache.employees=(await api("employeeList")).employees||[]}catch(e){}
   }
   const s=$("attEmp"), v=s.value;
   s.innerHTML='<option value="">كل الموظفين</option>'+(adminCache.employees||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.name)} (${esc(x.id)})</option>`).join("");
@@ -1993,7 +2394,7 @@ async function loadAttendance(){
   try{
     const r=await api("attendanceList",{from:$("attFrom").value,to:$("attTo").value,emp:$("attEmp").value,action:$("attAction").value,q:$("attQ").value,limit:1000});
     adminCache.attendance=r.rows||[];
-    $("attendanceTable").innerHTML=adminCache.attendance.length ? `
+    $("attendanceTable").innerHTML = adminCache.attendance.length ? `
       <div class="admin-table-wrap">
         <table class="admin-table">
           <thead>
@@ -2024,7 +2425,7 @@ async function loadRequests(){
   try{
     const r=await api("requestsList",{status:$("reqStatus").value,kind:$("reqKind").value});
     adminCache.requests=r.rows||[];
-    $("requestsTable").innerHTML=adminCache.requests.length ? `
+    $("requestsTable").innerHTML = adminCache.requests.length ? `
       <div class="admin-table-wrap">
         <table class="admin-table">
           <thead>
@@ -2054,7 +2455,7 @@ async function loadEvaluation(){
   try{
     const r=await api("evaluationList",{ym:$("evalMonth").value});
     adminCache.evaluation=r||[];
-    $("evaluationTable").innerHTML=adminCache.evaluation.length ? `
+    $("evaluationTable").innerHTML = adminCache.evaluation.length ? `
       <div class="admin-table-wrap">
         <table class="admin-table">
           <thead>
@@ -2066,7 +2467,11 @@ async function loadEvaluation(){
                 <td><b>${x.rank}</b></td>
                 <td>${esc(x.name)}<br><small>${esc(x.id)}</small></td>
                 <td><span class="score" style="${scoreCls(x.score)}">${x.score} · ${esc(x.grade)}</span></td>
-                <td>${x.present}</td><td>${x.absent}</td><td>${x.lateCount}</td><td>${x.lateMin}</td><td>${x.permCount}</td>
+                <td>${x.present}</td>
+                <td>${x.absent}</td>
+                <td>${x.lateCount}</td>
+                <td>${x.lateMin}</td>
+                <td>${x.permCount}</td>
               </tr>
             `).join("")}
           </tbody>
@@ -2082,7 +2487,7 @@ async function loadAudit(){
   try{
     const r=await api("auditList");
     adminCache.audit=r.rows||[];
-    $("auditTable").innerHTML=adminCache.audit.length ? `
+    $("auditTable").innerHTML = adminCache.audit.length ? `
       <div class="admin-table-wrap">
         <table class="admin-table">
           <thead>
@@ -2091,7 +2496,11 @@ async function loadAudit(){
           <tbody>
             ${adminCache.audit.map(x=>`
               <tr>
-                <td>${esc(x.ts)}</td><td>${esc(x.actor)}</td><td>${esc(x.action)}</td><td>${esc(x.target)}</td><td>${esc(x.details)}</td>
+                <td>${esc(x.ts)}</td>
+                <td>${esc(x.actor)}</td>
+                <td>${esc(x.action)}</td>
+                <td>${esc(x.target)}</td>
+                <td>${esc(x.details)}</td>
               </tr>
             `).join("")}
           </tbody>
@@ -2110,4 +2519,67 @@ $("runSetup").onclick=async()=>{
     const r=await api("v3Setup");
     badge(m,"ok","fa-circle-check","تمت تهيئة V3 بنجاح: "+(r.sheets||[]).join("، "));
   }catch(e){
-    badge(m,"bad","fa-circle-xmark",
+    badge(m,"bad","fa-circle-xmark",errText(e));
+  }finally{
+    b.disabled=false;
+  }
+};
+
+const escCsv=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+
+function downloadCsv(rows,filename){
+  if(!rows||!rows.length) return alert("لا توجد بيانات للتصدير");
+  const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))];
+  const csv="\ufeff"+keys.map(escCsv).join(",")+"\n"+
+            rows.map(r=>keys.map(k=>escCsv(r[k])).join(",")).join("\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download=filename;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+document.querySelectorAll("[data-report]").forEach(b=>b.onclick=async()=>{
+  try{
+    const type=b.dataset.report;
+    let p={type};
+    if(type==="attendance"){
+      p={...p,from:$("attFrom").value||iso(new Date()),to:$("attTo").value||iso(new Date()),emp:$("attEmp").value,action:$("attAction").value,q:$("attQ").value};
+    }
+    if(type==="evaluation"){
+      p.ym=$("evalMonth").value||iso(new Date()).slice(0,7);
+    }
+    const r=await api("reportData",p);
+    downloadCsv(r.rows||r,`attendance-${type}-${Date.now()}.csv`);
+  }catch(e){alert(errText(e))}
+});
+
+adminNav.forEach(b=>b.onclick=()=>adminGo(b.dataset.admin));
+
+document.addEventListener("click", e => {
+  const b = e.target.closest(".btn");
+  if (!b || b.disabled) return;
+
+  const r = b.getBoundingClientRect();
+  const d = Math.max(r.width, r.height);
+  const x = document.createElement("span");
+  x.className = "ripple";
+  x.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`;
+  b.appendChild(x);
+  setTimeout(() => x.remove(), 700);
+});
+
+bioReady.then(() => {
+  if (!S) return;
+  if (bioOn()) {
+    if (bioSupported()) {
+      $("unlockName").textContent = S.name;
+      show("vUnlock");
+    } else {
+      logout();
+      show("vLogin");
+    }
+  } else {
+    enterApp();
+  }
+});
