@@ -1408,16 +1408,7 @@ async function loginSnap() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const startBtn = document.getElementById("startBtn");
-  if (startBtn) {
-    startBtn.addEventListener("click", function () {
-      show("vLogin");
-    });
-  }
-});
 
-$("startBtn").onclick = () => show("vLogin");
 $("backLink").onclick = e => { e.preventDefault(); show("vLanding"); };
 
 $("loginForm").addEventListener("submit", async e => {
@@ -1692,7 +1683,38 @@ async function punch(action) {
 $("inBtn").onclick = () => punch("Check-In");
 $("outBtn").onclick = () => punch("Check-Out");
 
-const TABS = { punch: "vApp", req: "vReq", dash: "vDash", mgr: "vMgr" };
+<script>
+const TABS = {
+  punch: "vApp",
+  req: "vReq",
+  dash: "vDash",
+  mgr: "vMgr"
+};
+
+function show(id) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  const target = document.getElementById(id);
+  if (target) target.classList.add("active");
+
+  const tabs = document.getElementById("tabs");
+  const shouldShowTabs = Object.values(TABS).includes(id);
+
+  if (tabs) {
+    tabs.style.display = shouldShowTabs ? "flex" : "none";
+  }
+}
+
+// ربط الزر بشكل واضح ومباشر
+document.addEventListener("DOMContentLoaded", () => {
+  const startBtn = document.getElementById("startBtn");
+  if (startBtn) {
+    startBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      show("vLogin");
+    });
+  }
+});
+</script>
 const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
 const LEAVE_TYPES = ["سنوية", "مرضية", "عارضة", "بدون مرتب"];
 const PERM_TYPES = ["تأخير", "انصراف مبكر", "خروج أثناء العمل"];
